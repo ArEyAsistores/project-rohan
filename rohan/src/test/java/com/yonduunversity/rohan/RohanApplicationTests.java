@@ -1,4 +1,4 @@
-package com.yondu.unversity.rohan;
+package com.yonduunversity.rohan;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

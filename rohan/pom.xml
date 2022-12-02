@@ -8,7 +8,7 @@
 		<version>3.0.0</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.yondu.unversity</groupId>
+	<groupId>com.yonduunversity</groupId>
 	<artifactId>rohan</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>rohan</name>

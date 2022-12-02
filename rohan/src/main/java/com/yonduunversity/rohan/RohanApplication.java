@@ -1,4 +1,4 @@
-package com.yondu.unversity.rohan;
+package com.yonduunversity.rohan;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
