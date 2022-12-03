@@ -2,6 +2,7 @@ package com.yonduunversity.rohan;
 
 import com.yonduunversity.rohan.models.Role;
 import com.yonduunversity.rohan.models.User;
+import com.yonduunversity.rohan.models.student.Student;
 import com.yonduunversity.rohan.services.UserService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -18,9 +19,9 @@ public class RohanApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(RohanApplication.class, args);
 	}
-// *NOTE: for JWT
-//	@Bean
-//	PasswordEncoder passwordEncoder(){ return new BCryptPasswordEncoder();}
+
+	@Bean
+	PasswordEncoder passwordEncoder(){ return new BCryptPasswordEncoder();}
 
 	@Bean
 	CommandLineRunner run(UserService userService){
@@ -51,9 +52,26 @@ public class RohanApplication {
 					"rapog!h",
 					new ArrayList<>()
 			));
+			for (int x = 0; x < 20; x++){//TEMP for PAGINATION
+				userService.saveUser( new User(
+						null,
+						"rna.rey" + x + "@yahoo.com",
+						"Roberto II",
+						"Asistores",
+						"rapog!h",
+						new ArrayList<>()
+				));
+			}
 			////////////////////////
 			///INITIAL USER ROLE///
 			//////////////////////
+			userService.addStudent(new User(
+					null,
+					"rey@yahoo.com",
+					"Rober",
+					"Asistores",
+					"rapog!h",
+					new ArrayList<>()), new Student());
 			userService.assignRole("aj.piedragoza@yahoo.com", "ADMIN");
 			userService.assignRole("rna.rey@yahoo.com", "STUDENT");
 
