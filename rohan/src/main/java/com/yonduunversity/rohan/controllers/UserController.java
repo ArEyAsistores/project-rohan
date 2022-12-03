@@ -26,6 +26,10 @@ public class UserController {
     public ResponseEntity<List<User>> getAllUser(){
         return ResponseEntity.ok().body(userService.getUsers());
     }
+    @GetMapping("/users/{pageNumber}/{pageSize}")
+    public List<User> getAllUser(@PathVariable int pageNumber, @PathVariable int pageSize){
+        return userService.getUsers("Asistores",pageNumber,pageSize);
+    }
     ///////////////////////////
     ///POST: ADD NEW USER ///
     /////////////////////////
@@ -57,6 +61,4 @@ public class UserController {
         userService.assignRole(form.getEmail(),form.getRoleName());
         return ResponseEntity.ok().build();
     }
-
-
 }
