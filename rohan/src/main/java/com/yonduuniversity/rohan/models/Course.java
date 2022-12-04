@@ -19,11 +19,11 @@ public class Course {
 
     @NonNull
     @Column(name = "title", nullable = false)
-    String title;
+    private String title;
 
     @NonNull
     @Column(name = "description", nullable = false)
-    String description;
+    private String description;
 
     // classes
     @JsonIgnore

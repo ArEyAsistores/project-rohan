@@ -53,6 +53,6 @@ public class Class {
     @JoinColumn(name = "courseCode", referencedColumnName = "courseCode")
     private Course course;
 
-    // students fk
-    // ex/qui/proj fk
+    // students, foreign key, many to many
+    // ex/qui/proj, foreign key, one to many
 }
