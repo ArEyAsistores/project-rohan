@@ -1,13 +1,5 @@
-package com.yonduunversity.rohan.services.impl;
+package com.yonduuniversity.rohan.services.impl;
 
-import com.yonduunversity.rohan.models.Role;
-import com.yonduunversity.rohan.models.User;
-import com.yonduunversity.rohan.models.student.Student;
-import com.yonduunversity.rohan.repository.RoleRepo;
-import com.yonduunversity.rohan.repository.StudentRepo;
-import com.yonduunversity.rohan.repository.UserRepo;
-import com.yonduunversity.rohan.repository.pagination.UserRepoPagingate;
-import com.yonduunversity.rohan.services.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -21,11 +13,23 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.yonduuniversity.rohan.models.Role;
+import com.yonduuniversity.rohan.models.User;
+import com.yonduuniversity.rohan.models.student.Student;
+import com.yonduuniversity.rohan.repository.RoleRepo;
+import com.yonduuniversity.rohan.repository.StudentRepo;
+import com.yonduuniversity.rohan.repository.UserRepo;
+import com.yonduuniversity.rohan.repository.pagination.UserRepoPagingate;
+import com.yonduuniversity.rohan.services.UserService;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-@Service @RequiredArgsConstructor @Transactional @Slf4j
+@Service
+@RequiredArgsConstructor
+@Transactional
+@Slf4j
 public class UserServiceImpl implements UserService, UserDetailsService {
 
     private final UserRepo userRepo;
@@ -37,16 +41,16 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userRepo.findByEmail(email);
-        if(user == null){
+        if (user == null) {
             log.info("Email not found");
             throw new UsernameNotFoundException("Email not found");
 
-        }else{
+        } else {
             log.info("Email found {}:", email);
         }
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        user.getRoles().forEach( role -> authorities.add(new SimpleGrantedAuthority(role.getName())));
-        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(),authorities);
+        user.getRoles().forEach(role -> authorities.add(new SimpleGrantedAuthority(role.getName())));
+        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), authorities);
     }
 
     @Override
@@ -69,7 +73,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         User user = userRepo.findByEmail(email);
         Role role = roleRepo.findByName(roleName);
         user.getRoles().add(role);
-        log.info("Adding Role to {} to user {} ",roleName,email);
+        log.info("Adding Role to {} to user {} ", roleName, email);
 
     }
 
@@ -81,7 +85,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public void addStudent(User user, Student student) {
-        //        if(user.getRoles().contains("SME") || user.getRoles().contains("ADMIN")){ //*NOTE for RESTRICTION
+        // if(user.getRoles().contains("SME") || user.getRoles().contains("ADMIN")){
+        // //*NOTE for RESTRICTION
         student.setEmail(user.getEmail());
         student.setPassword(passwordEncoder.encode(user.getPassword()));
         student.setPassword(student.getPassword());
@@ -91,7 +96,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         student.getRoles().add(role);
         student.setActive(true);
         student.setClass(false);
-//        }
+        // }
         log.info("{} added to Database", student.getId());
         studentRepo.save(student);
     }
