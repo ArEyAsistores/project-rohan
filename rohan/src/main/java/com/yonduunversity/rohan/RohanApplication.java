@@ -54,7 +54,7 @@ public class RohanApplication {
 					"rapog!h",
 					true,
 					new ArrayList<>()
-			),"ADMIN");
+			),"STUDENT");
 			for (int x = 0; x < 20; x++){//TEMP for PAGINATION
 				userService.saveUser( new User(
 						null,

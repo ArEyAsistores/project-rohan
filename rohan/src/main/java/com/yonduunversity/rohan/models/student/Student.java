@@ -2,6 +2,7 @@ package com.yonduunversity.rohan.models.student;
 
 import com.yonduunversity.rohan.models.Role;
 import com.yonduunversity.rohan.models.User;
+import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.PrimaryKeyJoinColumn;
 import lombok.AllArgsConstructor;
@@ -14,7 +15,6 @@ import java.util.Collection;
 @Entity @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@PrimaryKeyJoinColumn(name = "id")
 public class Student extends User
 {
     //*NOTE TO-do FK(BatchID and CourseID) AND CODE CLEAN-UP
