@@ -22,7 +22,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import static org.springframework.http.HttpMethod.GET;
+import static org.springframework.http.HttpMethod.*;
 
 @Slf4j
 @Configuration
@@ -51,6 +51,11 @@ public class SecurityConfiguration {
         httpSecurity.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         httpSecurity.authorizeHttpRequests().requestMatchers("/api/login/**", "/api/token/refresh/**").permitAll();
         httpSecurity.authorizeHttpRequests().requestMatchers(GET,"/api/users/**").hasAuthority("ADMIN");
+        httpSecurity.authorizeHttpRequests().requestMatchers(POST,"/api/user/add/sme").hasAuthority("ADMIN");
+        httpSecurity.authorizeHttpRequests().requestMatchers(PUT,"/api/user/**").hasAuthority("ADMIN");
+        httpSecurity.authorizeHttpRequests().requestMatchers(POST,"/api/user/add/student").hasAuthority("SME");
+
+
         httpSecurity.authorizeHttpRequests().requestMatchers(GET,"/api/users/").hasAuthority("STUDENT");
 
         httpSecurity.authorizeHttpRequests().anyRequest().authenticated();

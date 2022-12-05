@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -20,10 +21,13 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import static org.springframework.http.HttpStatus.FORBIDDEN;
+import static org.springframework.http.HttpStatus.OK;
 
 @Service @RequiredArgsConstructor @Transactional @Slf4j
 public class UserServiceImpl implements UserService, UserDetailsService {
@@ -50,13 +54,36 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public User saveUser(User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setPassword(user.getPassword());
-        log.info("{} added to Database", user.getId());
-        return userRepo.save(user);
-    }
+    public Map<String,Object> saveUser(User user, String roleName) {
+        Role role = roleRepo.findByName(roleName);
+        Map<String, Object> message = new LinkedHashMap<>();
+        if(!userRepo.emailEquals(user.getEmail())){
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            user.setPassword(user.getPassword());
+            user.getRoles().add(role);
+            user.setActive(true);
 
+            if (roleName.equals("student")){
+                 saveUser(new Student(user));
+            }else{
+                 userRepo.save(user);
+            }
+            message.put("user",user);
+            message.put("message", user.getEmail() +" successfully created.");
+            message.put("status",  String.valueOf(OK.value()));
+        }else{
+            message.put("message",  "This Email: " + user.getEmail() + " is taken.");
+            message.put("status",  String.valueOf(FORBIDDEN.value()));
+        }
+
+    return message;
+    }
+    @Override
+    public void saveUser(Student student) {
+        student.setClass(false);
+        log.info("{} added to Database", student.getId());
+        studentRepo.save(student);
+    }
     @Override
     public Role saveRole(Role role) {
         log.info("{} added to Database", role.getName());
@@ -74,38 +101,37 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public User getUser(String email) {
-        log.info("Fetching user {} ", email);
-        return userRepo.findByEmail(email);
-    }
-
-    @Override
-    public void addStudent(User user, Student student) {
-        //        if(user.getRoles().contains("SME") || user.getRoles().contains("ADMIN")){ //*NOTE for RESTRICTION
-        student.setEmail(user.getEmail());
-        student.setPassword(passwordEncoder.encode(user.getPassword()));
-        student.setPassword(student.getPassword());
-        student.setFirstname(user.getFirstname());
-        student.setLastname(user.getLastname());
-        Role role = roleRepo.findByName("STUDENT");
-        student.getRoles().add(role);
-        student.setActive(true);
-        student.setClass(false);
-//        }
-        log.info("{} added to Database", student.getId());
-        studentRepo.save(student);
-    }
-
-    @Override
     public List<User> getUsers() {
         log.info("Fetching all users {} ");
         return userRepo.findAll();
     }
 
     @Override
-    public List<User> getUsers(String email, int pageNumber, int pageSize) {
+    public List<User> getUsers(int pageNumber, int pageSize) {
         Pageable paging = PageRequest.of(pageNumber, pageSize);
         Page<User> pagedResult = userRepoPagingate.findAll(paging);
-        return pagedResult.toList();
+        return pagedResult.stream().toList();
+    }
+
+    @Override
+    public User getUser(String email) {
+        return userRepo.findByEmail(email);
+    }
+
+    @Override
+    public List<User> getUserByKeyword(String keyword) {
+        if(keyword != null){
+            return userRepo.findAllByKeyword(keyword);
+        }else{
+            return userRepo.findAll();
+        }
+    }
+    @Override
+    public User deactivateUser(String email) {
+       User user =  userRepo.findByEmail(email);
+       if(user.isActive()){
+           user.setActive(false);
+       }
+       return user;
     }
 }

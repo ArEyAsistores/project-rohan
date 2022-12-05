@@ -12,6 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @SpringBootApplication
 public class RohanApplication {
@@ -42,16 +43,18 @@ public class RohanApplication {
 					"Almira Jane",
 					"Piedragoza",
 					"aj54@#1!",
+					true,
 					new ArrayList<>()
-			));
+			),"ADMIN");
 			userService.saveUser( new User(
 					null,
 					"rna.rey@yahoo.com",
 					"Roberto II",
 					"Asistores",
 					"rapog!h",
+					true,
 					new ArrayList<>()
-			));
+			),"ADMIN");
 			for (int x = 0; x < 20; x++){//TEMP for PAGINATION
 				userService.saveUser( new User(
 						null,
@@ -59,23 +62,10 @@ public class RohanApplication {
 						"Roberto II",
 						"Asistores",
 						"rapog!h",
+						true,
 						new ArrayList<>()
-				));
+				),"SME");
 			}
-			////////////////////////
-			///INITIAL USER ROLE///
-			//////////////////////
-			userService.addStudent(new User(
-					null,
-					"rey@yahoo.com",
-					"Rober",
-					"Asistores",
-					"rapog!h",
-					new ArrayList<>()), new Student());
-			userService.assignRole("aj.piedragoza@yahoo.com", "ADMIN");
-			userService.assignRole("rna.rey@yahoo.com", "STUDENT");
-
-
 		};
 	}
 }
