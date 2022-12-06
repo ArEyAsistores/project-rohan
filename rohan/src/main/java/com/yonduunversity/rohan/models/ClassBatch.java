@@ -67,3 +67,4 @@ public class ClassBatch {
     private LocalDate endDate;
 
 }
+

@@ -19,11 +19,12 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-
+import static org.springframework.http.HttpMethod.*;
 import com.yonduunversity.rohan.security.filter.CustomAuthenticationFilter;
 import com.yonduunversity.rohan.security.filter.CustomAuthorizationFilter;
 
 import static org.springframework.http.HttpMethod.GET;
+
 
 @Slf4j
 @Configuration
@@ -47,15 +48,18 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity, AuthenticationConfiguration authConfig)
             throws Exception {
-        CustomAuthenticationFilter customAuthFilter = new CustomAuthenticationFilter(
-                authConfig.getAuthenticationManager());
+        CustomAuthenticationFilter customAuthFilter = new CustomAuthenticationFilter(authConfig.getAuthenticationManager());
         customAuthFilter.setFilterProcessesUrl("/api/login");
 
         httpSecurity.csrf().disable();
         httpSecurity.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         httpSecurity.authorizeHttpRequests().requestMatchers("/api/login/**", "/api/token/refresh/**").permitAll();
-        httpSecurity.authorizeHttpRequests().requestMatchers(GET, "/api/users/**").hasAuthority("ADMIN");
-        httpSecurity.authorizeHttpRequests().requestMatchers(GET, "/api/users/").hasAuthority("STUDENT");
+        httpSecurity.authorizeHttpRequests().requestMatchers(GET,"/api/users/**").hasAuthority("ADMIN");
+        httpSecurity.authorizeHttpRequests().requestMatchers(POST,"/api/user/add/sme").hasAuthority("ADMIN");
+        httpSecurity.authorizeHttpRequests().requestMatchers(PUT,"/api/user/**").hasAuthority("ADMIN");
+        httpSecurity.authorizeHttpRequests().requestMatchers(POST,"/api/user/add/student").hasAuthority("SME");
+        httpSecurity.authorizeHttpRequests().requestMatchers(GET,"/api/users/").hasAuthority("STUDENT");
+
 
         httpSecurity.authorizeHttpRequests().anyRequest().authenticated();
         httpSecurity.addFilter(customAuthFilter);

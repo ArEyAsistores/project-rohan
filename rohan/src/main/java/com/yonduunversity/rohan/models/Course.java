@@ -22,6 +22,7 @@ public class Course {
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
     private List<ClassBatch> classBatches;
 
+
     @NonNull
     @Column(name = "title", nullable = false)
     private String title;

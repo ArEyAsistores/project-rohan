@@ -13,6 +13,7 @@ import com.yonduunversity.rohan.models.student.Student;
 import com.yonduunversity.rohan.services.UserService;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @SpringBootApplication
 public class RohanApplication {
@@ -45,14 +46,19 @@ public class RohanApplication {
 					"Almira Jane",
 					"Piedragoza",
 					"aj54@#1!",
-					new ArrayList<>()));
+
+					true,
+					new ArrayList<>()), "ADMIN");
+
 			userService.saveUser(new User(
 					null,
 					"rna.rey@yahoo.com",
 					"Roberto II",
 					"Asistores",
 					"rapog!h",
-					new ArrayList<>()));
+					true,
+					new ArrayList<>()), "STUDENT");
+
 			for (int x = 0; x < 20; x++) {// TEMP for PAGINATION
 				userService.saveUser(new User(
 						null,
@@ -60,20 +66,13 @@ public class RohanApplication {
 						"Roberto II",
 						"Asistores",
 						"rapog!h",
-						new ArrayList<>()));
+						true,
+						new ArrayList<>()), "SME");
 			}
+
 			////////////////////////
 			/// INITIAL USER ROLE///
 			//////////////////////
-			userService.addStudent(new User(
-					null,
-					"rey@yahoo.com",
-					"Rober",
-					"Asistores",
-					"rapog!h",
-					new ArrayList<>()), new Student());
-			userService.assignRole("aj.piedragoza@yahoo.com", "ADMIN");
-			userService.assignRole("rna.rey@yahoo.com", "STUDENT");
 
 		};
 	}

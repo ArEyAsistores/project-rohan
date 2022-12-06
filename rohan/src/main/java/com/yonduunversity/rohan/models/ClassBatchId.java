@@ -22,3 +22,4 @@ public class ClassBatchId implements Serializable {
     private int batch;
 
 }
+

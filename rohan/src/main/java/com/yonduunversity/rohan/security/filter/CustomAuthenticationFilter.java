@@ -17,9 +17,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.io.IOException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -27,11 +25,11 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @Slf4j
 public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
-        private final AuthenticationManager authManager;
-        private static final Date ACCESS_TOKEN_EXPIRE_AT = new Date(System.currentTimeMillis() + 10 * 60 * 1000); // 10
-                                                                                                                  // minutes
-        private static final Date REFRESH_TOKEN_EXPIRE_AT = new Date(System.currentTimeMillis() + 30 * 60 * 1000); // 30
-                                                                                                                   // minutes
+    private final AuthenticationManager authManager;
+    private static final Date ACCESS_TOKEN_EXPIRE_AT = new Date(System.currentTimeMillis() + 1440 * 60 * 1000); //10 minutes
+    private static final Date REFRESH_TOKEN_EXPIRE_AT = new Date(System.currentTimeMillis() + 120 * 60 * 1000); //30 minutes
+
+
 
         public CustomAuthenticationFilter(AuthenticationManager authManager) {
                 this.authManager = authManager;
@@ -42,7 +40,6 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
                         throws AuthenticationException {
                 String email = request.getParameter("email");
                 String password = request.getParameter("password");
-
                 UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(email,
                                 password);
                 return authManager.authenticate(authenticationToken);
@@ -70,6 +67,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
                                 .withSubject(user.getUsername())
                                 .withExpiresAt(REFRESH_TOKEN_EXPIRE_AT)
                                 .withIssuer(request.getRequestURL().toString()).sign(algorithm);
+
 
                 Map<String, String> tokens = new HashMap<>();
                 tokens.put("access_token", access_token);
