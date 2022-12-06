@@ -139,6 +139,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public User getUser(String email) {
         return userRepo.findByEmail(email);
     }
+    @Override
+    public Course getCourse(long courseCode) {
+        return courseRepo.findByCourseCode(courseCode);
+    }
 
     @Override
     public List<User> getUserByKeyword(String keyword) {

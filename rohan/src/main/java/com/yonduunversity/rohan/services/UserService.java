@@ -21,6 +21,7 @@ public interface UserService {
     List<Course>getCourses(int pageNumber, int pageSize);//With Pagination
     List<Course>getCourseByKeyword(String keyword);
     User getUser(String email);
+    Course getCourse(long courseCode);
     List<User>getUserByKeyword(String keyword);
 
     User deactivateUser(String email);

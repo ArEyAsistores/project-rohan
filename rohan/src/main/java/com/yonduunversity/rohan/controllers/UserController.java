@@ -82,6 +82,10 @@ public class UserController {
         List<Course> listOfUser = userService.getCourseByKeyword(keyword);
         return ResponseEntity.ok().body(listOfUser);
     }
+    @GetMapping("/course")
+    public Course getCourse(@Param("courseCode") long courseCode){
+        return userService.getCourse(courseCode);
+    }
     /////////////////////////////////
     ///POST: ASSIGN ROLE TO USER ///
     //////////////////////////////
