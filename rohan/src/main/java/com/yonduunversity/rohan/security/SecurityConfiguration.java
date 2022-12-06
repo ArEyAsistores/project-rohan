@@ -52,6 +52,8 @@ public class SecurityConfiguration {
         httpSecurity.authorizeHttpRequests().requestMatchers("/api/login/**", "/api/token/refresh/**").permitAll();
         httpSecurity.authorizeHttpRequests().requestMatchers(GET,"/api/users/**").hasAuthority("ADMIN");
         httpSecurity.authorizeHttpRequests().requestMatchers(POST,"/api/user/add/sme").hasAuthority("ADMIN");
+        httpSecurity.authorizeHttpRequests().requestMatchers(POST,"/api/course/**").hasAuthority("ADMIN");
+        httpSecurity.authorizeHttpRequests().requestMatchers(GET,"/api/courses/**").hasAuthority("ADMIN");
         httpSecurity.authorizeHttpRequests().requestMatchers(PUT,"/api/user/**").hasAuthority("ADMIN");
         httpSecurity.authorizeHttpRequests().requestMatchers(POST,"/api/user/add/student").hasAuthority("SME");
 

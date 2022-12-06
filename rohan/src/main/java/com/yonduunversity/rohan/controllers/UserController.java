@@ -1,5 +1,6 @@
 package com.yonduunversity.rohan.controllers;
 
+import com.yonduunversity.rohan.models.Course;
 import com.yonduunversity.rohan.models.Role;
 import com.yonduunversity.rohan.models.User;
 import com.yonduunversity.rohan.services.UserService;
@@ -51,7 +52,6 @@ public class UserController {
                     .fromCurrentContextPath()
                     .path("api/user/add").toUriString());
 
-
         return ResponseEntity.created(uri).body(userService.saveUser(user,roleName));
     }
     ///////////////////////////
@@ -64,6 +64,23 @@ public class UserController {
                 .fromCurrentContextPath()
                 .path("api/role/add").toUriString());
         return ResponseEntity.created(uri).body(userService.saveRole(role));
+    }
+    @PostMapping("/course/add")
+    public ResponseEntity<Course> addCourse(@RequestBody Course course){
+        URI uri = URI
+                .create(ServletUriComponentsBuilder
+                        .fromCurrentContextPath()
+                        .path("api/course/add").toUriString());
+        return ResponseEntity.created(uri).body(userService.addCourse(course));
+    }
+    @GetMapping("/courses")
+    public  List<Course> getAllCourses(@RequestParam(name = "page", defaultValue = "0") int pageNumber, @RequestParam(name = "pageSize", defaultValue = "10")   int pageSize){
+        return userService.getCourses(pageNumber,pageSize);
+    }
+    @GetMapping("/courses/search")
+    public ResponseEntity<List<Course>> getCourseByKeyword(@Param("keyword") String keyword){
+        List<Course> listOfUser = userService.getCourseByKeyword(keyword);
+        return ResponseEntity.ok().body(listOfUser);
     }
     /////////////////////////////////
     ///POST: ASSIGN ROLE TO USER ///
@@ -80,5 +97,9 @@ public class UserController {
     @PutMapping("/user/deactivate")
     public User deactivateUser(@RequestParam(name = "email", defaultValue = "") String email){
        return userService.deactivateUser(email);
+    }
+    @PutMapping("/course/deactivate")
+    public Course deactivateCourse(@RequestParam(name = "courseCode", defaultValue = "") Long courseCode){
+        return userService.deactivateCourse(courseCode);
     }
 }

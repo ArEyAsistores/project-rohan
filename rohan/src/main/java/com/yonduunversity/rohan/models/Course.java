@@ -13,9 +13,11 @@ import java.util.List;
 @Table(name = "course")
 public class Course {
 
+
     @Id
-    @Column(name = "course_code", nullable = false, unique = true)
-    private int courseCode;
+    @Column(name = "code", nullable = false, unique = true)
+//    @GeneratedValue(strategy=GenerationType.SEQUENCE)
+    private Long courseCode;
 
     // @JsonIgnore
     // @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
@@ -28,5 +30,7 @@ public class Course {
     @NonNull
     @Column(name = "description", nullable = false)
     private String description;
+
+    private boolean isActive;
 
 }
