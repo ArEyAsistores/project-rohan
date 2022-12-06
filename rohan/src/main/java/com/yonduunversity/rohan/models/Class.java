@@ -1,10 +1,10 @@
-package com.yonduuniversity.rohan.models;
+package com.yonduunversity.rohan.models;
 
 import java.time.LocalDate;
 
 import org.springframework.cglib.core.Local;
 
-import com.yonduuniversity.rohan.models.Course;
+import com.yonduunversity.rohan.models.Course;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
