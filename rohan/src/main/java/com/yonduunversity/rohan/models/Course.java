@@ -13,10 +13,12 @@ import java.util.List;
 @RequiredArgsConstructor
 @Table(name = "course")
 public class Course {
+
+
     @NonNull
     @Id
-    @Column(name = "course_code", nullable = false, unique = true)
-    private int courseCode;
+    @Column(name = "code", nullable = false, unique = true)
+    private Long courseCode;
 
     @JsonIgnore
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
@@ -30,5 +32,7 @@ public class Course {
     @NonNull
     @Column(name = "description", nullable = false)
     private String description;
+
+    private boolean isActive;
 
 }

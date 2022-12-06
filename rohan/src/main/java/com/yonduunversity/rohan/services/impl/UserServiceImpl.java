@@ -1,11 +1,21 @@
 package com.yonduunversity.rohan.services.impl;
 
+import com.yonduunversity.rohan.models.Course;
+import com.yonduunversity.rohan.models.Role;
+import com.yonduunversity.rohan.models.User;
+import com.yonduunversity.rohan.models.student.Student;
+import com.yonduunversity.rohan.repository.CourseRepo;
+import com.yonduunversity.rohan.repository.RoleRepo;
+import com.yonduunversity.rohan.repository.StudentRepo;
+import com.yonduunversity.rohan.repository.UserRepo;
+import com.yonduunversity.rohan.repository.pagination.CourseRepoPaginate;
+import com.yonduunversity.rohan.repository.pagination.UserRepoPaginate;
+import com.yonduunversity.rohan.services.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -16,14 +26,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.OK;
-import com.yonduunversity.rohan.models.Role;
-import com.yonduunversity.rohan.models.User;
-import com.yonduunversity.rohan.models.student.Student;
-import com.yonduunversity.rohan.repository.RoleRepo;
-import com.yonduunversity.rohan.repository.StudentRepo;
-import com.yonduunversity.rohan.repository.UserRepo;
-import com.yonduunversity.rohan.repository.pagination.UserRepoPagingate;
-import com.yonduunversity.rohan.services.UserService;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -39,7 +41,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private final RoleRepo roleRepo;
     private final StudentRepo studentRepo;
     private final PasswordEncoder passwordEncoder;
-    private final UserRepoPagingate userRepoPagingate;
+    private final UserRepoPaginate userRepoPagingate;
+    private final CourseRepoPaginate courseRepoPaginate;
+    private final CourseRepo courseRepo;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -110,9 +114,16 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public User getUser(String email) {
-        log.info("Fetching user {} ", email);
-        return userRepo.findByEmail(email);
+    public void assignCourse(String email, long roleName) {
+
+    }
+
+    @Override
+    public Course addCourse(Course course) {
+        log.info("{} added to Database", course.getTitle());
+        log.info("{} added to Database", course.getCourseCode());
+        course.setActive(true);
+        return courseRepo.save(course);
     }
 
     @Override
@@ -133,10 +144,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         studentRepo.save(student);
     }
 
-    @Override
-    public List<User> getUsers(String email, int pageNumber, int pageSize) {
-        return null;
-    }
 
     @Override
     public List<User> getUsers() {
@@ -150,6 +157,21 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         Page<User> pagedResult = userRepoPagingate.findAll(paging);
         return pagedResult.stream().toList();
     }
+    @Override
+    public List<Course> getCourses(int pageNumber, int pageSize) {
+        Pageable paging = PageRequest.of(pageNumber, pageSize);
+        Page<Course> pagedResult = courseRepoPaginate.findAll(paging);
+        return pagedResult.stream().toList();
+    }
+
+    @Override
+    public User getUser(String email) {
+        return userRepo.findByEmail(email);
+    }
+    @Override
+    public Course getCourse(long courseCode) {
+        return courseRepo.findByCourseCode(courseCode);
+    }
 
     @Override
     public List<User> getUserByKeyword(String keyword) {
@@ -160,11 +182,27 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         }
     }
     @Override
+    public List<Course> getCourseByKeyword(String keyword) {
+        if(keyword != null){
+            return courseRepo.findAllByKeyword(keyword);
+        }else{
+            return courseRepo.findAll();
+        }
+    }
+    @Override
     public User deactivateUser(String email) {
        User user =  userRepo.findByEmail(email);
        if(user.isActive()){
            user.setActive(false);
        }
        return user;
+    }
+    @Override
+    public Course deactivateCourse(long courseCode) {
+        Course course = courseRepo.findByCourseCode(courseCode);
+        if(course.isActive()){
+            course.setActive(false);
+        }
+        return course;
     }
 }
