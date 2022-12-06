@@ -1,8 +1,8 @@
-package com.yonduuniversity.rohan.repository;
+package com.yonduunversity.rohan.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.yonduuniversity.rohan.models.Role;
+import com.yonduunversity.rohan.models.Role;
 
 public interface RoleRepo extends JpaRepository<Role, Long> {
     Role findByName(String name);

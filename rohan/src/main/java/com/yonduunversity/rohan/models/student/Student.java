@@ -1,6 +1,6 @@
-package com.yonduuniversity.rohan.models.student;
+package com.yonduunversity.rohan.models.student;
 
-import com.yonduuniversity.rohan.models.User;
+import com.yonduunversity.rohan.models.User;
 
 import jakarta.persistence.Entity;
 import lombok.AllArgsConstructor;

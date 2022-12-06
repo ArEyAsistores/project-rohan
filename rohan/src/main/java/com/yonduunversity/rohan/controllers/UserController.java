@@ -1,4 +1,4 @@
-package com.yonduuniversity.rohan.controllers;
+package com.yonduunversity.rohan.controllers;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -6,9 +6,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.yonduuniversity.rohan.models.Role;
-import com.yonduuniversity.rohan.models.User;
-import com.yonduuniversity.rohan.services.UserService;
+import com.yonduunversity.rohan.models.Role;
+import com.yonduunversity.rohan.models.User;
+import com.yonduunversity.rohan.services.UserService;
 
 import java.net.URI;
 import java.util.List;

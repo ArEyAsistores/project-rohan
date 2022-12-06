@@ -1,10 +1,10 @@
-package com.yonduuniversity.rohan.services;
+package com.yonduunversity.rohan.services;
 
 import java.util.List;
 
-import com.yonduuniversity.rohan.models.Role;
-import com.yonduuniversity.rohan.models.User;
-import com.yonduuniversity.rohan.models.student.Student;
+import com.yonduunversity.rohan.models.Role;
+import com.yonduunversity.rohan.models.User;
+import com.yonduunversity.rohan.models.student.Student;
 
 public interface UserService {
 

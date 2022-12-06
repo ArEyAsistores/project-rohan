@@ -1,8 +1,8 @@
-package com.yonduuniversity.rohan.services;
+package com.yonduunversity.rohan.services;
 
 import java.util.List;
 
-import com.yonduuniversity.rohan.models.Course;
+import com.yonduunversity.rohan.models.Course;
 
 public interface CourseService {
 

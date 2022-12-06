@@ -1,4 +1,4 @@
-package com.yonduuniversity.rohan.controllers;
+package com.yonduunversity.rohan.controllers;
 
 import lombok.Data;
 

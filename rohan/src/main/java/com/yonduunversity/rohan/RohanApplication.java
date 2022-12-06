@@ -1,4 +1,4 @@
-package com.yonduuniversity.rohan;
+package com.yonduunversity.rohan;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -7,10 +7,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.yonduuniversity.rohan.models.Role;
-import com.yonduuniversity.rohan.models.User;
-import com.yonduuniversity.rohan.models.student.Student;
-import com.yonduuniversity.rohan.services.UserService;
+import com.yonduunversity.rohan.models.Role;
+import com.yonduunversity.rohan.models.User;
+import com.yonduunversity.rohan.models.student.Student;
+import com.yonduunversity.rohan.services.UserService;
 
 import java.util.ArrayList;
 

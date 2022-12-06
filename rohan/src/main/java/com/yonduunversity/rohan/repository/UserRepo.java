@@ -1,8 +1,8 @@
-package com.yonduuniversity.rohan.repository;
+package com.yonduunversity.rohan.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.yonduuniversity.rohan.models.User;
+import com.yonduunversity.rohan.models.User;
 
 public interface UserRepo extends JpaRepository<User, Long> {
     User findByEmail(String email);

@@ -1,8 +1,8 @@
-package com.yonduuniversity.rohan.repository;
+package com.yonduunversity.rohan.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.yonduuniversity.rohan.models.Course;
+import com.yonduunversity.rohan.models.Course;
 
 public interface CourseRepo extends JpaRepository<Course, Integer> {
 

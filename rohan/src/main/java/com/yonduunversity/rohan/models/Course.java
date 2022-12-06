@@ -1,4 +1,4 @@
-package com.yonduuniversity.rohan.models;
+package com.yonduunversity.rohan.models;
 
 import lombok.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -10,12 +10,17 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@RequiredArgsConstructor
 @Table(name = "course")
 public class Course {
-
+    @NonNull
     @Id
-    @Column(name = "courseCode", nullable = false, unique = true)
+    @Column(name = "course_code", nullable = false, unique = true)
     private int courseCode;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
+    private List<ClassBatch> classBatches;
 
     @NonNull
     @Column(name = "title", nullable = false)
@@ -25,8 +30,4 @@ public class Course {
     @Column(name = "description", nullable = false)
     private String description;
 
-    // classes
-    @JsonIgnore
-    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
-    private List<Class> classes;
 }

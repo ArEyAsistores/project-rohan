@@ -1,4 +1,4 @@
-package com.yonduuniversity.rohan.security;
+package com.yonduunversity.rohan.security;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,8 +20,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import com.yonduuniversity.rohan.security.filter.CustomAuthenticationFilter;
-import com.yonduuniversity.rohan.security.filter.CustomAuthorizationFilter;
+import com.yonduunversity.rohan.security.filter.CustomAuthenticationFilter;
+import com.yonduunversity.rohan.security.filter.CustomAuthorizationFilter;
 
 import static org.springframework.http.HttpMethod.GET;
 

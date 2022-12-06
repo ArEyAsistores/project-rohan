@@ -1,4 +1,4 @@
-package com.yonduuniversity.rohan.services.impl;
+package com.yonduunversity.rohan.services.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,14 +13,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.yonduuniversity.rohan.models.Role;
-import com.yonduuniversity.rohan.models.User;
-import com.yonduuniversity.rohan.models.student.Student;
-import com.yonduuniversity.rohan.repository.RoleRepo;
-import com.yonduuniversity.rohan.repository.StudentRepo;
-import com.yonduuniversity.rohan.repository.UserRepo;
-import com.yonduuniversity.rohan.repository.pagination.UserRepoPagingate;
-import com.yonduuniversity.rohan.services.UserService;
+import com.yonduunversity.rohan.models.Role;
+import com.yonduunversity.rohan.models.User;
+import com.yonduunversity.rohan.models.student.Student;
+import com.yonduunversity.rohan.repository.RoleRepo;
+import com.yonduunversity.rohan.repository.StudentRepo;
+import com.yonduunversity.rohan.repository.UserRepo;
+import com.yonduunversity.rohan.repository.pagination.UserRepoPagingate;
+import com.yonduunversity.rohan.services.UserService;
 
 import java.util.ArrayList;
 import java.util.Collection;

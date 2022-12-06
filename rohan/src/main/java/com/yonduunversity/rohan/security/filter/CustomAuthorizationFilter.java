@@ -1,4 +1,4 @@
-package com.yonduuniversity.rohan.security.filter;
+package com.yonduunversity.rohan.security.filter;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;

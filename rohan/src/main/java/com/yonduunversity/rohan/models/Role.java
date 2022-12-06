@@ -1,4 +1,4 @@
-package com.yonduuniversity.rohan.models;
+package com.yonduunversity.rohan.models;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
