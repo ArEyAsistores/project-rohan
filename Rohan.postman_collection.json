@@ -1,0 +1,420 @@
+{
+	"info": {
+		"_postman_id": "9e5438a0-af75-4b7b-a16a-3c19437d2271",
+		"name": "Rohan",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Auth ADMIN",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "c7a38eef-81e2-4394-931c-8656612624df",
+						"type": "default",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "email",
+							"value": "aj.piedragoza@yahoo.com",
+							"type": "default"
+						},
+						{
+							"key": "password",
+							"value": "aj54@#1!",
+							"type": "default"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{localhost}}api/login",
+					"host": [
+						"{{localhost}}api"
+					],
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Auth SME",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "c7a38eef-81e2-4394-931c-8656612624df",
+						"type": "default",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "email",
+							"value": "aj.piedragoza@yahoo.com",
+							"type": "default"
+						},
+						{
+							"key": "password",
+							"value": "aj54@#1!",
+							"type": "default"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{localhost}}api/login",
+					"host": [
+						"{{localhost}}api"
+					],
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET Users",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{Bearer}}eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhai5waWVkcmFnb3phQHlhaG9vLmNvbSIsInJvbGVzIjpbIkFETUlOIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC9hcGkvbG9naW4iLCJleHAiOjE2NzAwNTI5MzR9.5PqJ98Qa1DpEkjsSYgbF2qEQtecOZi8LsHEB8e2vM7M",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{localhost}}api/users",
+					"host": [
+						"{{localhost}}api"
+					],
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Refresh Token",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJNaXJhIiwicm9sZXMiOlsiQURNSU4iLCJTTUUiXSwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL2FwaS9sb2dpbiIsImV4cCI6MTY2OTk1NDI3NH0.kyoRtvpGbcNIsQhVn8Mg5iSylZm8wp7p_POdBmnBF0o",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "{{localhost}}/api/token/refresh",
+					"host": [
+						"{{localhost}}"
+					],
+					"path": [
+						"api",
+						"token",
+						"refresh"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET Search user by keyword",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJNaXJhIiwicm9sZXMiOlsiQURNSU4iLCJTTUUiXSwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL2FwaS9sb2dpbiIsImV4cCI6MTY2OTk1NDI3NH0.kyoRtvpGbcNIsQhVn8Mg5iSylZm8wp7p_POdBmnBF0o",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "{{localhost}}/api/token/refresh",
+					"host": [
+						"{{localhost}}"
+					],
+					"path": [
+						"api",
+						"token",
+						"refresh"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET Users with pagination",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{Bearer}}eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhai5waWVkcmFnb3phQHlhaG9vLmNvbSIsInJvbGVzIjpbIkFETUlOIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC9hcGkvbG9naW4iLCJleHAiOjE2NzAyMjAzNjF9.CnI6MCs0UF_wMS1kS93688wk2SINsGH4HM5JwgonGZw",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "{{localhost}}api/users/search?keyword=piedragoza",
+					"host": [
+						"{{localhost}}api"
+					],
+					"path": [
+						"users",
+						"search"
+					],
+					"query": [
+						{
+							"key": "keyword",
+							"value": "piedragoza"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST Add User Admin",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{Bearer}}eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhai5waWVkcmFnb3phQHlhaG9vLmNvbSIsInJvbGVzIjpbIkFETUlOIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC9hcGkvbG9naW4iLCJleHAiOjE2NzAzMTM3Njd9._3R8y9yiUll8_Tm7y8cSTP6IVsujwCo8rjXh5G6xLyw",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"email.sample22w3@yondu.com\",\r\n    \"firstname\": \"FnameSample\",\r\n    \"lastname\": \"LnameSample\",\r\n    \"password\": \"sample2\"\r\n   \r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{localhost}}api/user/add/sme",
+					"host": [
+						"{{localhost}}api"
+					],
+					"path": [
+						"user",
+						"add",
+						"sme"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST Add Student by SME",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{Bearer}}eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJybmEucmV5MEB5YWhvby5jb20iLCJyb2xlcyI6WyJTTUUiXSwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL2FwaS9sb2dpbiIsImV4cCI6MTY3MDMxNjYzOH0.yVIIhiaZOsCNRzLsjY21D9ONgtQBSiFp-cbJPAv5GtQ",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"email.sample22w3@yondu.com\",\r\n    \"firstname\": \"FnameSample\",\r\n    \"lastname\": \"LnameSample\",\r\n    \"password\": \"sample2\",\r\n    \r\n   \r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{localhost}}api/user/add/student",
+					"host": [
+						"{{localhost}}api"
+					],
+					"path": [
+						"user",
+						"add",
+						"student"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET Users by Email",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{Bearer}}eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhai5waWVkcmFnb3phQHlhaG9vLmNvbSIsInJvbGVzIjpbIkFETUlOIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC9hcGkvbG9naW4iLCJleHAiOjE2NzAyMjAzNjF9.CnI6MCs0UF_wMS1kS93688wk2SINsGH4HM5JwgonGZw",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "{{localhost}}api/users/search?keyword=piedragoza",
+					"host": [
+						"{{localhost}}api"
+					],
+					"path": [
+						"users",
+						"search"
+					],
+					"query": [
+						{
+							"key": "keyword",
+							"value": "piedragoza"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PUT Deactivate User",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{Bearer}}eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhai5waWVkcmFnb3phQHlhaG9vLmNvbSIsInJvbGVzIjpbIkFETUlOIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC9hcGkvbG9naW4iLCJleHAiOjE2NzAzMTM3Njd9._3R8y9yiUll8_Tm7y8cSTP6IVsujwCo8rjXh5G6xLyw",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{localhost}}api/user/deactivate?email=rna.rey@yahoo.com",
+					"host": [
+						"{{localhost}}api"
+					],
+					"path": [
+						"user",
+						"deactivate"
+					],
+					"query": [
+						{
+							"key": "email",
+							"value": "rna.rey@yahoo.com"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "localhost",
+			"value": "localhost:8080/",
+			"type": "default"
+		},
+		{
+			"key": "Bearer",
+			"value": "Bearer ",
+			"type": "default"
+		}
+	]
+}

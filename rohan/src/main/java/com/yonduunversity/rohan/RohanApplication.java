@@ -22,49 +22,48 @@ public class RohanApplication {
 	}
 
 	@Bean
-	PasswordEncoder passwordEncoder(){ return new BCryptPasswordEncoder();}
+	PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
 
 	@Bean
-	CommandLineRunner run(UserService userService){
+	CommandLineRunner run(UserService userService) {
 		return args -> {
 			///////////////////
-			///INITIAL ROLES///
+			/// INITIAL ROLES///
 			//////////////////
-			userService.saveRole( new Role(null,"ADMIN"));
-			userService.saveRole( new Role(null,"SME"));
-			userService.saveRole( new Role(null,"STUDENT"));
+			userService.saveRole(new Role(null, "ADMIN"));
+			userService.saveRole(new Role(null, "SME"));
+			userService.saveRole(new Role(null, "STUDENT"));
 
 			///////////////////
-			///INITIAL USERS///
+			/// INITIAL USERS///
 			//////////////////
-			userService.saveUser( new User(
+			userService.saveUser(new User(
 					null,
 					"aj.piedragoza@yahoo.com",
 					"Almira Jane",
 					"Piedragoza",
 					"aj54@#1!",
 					true,
-					new ArrayList<>()
-			),"ADMIN");
-			userService.saveUser( new User(
+					new ArrayList<>()), "ADMIN");
+			userService.saveUser(new User(
 					null,
 					"rna.rey@yahoo.com",
 					"Roberto II",
 					"Asistores",
 					"rapog!h",
 					true,
-					new ArrayList<>()
-			),"STUDENT");
-			for (int x = 0; x < 20; x++){//TEMP for PAGINATION
-				userService.saveUser( new User(
+					new ArrayList<>()), "STUDENT");
+			for (int x = 0; x < 20; x++) {// TEMP for PAGINATION
+				userService.saveUser(new User(
 						null,
 						"rna.rey" + x + "@yahoo.com",
 						"Roberto II",
 						"Asistores",
 						"rapog!h",
 						true,
-						new ArrayList<>()
-				),"SME");
+						new ArrayList<>()), "SME");
 			}
 		};
 	}
