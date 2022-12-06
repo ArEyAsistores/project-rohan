@@ -23,13 +23,18 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.*;
-
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.OK;
 
-@Service @RequiredArgsConstructor @Transactional @Slf4j
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+@Service
+@RequiredArgsConstructor
+@Transactional
+@Slf4j
 public class UserServiceImpl implements UserService, UserDetailsService {
 
     private final UserRepo userRepo;
@@ -43,16 +48,16 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userRepo.findByEmail(email);
-        if(user == null){
+        if (user == null) {
             log.info("Email not found");
             throw new UsernameNotFoundException("Email not found");
 
-        }else{
+        } else {
             log.info("Email found {}:", email);
         }
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        user.getRoles().forEach( role -> authorities.add(new SimpleGrantedAuthority(role.getName())));
-        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(),authorities);
+        user.getRoles().forEach(role -> authorities.add(new SimpleGrantedAuthority(role.getName())));
+        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), authorities);
     }
 
     @Override
@@ -80,6 +85,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     return message;
     }
+
+    @Override
+    public User saveUser(User user) {
+        return null;
+    }
+
     @Override
     public void saveUser(Student student) {
         student.setClass(false);
@@ -98,7 +109,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         User user = userRepo.findByEmail(email);
         Role role = roleRepo.findByName(roleName);
         user.getRoles().add(role);
-        log.info("Adding Role to {} to user {} ",roleName,email);
+        log.info("Adding Role to {} to user {} ", roleName, email);
 
     }
 
@@ -111,10 +122,28 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public Course addCourse(Course course) {
         log.info("{} added to Database", course.getTitle());
         log.info("{} added to Database", course.getCourseCode());
-//        course.setCourseCode(course.getCourseCode());
         course.setActive(true);
         return courseRepo.save(course);
     }
+
+    @Override
+    public void addStudent(User user, Student student) {
+        // if(user.getRoles().contains("SME") || user.getRoles().contains("ADMIN")){
+        // //*NOTE for RESTRICTION
+        student.setEmail(user.getEmail());
+        student.setPassword(passwordEncoder.encode(user.getPassword()));
+        student.setPassword(student.getPassword());
+        student.setFirstname(user.getFirstname());
+        student.setLastname(user.getLastname());
+        Role role = roleRepo.findByName("STUDENT");
+        student.getRoles().add(role);
+        student.setActive(true);
+        student.setClass(false);
+        // }
+        log.info("{} added to Database", student.getId());
+        studentRepo.save(student);
+    }
+
 
     @Override
     public List<User> getUsers() {
