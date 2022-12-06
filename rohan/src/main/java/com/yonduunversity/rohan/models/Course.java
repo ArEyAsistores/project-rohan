@@ -10,16 +10,18 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@RequiredArgsConstructor
 @Table(name = "course")
 public class Course {
-
+    @NonNull
     @Id
     @Column(name = "course_code", nullable = false, unique = true)
     private int courseCode;
 
-    // @JsonIgnore
-    // @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
-    // private List<ClassBatch> classBatches;
+    @JsonIgnore
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
+    private List<ClassBatch> classBatches;
+
 
     @NonNull
     @Column(name = "title", nullable = false)

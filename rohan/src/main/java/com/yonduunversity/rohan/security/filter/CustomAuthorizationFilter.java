@@ -29,14 +29,15 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @Slf4j
 public class CustomAuthorizationFilter extends OncePerRequestFilter {
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
 
-        if(request.getServletPath().equals("/api/login") || request.getServletPath().equals("")){
-            filterChain.doFilter(request,response);
-        }else{
+        if (request.getServletPath().equals("/api/login") || request.getServletPath().equals("")) {
+            filterChain.doFilter(request, response);
+        } else {
 
             String authHeader = request.getHeader(AUTHORIZATION);
-            if(authHeader != null && authHeader.startsWith("Bearer ")){
+            if (authHeader != null && authHeader.startsWith("Bearer ")) {
                 try {
                     String token = authHeader.substring("Bearer ".length());
                     Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
@@ -50,9 +51,10 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
                     Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
                     stream(roles).forEach(role -> authorities.add(new SimpleGrantedAuthority(role)));
 
-                    UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(email,null,authorities);
+                    UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+                            email, null, authorities);
                     SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-                    filterChain.doFilter(request,response);
+                    filterChain.doFilter(request, response);
 
                 } catch (Exception e) {
                     log.error("ERROR logging: {}", e.getMessage());
@@ -66,8 +68,8 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
                     response.setContentType(APPLICATION_JSON_VALUE);
                     new ObjectMapper().writeValue(response.getOutputStream(), error);
                 }
-            }else{
-                filterChain.doFilter(request,response);
+            } else {
+                filterChain.doFilter(request, response);
             }
 
         }

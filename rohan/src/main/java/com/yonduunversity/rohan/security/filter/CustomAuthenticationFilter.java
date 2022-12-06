@@ -28,54 +28,52 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     private final AuthenticationManager authManager;
     private static final Date ACCESS_TOKEN_EXPIRE_AT = new Date(System.currentTimeMillis() + 1440 * 60 * 1000); //10 minutes
     private static final Date REFRESH_TOKEN_EXPIRE_AT = new Date(System.currentTimeMillis() + 120 * 60 * 1000); //30 minutes
-    public CustomAuthenticationFilter(AuthenticationManager authManager) {
-        this.authManager = authManager;
-    }
 
-    @Override
-    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
-       String email = request.getParameter("email");
-       String password = request.getParameter("password");
 
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(email,password);
-        return authManager.authenticate(authenticationToken);
-    }
 
-    @Override
-    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
-        User userAuth = (User) authResult.getPrincipal();
-        Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
+        public CustomAuthenticationFilter(AuthenticationManager authManager) {
+                this.authManager = authManager;
+        }
 
-        String access_token = JWT.create()
-                .withSubject(userAuth.getUsername())
-                .withExpiresAt(ACCESS_TOKEN_EXPIRE_AT)
-                .withIssuer(request.getRequestURL().toString())
-                .withClaim("roles",
-                        userAuth.getAuthorities()
-                                        .stream()
-                                        .map(GrantedAuthority::getAuthority)
-                                        .collect(Collectors.toList()))
-                .sign(algorithm);
+        @Override
+        public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
+                        throws AuthenticationException {
+                String email = request.getParameter("email");
+                String password = request.getParameter("password");
+                UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(email,
+                                password);
+                return authManager.authenticate(authenticationToken);
+        }
 
-        String refresh_token = JWT.create()
-                .withSubject(userAuth.getUsername())
-                .withExpiresAt(REFRESH_TOKEN_EXPIRE_AT)
-                .withIssuer(request.getRequestURL().toString()).sign(algorithm);
+        @Override
+        protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
+                        FilterChain chain,
+                        Authentication authResult) throws IOException, ServletException {
+                User user = (User) authResult.getPrincipal();
+                Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
 
-        Map<String,String> user = new LinkedHashMap<>();
-        Map<String,String> tokens = new LinkedHashMap<>();
+                String access_token = JWT.create()
+                                .withSubject(user.getUsername())
+                                .withExpiresAt(ACCESS_TOKEN_EXPIRE_AT)
+                                .withIssuer(request.getRequestURL().toString())
+                                .withClaim("roles",
+                                                user.getAuthorities()
+                                                                .stream()
+                                                                .map(GrantedAuthority::getAuthority)
+                                                                .collect(Collectors.toList()))
+                                .sign(algorithm);
 
-        Map<String, Map<String, String>> userInfo = new LinkedHashMap<>();
-        user.put("email", ((User) authResult.getPrincipal()).getUsername());
-        authResult.getAuthorities().forEach(a -> user.put("granted_authorities", a.getAuthority()));
-        tokens.put("access_token", access_token);
-        tokens.put("refresh_token", refresh_token);
-        tokens.put("isAuthenticated", String.valueOf(authResult.isAuthenticated()));
-        userInfo.put("userInformation", user);
-        userInfo.put("tokens", tokens);
+                String refresh_token = JWT.create()
+                                .withSubject(user.getUsername())
+                                .withExpiresAt(REFRESH_TOKEN_EXPIRE_AT)
+                                .withIssuer(request.getRequestURL().toString()).sign(algorithm);
 
-        response.setContentType(APPLICATION_JSON_VALUE);
-        new ObjectMapper().writeValue(response.getOutputStream(),userInfo);
 
-    }
+                Map<String, String> tokens = new HashMap<>();
+                tokens.put("access_token", access_token);
+                tokens.put("refresh_token", refresh_token);
+                response.setContentType(APPLICATION_JSON_VALUE);
+                new ObjectMapper().writeValue(response.getOutputStream(), tokens);
+
+        }
 }

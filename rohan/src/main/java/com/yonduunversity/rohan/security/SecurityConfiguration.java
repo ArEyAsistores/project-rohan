@@ -1,7 +1,5 @@
 package com.yonduunversity.rohan.security;
 
-import com.yonduunversity.rohan.security.filter.CustomAuthenticationFilter;
-import com.yonduunversity.rohan.security.filter.CustomAuthorizationFilter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +19,12 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-
 import static org.springframework.http.HttpMethod.*;
+import com.yonduunversity.rohan.security.filter.CustomAuthenticationFilter;
+import com.yonduunversity.rohan.security.filter.CustomAuthorizationFilter;
+
+import static org.springframework.http.HttpMethod.GET;
+
 
 @Slf4j
 @Configuration
@@ -34,16 +36,18 @@ public class SecurityConfiguration {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception{
+    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder);
     }
+
     @Bean
     protected AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
         return authConfig.getAuthenticationManager();
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity httpSecurity, AuthenticationConfiguration authConfig) throws Exception{
+    public SecurityFilterChain filterChain(HttpSecurity httpSecurity, AuthenticationConfiguration authConfig)
+            throws Exception {
         CustomAuthenticationFilter customAuthFilter = new CustomAuthenticationFilter(authConfig.getAuthenticationManager());
         customAuthFilter.setFilterProcessesUrl("/api/login");
 
@@ -54,9 +58,8 @@ public class SecurityConfiguration {
         httpSecurity.authorizeHttpRequests().requestMatchers(POST,"/api/user/add/sme").hasAuthority("ADMIN");
         httpSecurity.authorizeHttpRequests().requestMatchers(PUT,"/api/user/**").hasAuthority("ADMIN");
         httpSecurity.authorizeHttpRequests().requestMatchers(POST,"/api/user/add/student").hasAuthority("SME");
-
-
         httpSecurity.authorizeHttpRequests().requestMatchers(GET,"/api/users/").hasAuthority("STUDENT");
+
 
         httpSecurity.authorizeHttpRequests().anyRequest().authenticated();
         httpSecurity.addFilter(customAuthFilter);
@@ -66,9 +69,10 @@ public class SecurityConfiguration {
     }
 
     @Bean
-    public WebSecurityCustomizer webSecurityCustomizer(){
-        return (web) -> web.ignoring().requestMatchers("/images/**","/js/**","/webjars/**");
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return (web) -> web.ignoring().requestMatchers("/images/**", "/js/**", "/webjars/**");
     }
+
     @Bean
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurer() {
