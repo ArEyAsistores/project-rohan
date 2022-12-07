@@ -14,7 +14,6 @@ import java.util.List;
 @Table(name = "course")
 public class Course {
 
-
     @NonNull
     @Id
     @Column(name = "code", nullable = false, unique = true)
@@ -23,7 +22,6 @@ public class Course {
     @JsonIgnore
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
     private List<ClassBatch> classBatches;
-
 
     @NonNull
     @Column(name = "title", nullable = false)
