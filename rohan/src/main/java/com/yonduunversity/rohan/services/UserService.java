@@ -1,5 +1,6 @@
 package com.yonduunversity.rohan.services;
 
+import com.yonduunversity.rohan.models.ClassBatch;
 import com.yonduunversity.rohan.models.Course;
 import java.util.List;
 import com.yonduunversity.rohan.models.Role;
@@ -14,7 +15,7 @@ public interface UserService {
     Map<String, Object> saveUser(User user, String roleName);
 
     User saveUser(User user);
-
+    ClassBatch saveClassBatch(ClassBatch classBatch);
     Role saveRole(Role role);
     void assignRole(String email, String roleName);
 

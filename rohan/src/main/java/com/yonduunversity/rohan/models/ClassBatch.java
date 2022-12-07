@@ -1,21 +1,15 @@
 package com.yonduunversity.rohan.models;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collection;
 
+import com.yonduunversity.rohan.models.student.Student;
+import jakarta.persistence.*;
 import org.springframework.cglib.core.Local;
 
 import com.yonduunversity.rohan.models.Course;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.EmbeddedId;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.IdClass;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.MapsId;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
 import lombok.*;
 
 @Getter
@@ -23,11 +17,13 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "class_batch")
+@Table(name = "class")
 public class ClassBatch {
 
-    @EmbeddedId
-    private ClassBatchId classBatchId;
+//    @EmbeddedId
+//    private ClassBatchId classBatchId;
+
+
 
     // @OneToOne(mappedBy = "project")
     // private Project project;
@@ -37,10 +33,22 @@ public class ClassBatch {
     // ex/qui/proj, foreign key, one to many
 
     // private Course course;
+    @Id
+    private long batchNumber;
+
+
+
+    @ManyToMany(fetch = FetchType.EAGER) // load Database From Role when this user RUN
+    private Collection<Student> students = new ArrayList<>();
+
     @ManyToOne
     @MapsId("code")
     @JoinColumn(name = "course_code", referencedColumnName = "code")
     private Course course;
+
+    public void setBatchNumber(long batchNumber) {
+        this.batchNumber = batchNumber + course.getCourseCode();
+    }
 
     @NonNull
     @Column(name = "quiz_percentage")
@@ -65,6 +73,9 @@ public class ClassBatch {
     @NonNull
     @Column(name = "end_date")
     private LocalDate endDate;
+    @NonNull
+    @Column(name = "is_active")
+    private boolean isActive;
 
 }
 

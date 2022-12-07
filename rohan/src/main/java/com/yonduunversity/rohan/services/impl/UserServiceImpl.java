@@ -1,5 +1,6 @@
 package com.yonduunversity.rohan.services.impl;
 
+import com.yonduunversity.rohan.models.ClassBatch;
 import com.yonduunversity.rohan.models.Course;
 import com.yonduunversity.rohan.models.Role;
 import com.yonduunversity.rohan.models.User;
@@ -128,8 +129,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public void addStudent(User user, Student student) {
-        // if(user.getRoles().contains("SME") || user.getRoles().contains("ADMIN")){
-        // //*NOTE for RESTRICTION
+
         student.setEmail(user.getEmail());
         student.setPassword(passwordEncoder.encode(user.getPassword()));
         student.setPassword(student.getPassword());
@@ -139,7 +139,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         student.getRoles().add(role);
         student.setActive(true);
         student.setClass(false);
-        // }
+        
         log.info("{} added to Database", student.getId());
         studentRepo.save(student);
     }
@@ -204,5 +204,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             course.setActive(false);
         }
         return course;
+    }
+
+    @Override
+    public ClassBatch saveClassBatch(ClassBatch classBatch) {
+        return null;
     }
 }
