@@ -20,9 +20,9 @@ public class Course {
     @Column(name = "code", nullable = false, unique = true)
     private Long courseCode;
 
-//    @JsonIgnore
-//    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
-//    private List<ClassBatch> classBatches;
+    @JsonIgnore
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
+    private List<ClassBatch> classBatches;
 
 
     @NonNull
