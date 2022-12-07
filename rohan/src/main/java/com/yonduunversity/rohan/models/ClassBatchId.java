@@ -17,9 +17,8 @@ public class ClassBatchId implements Serializable {
     // @ManyToOne(optional = false)
     // @MapsId("course_code")
     // @JoinColumn(name = "course_code", referencedColumnName = "course_code")
-    private int course_code;
+    private long course_code;
 
     private int batch;
 
 }
-

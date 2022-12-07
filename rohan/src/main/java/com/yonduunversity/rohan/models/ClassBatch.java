@@ -1,6 +1,7 @@
 package com.yonduunversity.rohan.models;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import org.springframework.cglib.core.Local;
 
@@ -14,6 +15,7 @@ import jakarta.persistence.IdClass;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapsId;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.*;
@@ -66,5 +68,7 @@ public class ClassBatch {
     @Column(name = "end_date")
     private LocalDate endDate;
 
-}
+    @OneToMany(mappedBy = "classBatch")
+    private List<Quiz> quiz;
 
+}
