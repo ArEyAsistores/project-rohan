@@ -1,7 +1,8 @@
 package com.yonduunversity.rohan.models.student;
-import com.yonduunversity.rohan.models.Course;
-import com.yonduunversity.rohan.models.Role;
-import com.yonduunversity.rohan.models.User;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.yonduunversity.rohan.models.*;
 import jakarta.persistence.*;
 
 import com.yonduunversity.rohan.models.User;
@@ -9,6 +10,8 @@ import jakarta.persistence.Entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -22,8 +25,15 @@ public class Student extends User
 {
     //*NOTE TO-do FK(BatchID and CourseID) AND CODE CLEAN-UP
     private boolean isClass;
-    @OneToMany(fetch = FetchType.EAGER)
+    @ManyToMany
+    @JsonIgnore
     private Collection<Course> course = new ArrayList<>();
+
+//    @JsonManagedReference
+//    @JsonIgnore
+    @ManyToMany
+    @JsonIgnore
+    private Collection<ClassBatch> classBatches = new ArrayList<>();
 
     public Student(User user) {
         super(user.getId(), user.getEmail(), user.getFirstname(), user.getLastname(), user.getPassword(), user.isActive(), user.getRoles());

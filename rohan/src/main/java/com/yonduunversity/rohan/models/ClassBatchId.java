@@ -2,10 +2,8 @@ package com.yonduunversity.rohan.models;
 
 import java.io.Serializable;
 
-import jakarta.persistence.Embeddable;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.MapsId;
+import com.yonduunversity.rohan.models.student.Student;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Getter
@@ -14,12 +12,12 @@ import lombok.*;
 @NoArgsConstructor
 @Embeddable
 public class ClassBatchId implements Serializable {
-    // @ManyToOne(optional = false)
-    // @MapsId("course_code")
-    // @JoinColumn(name = "course_code", referencedColumnName = "course_code")
-    private int course_code;
+    @ManyToOne
+    @JoinColumn(name = "code", referencedColumnName = "code")
+    private Course course;
 
-    private int batch;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long batch;
 
 }
 
