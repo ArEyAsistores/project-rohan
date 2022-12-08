@@ -53,11 +53,12 @@ public class ClassBatch {
     // One class to many exercise
     @JsonIgnore
     @OneToMany(mappedBy = "classBatch", cascade = CascadeType.ALL)
-    private List<Project> exercises;
+    private List<Exercise> exercises;
 
     // One class to one project
     @OneToOne(mappedBy = "classBatch", cascade = CascadeType.ALL)
     @PrimaryKeyJoinColumn
+    @NonNull
     private Project project;
 
     @NonNull

@@ -166,7 +166,6 @@ public class UserController {
                         .fromCurrentContextPath()
                         .path("api/quiz/add").toUriString());
         return ResponseEntity.created(uri).body(quizService.addQuizById(quiz, id));
-        // return new ResponseEntity(quizService.addQuiz(quiz), HttpStatus.OK);
     }
 
     @GetMapping("/quiz/remove")

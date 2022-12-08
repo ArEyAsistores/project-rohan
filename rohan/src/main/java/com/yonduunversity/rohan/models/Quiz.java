@@ -32,16 +32,19 @@ import lombok.*;
 @Entity
 @Table(name = "quiz")
 public class Quiz {
+    // Id
     @Id
     @NonNull
     @Column(name = "id", unique = true)
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
+    // Many quiz to one classBatch
     @ManyToOne
     @JoinColumn(name = "classbatch_id", referencedColumnName = "id")
     private ClassBatch classBatch;
 
+    // One quiz to many grades
     @JsonIgnore
     @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL)
     private List<Grade> grades;

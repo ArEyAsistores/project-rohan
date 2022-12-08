@@ -48,6 +48,9 @@ public class Grade {
     private Project project;
 
     // many grade to one exercise
+    @ManyToOne
+    @JoinColumn(name = "exercise_id", referencedColumnName = "id")
+    private Exercise exercise;
 
     private int score;
 
