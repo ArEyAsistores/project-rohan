@@ -10,5 +10,5 @@ public interface GradeService {
 
     List<Grade> retrieveClassGrades(ClassBatchId id);
 
-    Grade giveGrade(Grade grade, int score);
+    Grade giveGrade(Grade grade, int score, String email);
 }

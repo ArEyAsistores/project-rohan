@@ -5,11 +5,16 @@ import java.util.List;
 
 import org.springframework.cglib.core.Local;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.yonduunversity.rohan.models.Course;
+import com.yonduunversity.rohan.models.Project;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.IdClass;
 import jakarta.persistence.JoinColumn;
@@ -17,6 +22,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
 import lombok.*;
 
@@ -28,21 +34,31 @@ import lombok.*;
 @Table(name = "class_batch")
 public class ClassBatch {
 
-    @EmbeddedId
-    private ClassBatchId classBatchId;
+    // ClassBatch Id
+    @Id
+    @NonNull
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
 
-    // @OneToOne(mappedBy = "project")
-    // private Project project;
-
-    // students, foreign key, many to many
-
-    // ex/qui/proj, foreign key, one to many
-
-    // private Course course;
+    // Many class to one course;
     @ManyToOne
-    @MapsId("course_code")
     @JoinColumn(name = "course_code", referencedColumnName = "code")
     private Course course;
+
+    // One class to many quiz
+    @JsonIgnore
+    @OneToMany(mappedBy = "classBatch", cascade = CascadeType.ALL)
+    private List<Quiz> quizzes;
+
+    // One class to many exercise
+    @JsonIgnore
+    @OneToMany(mappedBy = "classBatch", cascade = CascadeType.ALL)
+    private List<Project> exercises;
+
+    // One class to one project
+    @OneToOne(mappedBy = "classBatch", cascade = CascadeType.ALL)
+    @PrimaryKeyJoinColumn
+    private Project project;
 
     @NonNull
     @Column(name = "quiz_percentage")
@@ -67,8 +83,5 @@ public class ClassBatch {
     @NonNull
     @Column(name = "end_date")
     private LocalDate endDate;
-
-    @OneToMany(mappedBy = "classBatch")
-    private List<Quiz> quiz;
 
 }

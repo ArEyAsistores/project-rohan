@@ -19,35 +19,35 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Grade {
-
+    // Grade id
     @Id
     @NonNull
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    // Many to one quiz
+    // Many grade to one classbatch
     @ManyToOne
-    @JoinColumn(name = "quiz_id", referencedColumnName = "id")
-    private Quiz quiz;
+    @JoinColumn(name = "classbatch_id", referencedColumnName = "id")
+    private ClassBatch classBatch;
 
-    // Many to one student
+    // Many grade to one student
     @ManyToOne
     @JoinColumn(name = "student_id", referencedColumnName = "id")
     @NonNull
     private Student student;
 
-    // many to one classbatch
-    @MapsId("classBatchId")
+    // Many grade to one quiz
     @ManyToOne
-    @NonNull
-    @JoinColumns({ @JoinColumn(name = "course_code", referencedColumnName = "course_code"),
-            @JoinColumn(name = "batch", referencedColumnName = "batch") })
-    private ClassBatch classBatch;
+    @JoinColumn(name = "quiz_id", referencedColumnName = "id")
+    private Quiz quiz;
 
-    // many to one project
+    // Many grade to one project
+    @ManyToOne
+    @JoinColumn(name = "project_id", referencedColumnName = "id")
+    private Project project;
 
-    // many to one exercise
+    // many grade to one exercise
 
     private int score;
 

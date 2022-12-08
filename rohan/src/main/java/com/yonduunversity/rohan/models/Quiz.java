@@ -38,11 +38,8 @@ public class Quiz {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
-    // many to one to classbatch composite key
-    @MapsId("classBatchId")
     @ManyToOne
-    @JoinColumns({ @JoinColumn(name = "course_code", referencedColumnName = "course_code"),
-            @JoinColumn(name = "batch", referencedColumnName = "batch") })
+    @JoinColumn(name = "classbatch_id", referencedColumnName = "id")
     private ClassBatch classBatch;
 
     @JsonIgnore

@@ -159,13 +159,13 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PostMapping("/quiz/add")
-    public ResponseEntity<Quiz> addQuiz(@RequestBody Quiz quiz) {
+    @PostMapping("/quiz/addById")
+    public ResponseEntity<Quiz> addQuiz(@RequestBody Quiz quiz, @Param("id") long id) {
         URI uri = URI
                 .create(ServletUriComponentsBuilder
                         .fromCurrentContextPath()
                         .path("api/quiz/add").toUriString());
-        return ResponseEntity.created(uri).body(quizService.addQuiz(quiz));
+        return ResponseEntity.created(uri).body(quizService.addQuizById(quiz, id));
         // return new ResponseEntity(quizService.addQuiz(quiz), HttpStatus.OK);
     }
 

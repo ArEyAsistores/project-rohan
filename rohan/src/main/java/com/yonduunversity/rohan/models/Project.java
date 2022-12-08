@@ -1,58 +1,60 @@
-// package com.yonduunversity.rohan.models;
+package com.yonduunversity.rohan.models;
 
-// import java.time.LocalDate;
+import java.time.LocalDate;
+import java.util.List;
 
-// import jakarta.persistence.Column;
-// import jakarta.persistence.EmbeddedId;
-// import jakarta.persistence.Entity;
-// import jakarta.persistence.Id;
-// import jakarta.persistence.JoinColumn;
-// import jakarta.persistence.MapsId;
-// import jakarta.persistence.OneToOne;
-// import jakarta.persistence.Table;
-// import lombok.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.EmbeddedId;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.MapsId;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+import lombok.*;
 
-// @Getter
-// @Setter
-// @AllArgsConstructor
-// @NoArgsConstructor
-// @Entity
-// @Table(name = "project")
-// public class Project {
-// @EmbeddedId
-// private ClassBatchId classBatchId;
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
+@Table(name = "project")
+public class Project {
 
-// @OneToOne
-// @JoinColumn(name = "course_code", referencedColumnName = "course_code")
-// @JoinColumn(name = "batch", referencedColumnName = "batch")
-// @NonNull
-// @MapsId
-// @Column(name = "course_code")
-// private Course course;
+    // Project Id
+    @Id
+    @Column(name = "id")
+    private long id;
 
-// @NonNull
-// @Column(name = "batch")
-// private int batch;
+    // One project to one classbatch
+    @OneToOne
+    @MapsId
+    @JoinColumn(name = "classBatch_id")
+    ClassBatch classBatch;
 
-// // one to one to student
+    // One project to many grades
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
+    private List<Grade> grades;
 
-// @NonNull
-// @Column(name = "title")
-// private int title;
+    @NonNull
+    @Column(name = "title")
+    private int title;
 
-// @NonNull
-// @Column(name = "max_score")
-// private int maxScore;
+    @NonNull
+    @Column(name = "max_score")
+    private int maxScore;
 
-// @NonNull
-// @Column(name = "min_score")
-// private int minScore;
+    @NonNull
+    @Column(name = "min_score")
+    private int minScore;
 
-// @NonNull
-// @Column(name = "score")
-// private int score;
+    @NonNull
+    @Column(name = "score")
+    private int score;
 
-// @NonNull
-// @Column(name = "date")
-// private LocalDate date;
-// }
+    @NonNull
+    @Column(name = "date")
+    private LocalDate date;
+}

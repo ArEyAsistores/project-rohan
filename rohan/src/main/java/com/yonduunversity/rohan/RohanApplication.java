@@ -1,5 +1,6 @@
 package com.yonduunversity.rohan;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -7,9 +8,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.yonduunversity.rohan.models.ClassBatch;
 import com.yonduunversity.rohan.models.Role;
 import com.yonduunversity.rohan.models.User;
 import com.yonduunversity.rohan.models.student.Student;
+import com.yonduunversity.rohan.repository.ClassBatchRepo;
 import com.yonduunversity.rohan.services.UserService;
 
 import java.util.ArrayList;
@@ -26,6 +29,9 @@ public class RohanApplication {
 	PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
+
+	@Autowired
+	ClassBatchRepo classBatchRepo;
 
 	@Bean
 	CommandLineRunner run(UserService userService) {
@@ -73,7 +79,7 @@ public class RohanApplication {
 			////////////////////////
 			/// INITIAL USER ROLE///
 			//////////////////////
-
+			classBatchRepo.save(new ClassBatch());
 		};
 	}
 }
