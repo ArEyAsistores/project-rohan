@@ -40,7 +40,7 @@ public class ClassBatch {
 
     // private Course course;
     @ManyToOne
-    @MapsId("code")
+    @MapsId("course_code")
     @JoinColumn(name = "course_code", referencedColumnName = "code")
     private Course course;
 
