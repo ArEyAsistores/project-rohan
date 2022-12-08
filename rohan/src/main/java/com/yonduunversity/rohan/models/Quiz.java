@@ -36,10 +36,12 @@ public class Quiz {
     private int id;
 
     // many to many students foreign key
-    @JsonIgnore
-    @ManyToMany
-    @JoinTable(name = "student_quiz", joinColumns = @JoinColumn(name = "quiz_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "student_id", referencedColumnName = "id"))
-    Set<Student> students;
+    // @JsonIgnore
+    // @ManyToMany
+    // @JoinTable(name = "student_quiz", joinColumns = @JoinColumn(name = "quiz_id",
+    // referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name =
+    // "student_id", referencedColumnName = "id"))
+    // Set<Student> students;
 
     // many to one to classbatch composite key
     @MapsId("classBatchId")
@@ -47,14 +49,6 @@ public class Quiz {
     @JoinColumns({ @JoinColumn(name = "course_code", referencedColumnName = "course_code"),
             @JoinColumn(name = "batch", referencedColumnName = "batch") })
     private ClassBatch classBatch;
-
-    // @NonNull
-    // @Column
-    // private long courseCode;
-
-    // @NonNull
-    // @Column
-    // private int batch;
 
     @NonNull
     @Column(name = "title")
@@ -68,10 +62,10 @@ public class Quiz {
     @Column(name = "min_score")
     private int minScore;
 
-    @Column(name = "score")
-    private int score;
-
     @NonNull
     @Column(name = "date")
     private LocalDate date;
+
+    @Column(name = "isActive")
+    private boolean isActive;
 }

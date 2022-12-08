@@ -159,6 +159,12 @@ public class UserController {
 
     @PostMapping("/quiz/add")
     public ResponseEntity<Quiz> addQuiz(@RequestBody Quiz quiz) {
-        return new ResponseEntity(quizService.addQuiz(null), HttpStatus.OK);
+        return new ResponseEntity(quizService.addQuiz(quiz), HttpStatus.OK);
+    }
+
+    @GetMapping("/quiz/remove")
+    public ResponseEntity removeQuiz(@PathVariable int id) {
+        quizService.removeQuiz(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

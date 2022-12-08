@@ -4,4 +4,6 @@ import com.yonduunversity.rohan.models.Quiz;
 
 public interface QuizService {
     Quiz addQuiz(Quiz quiz);
+
+    void removeQuiz(int id);
 }

@@ -28,9 +28,9 @@ public class Student extends User {
     @OneToMany(fetch = FetchType.EAGER)
     private Collection<Course> course = new ArrayList<>();
 
-    @JsonIgnore
-    @ManyToMany(mappedBy = "students")
-    private Set<Quiz> quizzes;
+    // @JsonIgnore
+    // @ManyToMany(mappedBy = "students")
+    // private Set<Quiz> quizzes;
 
     public Student(User user) {
         super(user.getId(), user.getEmail(), user.getFirstname(), user.getLastname(), user.getPassword(),
