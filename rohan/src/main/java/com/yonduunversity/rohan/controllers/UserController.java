@@ -6,6 +6,8 @@ import com.yonduunversity.rohan.models.Role;
 import com.yonduunversity.rohan.models.User;
 import com.yonduunversity.rohan.services.QuizService;
 import com.yonduunversity.rohan.services.UserService;
+
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.repository.query.Param;
@@ -32,7 +34,7 @@ import java.util.Optional;
 @RequestMapping("/api") // Root path
 public class UserController {
     private final UserService userService;
-    private QuizService quizService;
+    private final QuizService quizService;
 
     //////////////////////////////
     /// GET: RETRIEVE ALL USER ///
@@ -159,7 +161,12 @@ public class UserController {
 
     @PostMapping("/quiz/add")
     public ResponseEntity<Quiz> addQuiz(@RequestBody Quiz quiz) {
-        return new ResponseEntity(quizService.addQuiz(quiz), HttpStatus.OK);
+        URI uri = URI
+                .create(ServletUriComponentsBuilder
+                        .fromCurrentContextPath()
+                        .path("api/quiz/add").toUriString());
+        return ResponseEntity.created(uri).body(quizService.addQuiz(quiz));
+        // return new ResponseEntity(quizService.addQuiz(quiz), HttpStatus.OK);
     }
 
     @GetMapping("/quiz/remove")
