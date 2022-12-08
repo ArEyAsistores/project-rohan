@@ -1,9 +1,13 @@
 package com.yonduunversity.rohan.controllers;
 
 import com.yonduunversity.rohan.models.Course;
+import com.yonduunversity.rohan.models.Exercise;
+import com.yonduunversity.rohan.models.Grade;
 import com.yonduunversity.rohan.models.Quiz;
 import com.yonduunversity.rohan.models.Role;
 import com.yonduunversity.rohan.models.User;
+import com.yonduunversity.rohan.services.ExerciseService;
+import com.yonduunversity.rohan.services.GradeService;
 import com.yonduunversity.rohan.services.QuizService;
 import com.yonduunversity.rohan.services.UserService;
 
@@ -35,6 +39,8 @@ import java.util.Optional;
 public class UserController {
     private final UserService userService;
     private final QuizService quizService;
+    private final ExerciseService exerciseService;
+    private final GradeService gradeService;
 
     //////////////////////////////
     /// GET: RETRIEVE ALL USER ///
@@ -173,4 +179,27 @@ public class UserController {
         quizService.removeQuiz(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    @GetMapping("/grade/giveQuizScore")
+    public ResponseEntity<Grade> giveQuizScore(@Param("id") int id, @Param("email") String email,
+            @Param("score") int score) {
+        return new ResponseEntity<Grade>(gradeService.giveQuizScore(id, email, score), HttpStatus.OK);
+    }
+
+    // Exercise
+    @PostMapping("/exercise/addById")
+    public ResponseEntity<Exercise> addExercise(@RequestBody Exercise exercise, @Param("id") long id) {
+        URI uri = URI
+                .create(ServletUriComponentsBuilder
+                        .fromCurrentContextPath()
+                        .path("api/exercise/add").toUriString());
+        return ResponseEntity.created(uri).body(exerciseService.addExerciseById(exercise, id));
+    }
+
+    @GetMapping("/exercise/remove")
+    public ResponseEntity removeExercise(@PathVariable int id) {
+        exerciseService.removeExercise(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
 }

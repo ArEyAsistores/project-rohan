@@ -19,6 +19,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Grade {
+
     // Grade id
     @Id
     @NonNull
