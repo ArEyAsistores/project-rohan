@@ -180,12 +180,6 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @GetMapping("/grade/giveQuizScore")
-    public ResponseEntity<Grade> giveQuizScore(@Param("id") int id, @Param("email") String email,
-            @Param("score") int score) {
-        return new ResponseEntity<Grade>(gradeService.giveQuizScore(id, email, score), HttpStatus.OK);
-    }
-
     // Exercise
     @PostMapping("/exercise/addById")
     public ResponseEntity<Exercise> addExercise(@RequestBody Exercise exercise, @Param("id") long id) {
@@ -200,6 +194,31 @@ public class UserController {
     public ResponseEntity removeExercise(@PathVariable int id) {
         exerciseService.removeExercise(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    // Grade
+    @GetMapping("/grade/giveQuizScore")
+    public ResponseEntity<Grade> giveQuizScore(@Param("id") int id, @Param("email") String email,
+            @Param("score") int score) {
+        return new ResponseEntity<Grade>(gradeService.giveQuizScore(id, email, score), HttpStatus.OK);
+    }
+
+    @GetMapping("/grade/giveExerciseScore")
+    public ResponseEntity<Grade> giveExerciseScore(@Param("id") int id, @Param("email") String email,
+            @Param("score") int score) {
+        return new ResponseEntity<Grade>(gradeService.giveExerciseScore(id, email, score), HttpStatus.OK);
+    }
+
+    @GetMapping("/grade/giveProjectScore")
+    public ResponseEntity<Grade> giveProjectScore(@Param("id") int id, @Param("email") String email,
+            @Param("score") int score) {
+        return new ResponseEntity<Grade>(gradeService.giveProjectScore(id, email, score), HttpStatus.OK);
+    }
+
+    @GetMapping("/grade/retrieveStudentGrades")
+    public ResponseEntity<List<Grade>> retrieveStudentGrades(@Param("email") String email) {
+        return new ResponseEntity<List<Grade>>(gradeService.retrieveStudentGrades(email),
+                HttpStatus.OK);
     }
 
 }

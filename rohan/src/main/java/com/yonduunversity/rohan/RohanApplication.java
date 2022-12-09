@@ -13,6 +13,7 @@ import com.yonduunversity.rohan.models.Role;
 import com.yonduunversity.rohan.models.User;
 import com.yonduunversity.rohan.models.student.Student;
 import com.yonduunversity.rohan.repository.ClassBatchRepo;
+import com.yonduunversity.rohan.repository.StudentRepo;
 import com.yonduunversity.rohan.services.UserService;
 
 import java.util.ArrayList;
@@ -32,6 +33,8 @@ public class RohanApplication {
 
 	@Autowired
 	ClassBatchRepo classBatchRepo;
+	@Autowired
+	StudentRepo studentRepo;
 
 	@Bean
 	CommandLineRunner run(UserService userService) {
@@ -80,6 +83,10 @@ public class RohanApplication {
 			/// INITIAL USER ROLE///
 			//////////////////////
 			classBatchRepo.save(new ClassBatch());
+			Student student = new Student();
+			student.setEmail("hello@world.com");
+			studentRepo.save(student);
+
 		};
 	}
 }

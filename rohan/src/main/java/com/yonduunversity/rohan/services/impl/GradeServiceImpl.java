@@ -1,5 +1,6 @@
 package com.yonduunversity.rohan.services.impl;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.hibernate.cache.spi.entry.StructuredMapCacheEntry;
@@ -39,19 +40,45 @@ public class GradeServiceImpl implements GradeService {
         Optional<Quiz> optionalQuiz = quizRepo.findById(quiz_id);
         Quiz quiz = optionalQuiz.get();
         Student student = studentRepo.findByEmail(email);
+        ClassBatch classBatch = quiz.getClassBatch();
         Grade grade = new Grade();
         grade.setQuiz(quiz);
         grade.setStudent(student);
         grade.setScore(score);
+        grade.setClassBatch(classBatch);
+
         return gradeRepo.save(grade);
     }
 
     public Grade giveExerciseScore(int exercise_id, String email, int score) {
-        return new Grade();
+        Optional<Exercise> optionalExercise = exerciseRepo.findById(exercise_id);
+        Exercise exercise = optionalExercise.get();
+        Student student = studentRepo.findByEmail(email);
+        ClassBatch classBatch = exercise.getClassBatch();
+        Grade grade = new Grade();
+        grade.setExercise(exercise);
+        grade.setStudent(student);
+        grade.setScore(score);
+        grade.setClassBatch(classBatch);
+
+        return gradeRepo.save(grade);
     }
 
-    public Grade giveProjectScore(int project_id, String email, int score) {
-        return new Grade();
+    public Grade giveProjectScore(long project_id, String email, int score) {
+        Optional<Project> optionalProject = projectRepo.findById(project_id);
+        Project project = optionalProject.get();
+        Student student = studentRepo.findByEmail(email);
+        ClassBatch classBatch = project.getClassBatch();
+        Grade grade = new Grade();
+        grade.setProject(project);
+        grade.setStudent(student);
+        grade.setScore(score);
+        grade.setClassBatch(classBatch);
+        return gradeRepo.save(grade);
     }
+
+    // public List<Grade> retrieveStudentGrades(String email) {
+    // return (List<Grade>) gradeRepo.findByStudentId(email);
+    // }
 
 }

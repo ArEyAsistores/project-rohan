@@ -6,7 +6,7 @@ import com.yonduunversity.rohan.models.ClassBatchId;
 import com.yonduunversity.rohan.models.Grade;
 
 public interface GradeService {
-    // List<Grade> retrieveStudentGrades(String email);
+    List<Grade> retrieveStudentGrades(String email);
 
     // List<Grade> retrieveClassGrades(ClassBatchId id);
 
@@ -14,5 +14,5 @@ public interface GradeService {
 
     Grade giveExerciseScore(int exercise_id, String email, int score);
 
-    Grade giveProjectScore(int project_id, String email, int score);
+    Grade giveProjectScore(long project_id, String email, int score);
 }
