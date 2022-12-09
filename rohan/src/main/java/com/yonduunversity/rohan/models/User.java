@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -30,6 +31,7 @@ public class User {
     private boolean isActive;
 
     @ManyToMany(fetch = FetchType.EAGER) // load Database From Role when this user RUN
-    private Collection<Role> roles = new ArrayList<>();
+    private List<Role> roles = new ArrayList<>();
+
 
 }

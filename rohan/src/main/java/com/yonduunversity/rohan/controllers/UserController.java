@@ -1,11 +1,6 @@
 package com.yonduunversity.rohan.controllers;
 
-import com.yonduunversity.rohan.models.Course;
-import com.yonduunversity.rohan.models.Exercise;
-import com.yonduunversity.rohan.models.Grade;
-import com.yonduunversity.rohan.models.Quiz;
-import com.yonduunversity.rohan.models.Role;
-import com.yonduunversity.rohan.models.User;
+import com.yonduunversity.rohan.models.*;
 import com.yonduunversity.rohan.services.ExerciseService;
 import com.yonduunversity.rohan.services.GradeService;
 import com.yonduunversity.rohan.services.QuizService;
@@ -20,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -44,13 +40,18 @@ public class UserController {
     @GetMapping("/users/search")
     public ResponseEntity<List<User>> getAllUser(@Param("keyword") String keyword) {
         List<User> listOfUser = userService.getUserByKeyword(keyword);
+
         return ResponseEntity.ok().body(listOfUser);
     }
 
     @GetMapping("/users")
-    public List<User> getAllUser(@RequestParam(name = "page", defaultValue = "0") int pageNumber,
-            @RequestParam(name = "pageSize", defaultValue = "10") int pageSize) {
-        return userService.getUsers(pageNumber, pageSize);
+    public Pager getAllUser(@RequestParam(name = "page", defaultValue = "0") int pageNumber,
+                                    @RequestParam(name = "pageSize", defaultValue = "10") int pageSize) {
+
+
+        List<UserDTO> userDTOS = userService.getUsers(pageNumber, pageSize).stream().map(UserDTO::new).collect(Collectors.toList());
+        Pager pager = new Pager(userDTOS,pageNumber,pageSize);
+        return pager ;
     }
 
     @PostMapping("/user/add/{roleName}")

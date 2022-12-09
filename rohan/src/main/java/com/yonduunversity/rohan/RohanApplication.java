@@ -100,13 +100,6 @@ public class RohanApplication {
 			userService
 					.addCourse(new Course("DATASTRUCT", "Computer Programming", "Data structures and algorithm", true));
 
-			// classBatchRepo.save(new ClassBatch());
-			Student student1 = new Student();
-			student1.setEmail("hello@world.com");
-			studentRepo.save(student1);
-			Student student2 = new Student();
-			student2.setEmail("hello2@world.com");
-			studentRepo.save(student2);
 
 		};
 	}
