@@ -18,7 +18,9 @@ public interface UserService {
     User saveUser(User user);
     ClassBatch saveClass(ClassBatch classBatch, String whoAdded);
     ClassBatch enrollStudent(String email, String code,long batchNumber);
-
+    ClassBatch unEnrollStudent(String email,  String code, long batchNumber);
+    ClassBatch deactivateClass(String code, long batchNumber);
+    List<ClassBatch> findStudentCourse();
     Role saveRole(Role role);
     void assignRole(String email, String roleName);
 
@@ -36,4 +38,5 @@ public interface UserService {
     User deactivateUser(String email);
     Course deactivateCourse(String code);
     void addStudent(User user, Student student);
+
 }

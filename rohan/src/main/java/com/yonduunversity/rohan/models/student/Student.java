@@ -27,12 +27,6 @@ public class Student extends User
     private boolean isClass;
     @ManyToMany
     @JsonIgnore
-    private Collection<Course> course = new ArrayList<>();
-
-//    @JsonManagedReference
-//    @JsonIgnore
-    @ManyToMany
-    @JsonIgnore
     private Collection<ClassBatch> classBatches = new ArrayList<>();
 
     public Student(User user) {

@@ -12,6 +12,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +25,7 @@ import com.yonduunversity.rohan.models.User;
 import java.net.URI;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
@@ -31,12 +34,9 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 @RequiredArgsConstructor
 @RequestMapping("/api") // Root path
 public class UserController {
+    @Autowired
+    private ModelMapper modelMapper;
     private final UserService userService;
-
-    //////////////////////////////
-    /// GET: RETRIEVE ALL USER ///
-    ////////////////////////////
-
     @GetMapping("/user")
     public User getUser(@Param("email") String email) {
         return userService.getUser(email);
@@ -52,26 +52,15 @@ public class UserController {
     public List<User> getAllUser(@RequestParam(name = "page", defaultValue = "0") int pageNumber, @RequestParam(name = "pageSize", defaultValue = "10") int pageSize) {
         return userService.getUsers(pageNumber, pageSize);
     }
-
-    ///////////////////////////
-    /// POST: ADD NEW USER ///
-    /////////////////////////
     @PostMapping("/user/add/{roleName}")
     public ResponseEntity<?> addUser(@RequestBody User user, @PathVariable String roleName) {
-
         URI uri = URI
                 .create(ServletUriComponentsBuilder
                         .fromCurrentContextPath()
                         .path("api/user/add").toUriString());
 
-
         return ResponseEntity.created(uri).body(userService.saveUser(user, roleName));
     }
-
-
-    ///////////////////////////
-    ///POST: ADD NEW ROLE ///
-    /////////////////////////
 
     @PostMapping("/role/add")
     public ResponseEntity<Role> addRole(@RequestBody Role role){
@@ -107,12 +96,9 @@ public class UserController {
     public Course getCourse(@PathVariable String code){
         return userService.getCourse(code);
     }
-    /////////////////////////////////
-    ///POST: ASSIGN ROLE TO USER ///
-    //////////////////////////////
 
-        @PostMapping("/user/add")
-        public ResponseEntity<User> addUser (@RequestBody User user){
+    @PostMapping("/user/add")
+    public ResponseEntity<User> addUser (@RequestBody User user){
             URI uri = URI
                     .create(ServletUriComponentsBuilder
                             .fromCurrentContextPath()
@@ -120,59 +106,17 @@ public class UserController {
             return ResponseEntity.created(uri).body(userService.saveUser(user));
         }
 
-        ///////////////////////////
-        /// POST: ADD NEW ROLE ///
-        /////////////////////////
-
-        /////////////////////////////////
-        /// POST: ASSIGN ROLE TO USER ///
-        //////////////////////////////
-
-        @PostMapping("/role/assign")
-        public ResponseEntity<?> assignRole (@RequestBody RoleUser form){
-            userService.assignRole(form.getEmail(), form.getRoleName());
-            return ResponseEntity.ok().build();
-        }
-    @PostMapping("/user/class/add")
-    public ResponseEntity<?> assignRole (@RequestBody Map<String, Object> email, @RequestParam(name = "batchNumber") long batchNumber, @RequestParam(name = "courseCode") String code){
-        URI uri = URI
-                .create(ServletUriComponentsBuilder
-                        .fromCurrentContextPath()
-                        .path("api/user/class/add").toUriString());
-
-       return ResponseEntity.created(uri).body(userService.enrollStudent(email.get("email").toString(),code, batchNumber));
-    }
-    @PostMapping("/user/add/class")
-    public ResponseEntity<?> saveClass(@RequestBody ClassBatch classBatch, HttpServletRequest request, HttpServletResponse response) {
-        URI uri = URI
-                .create(ServletUriComponentsBuilder
-                        .fromCurrentContextPath()
-                        .path("api/user/class").toUriString());
-
-        String authorizationHeader = request.getHeader(AUTHORIZATION);
-        String whoAddedToken = authorizationHeader.substring("Bearer ".length());
-        Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
-        JWTVerifier jwtVerifier = JWT.require(algorithm).build();
-        DecodedJWT decodedJWT = jwtVerifier.verify(whoAddedToken);
-        String whoAdded = decodedJWT.getSubject();
-        return ResponseEntity.created(uri).body(userService.saveClass(classBatch,whoAdded));
-    }
-    @GetMapping("/user/classes")
-    public ResponseEntity<List<ClassBatch>> getAllClassBatch(){
-        return ResponseEntity.ok().body(userService.getAllClassBatch());
-    }
-        /////////////////////////////////
-        ///POST: ASSIGN ROLE TO USER ///
-        //////////////////////////////
-        @PutMapping("/user/deactivate")
-        public User deactivateUser (@RequestParam(name = "email", defaultValue = "") String email){
-            return userService.deactivateUser(email);
-
+    @PostMapping("/role/assign")
+    public ResponseEntity<?> assignRole (@RequestBody RoleUser form){
+        userService.assignRole(form.getEmail(), form.getRoleName());
+        return ResponseEntity.ok().build();
     }
 
-    /////////////////////////////////
-    ///POST: ASSIGN ROLE TO USER ///
-    //////////////////////////////
+    @PutMapping("/user/deactivate")
+    public User deactivateUser (@RequestParam(name = "email", defaultValue = "") String email){
+        return userService.deactivateUser(email);
+    }
+
     @PutMapping("/course/deactivate")
     public Course deactivateCourse(@RequestParam(name = "courseCode", defaultValue = "") String code){
         return userService.deactivateCourse(code);

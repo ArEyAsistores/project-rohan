@@ -82,14 +82,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     return message;
     }
 
-    @Override
-    public ClassBatch saveClass(ClassBatch classBatch, String whoAdded) {
-        Course course = courseRepo.findCourseByCode(classBatch.getCourse().getCode());
-        User userSme = userRepo.findByEmail(whoAdded);
-        classBatch.setCourse(course);
-        classBatch.setSme(userSme);
-        return classBatchRepo.save(classBatch);
-    }
+
 
     @Override
     public User saveUser(User user) {
@@ -116,15 +109,41 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         log.info("Adding Role to {} to user {} ", roleName, email);
     }
     @Override
+    public ClassBatch saveClass(ClassBatch classBatch, String whoAdded) {
+        Course course = courseRepo.findCourseByCode(classBatch.getCourse().getCode());
+        User userSme = userRepo.findByEmail(whoAdded);
+        classBatch.setCourse(course);
+        classBatch.setSme(userSme);
+        return classBatchRepo.save(classBatch);
+    }
+    @Override
     public ClassBatch enrollStudent(String email,  String code, long batchNumber) {
-
-        Course course = courseRepo.findCourseByCode(code);
         ClassBatch classBatch = classBatchRepo.findClassBatchByCourseCodeAndBatch(code,batchNumber);
         Student studentEnrolled = studentRepo.findByEmail(email);
+        studentEnrolled.setActive(true);
         classBatch.getStudents().add(studentEnrolled);
         studentEnrolled.getClassBatches().add(classBatch);
-        studentEnrolled.getCourse().add(course);
+        return classBatchRepo.save(classBatch);
+    }
+    @Override
+    public ClassBatch unEnrollStudent(String email,  String code, long batchNumber) {
+        ClassBatch classBatch = classBatchRepo.findClassBatchByCourseCodeAndBatch(code,batchNumber);
+        Student studentUnEnroll = studentRepo.findByEmail(email);
+        classBatch.getStudents().remove(studentUnEnroll);
+        classBatch.setActive(false);
+        return classBatchRepo.save(classBatch);
+    }
+    @Override
+    public List<ClassBatch> findStudentCourse() {
+        Student studentUnEnroll = studentRepo.findByEmail("student2.rey@yahoo.com");
+        return studentUnEnroll.getClassBatches().stream().toList();
+    }
 
+    @Override
+    public ClassBatch deactivateClass(String code, long batchNumber) {
+        ClassBatch classBatch = classBatchRepo.findClassBatchByCourseCodeAndBatch(code,batchNumber);
+        classBatch.getStudents().removeAll(classBatch.getStudents());
+        classBatch.setActive(false);
         return classBatchRepo.save(classBatch);
     }
 

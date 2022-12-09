@@ -8,6 +8,7 @@ import java.util.Collection;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.yonduunversity.rohan.models.student.Student;
 import jakarta.persistence.*;
 import org.springframework.cglib.core.Local;
@@ -25,11 +26,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 @Table(name = "class")
 public class ClassBatch implements Serializable {
 
-
-
-
-//    @EmbeddedId
-//    ClassBatchId classBatchId;
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     private long batch;
     @ManyToOne
@@ -38,10 +34,7 @@ public class ClassBatch implements Serializable {
 
     @ManyToOne
     private User sme;
-//    @JsonInclude(JsonInclude.Include.NON_NULL)
-//    @JsonIgnore
-
-    @ManyToMany // load Database From Role when this user RUN
+    @ManyToMany
     private Collection<Student> students = new ArrayList<>();
 
     @Column(name = "quiz_percentage")
