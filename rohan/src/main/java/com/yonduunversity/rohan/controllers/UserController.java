@@ -175,7 +175,7 @@ public class UserController {
     }
 
     @GetMapping("/quiz/remove")
-    public ResponseEntity removeQuiz(@PathVariable int id) {
+    public ResponseEntity removeQuiz(@Param("id") int id) {
         quizService.removeQuiz(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
@@ -191,7 +191,7 @@ public class UserController {
     }
 
     @GetMapping("/exercise/remove")
-    public ResponseEntity removeExercise(@PathVariable int id) {
+    public ResponseEntity removeExercise(@Param("id") int id) {
         exerciseService.removeExercise(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
@@ -218,6 +218,12 @@ public class UserController {
     @GetMapping("/grade/retrieveStudentGrades")
     public ResponseEntity<List<Grade>> retrieveStudentGrades(@Param("email") String email) {
         return new ResponseEntity<List<Grade>>(gradeService.retrieveStudentGrades(email),
+                HttpStatus.OK);
+    }
+
+    @GetMapping("/grade/retrieveClassGrades")
+    public ResponseEntity<List<Grade>> retrieveClassGrades(@Param("id") long id) {
+        return new ResponseEntity<List<Grade>>(gradeService.retrieveClassGrades(id),
                 HttpStatus.OK);
     }
 

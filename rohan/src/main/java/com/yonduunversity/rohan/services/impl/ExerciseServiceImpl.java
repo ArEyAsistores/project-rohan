@@ -32,5 +32,6 @@ public class ExerciseServiceImpl implements ExerciseService {
         if (exercise.isActive()) {
             exercise.setActive(false);
         }
+        exerciseRepo.save(exercise);
     }
 }

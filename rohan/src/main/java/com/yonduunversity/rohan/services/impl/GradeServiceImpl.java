@@ -27,13 +27,6 @@ public class GradeServiceImpl implements GradeService {
     StudentRepo studentRepo;
     ClassBatchRepo classBatchRepo;
     GradeRepo gradeRepo;
-    // List<Grade> retrieveStudentGrades(String email) {
-
-    // }
-
-    // List<Grade> retrieveClassGrades(ClassBatchId id) {
-
-    // }
 
     public Grade giveQuizScore(int quiz_id, String email, int score) {
         // searchstudent;
@@ -77,8 +70,12 @@ public class GradeServiceImpl implements GradeService {
         return gradeRepo.save(grade);
     }
 
-    // public List<Grade> retrieveStudentGrades(String email) {
-    // return (List<Grade>) gradeRepo.findByStudentId(email);
-    // }
+    public List<Grade> retrieveStudentGrades(String email) {
+        return (List<Grade>) gradeRepo.findByStudentEmail(email);
+    }
+
+    public List<Grade> retrieveClassGrades(long id) {
+        return (List<Grade>) gradeRepo.findByClassBatchId(id);
+    }
 
 }

@@ -32,5 +32,6 @@ public class QuizServiceImpl implements QuizService {
         if (quiz.isActive()) {
             quiz.setActive(false);
         }
+        quizRepo.save(quiz);
     }
 }

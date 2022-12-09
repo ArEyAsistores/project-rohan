@@ -34,7 +34,7 @@ public class Grade {
 
     // Many grade to one student
     @ManyToOne
-    @JoinColumn(name = "student_id", referencedColumnName = "id")
+    @JoinColumn(name = "student_email", referencedColumnName = "id")
     @NonNull
     private Student student;
 
