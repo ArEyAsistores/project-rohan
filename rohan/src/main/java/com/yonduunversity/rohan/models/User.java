@@ -22,7 +22,6 @@ public class User {
     @JsonProperty(value = "id", access = JsonProperty.Access.WRITE_ONLY)
 
     private Long id;
-
     private String email;
     private String firstname;
     private String lastname;

@@ -1,14 +1,21 @@
 package com.yonduunversity.rohan.models;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.ArrayList;
+import java.util.Collection;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.yonduunversity.rohan.models.student.Student;
+import jakarta.persistence.*;
 import org.springframework.cglib.core.Local;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.yonduunversity.rohan.models.Course;
 import com.yonduunversity.rohan.models.Project;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
@@ -25,14 +32,15 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
 import lombok.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "class_batch")
-public class ClassBatch {
+@Table(name = "class")
+public class ClassBatch implements Serializable {
 
     // ClassBatch Id
     @Id
@@ -42,7 +50,7 @@ public class ClassBatch {
 
     // Many class to one course;
     @ManyToOne
-    @JoinColumn(name = "course_code", referencedColumnName = "code")
+    @JoinColumn(name = "code", referencedColumnName = "code")
     private Course course;
 
     // One class to many quiz
@@ -61,28 +69,30 @@ public class ClassBatch {
     @NonNull
     private Project project;
 
-    @NonNull
+    @ManyToOne
+    private User sme;
+
+    @ManyToMany
+    private Collection<Student> students = new ArrayList<>();
+
     @Column(name = "quiz_percentage")
     private int quizPercentage;
 
-    @NonNull
     @Column(name = "exercise_percentage")
     private int exercisePercentage;
 
-    @NonNull
     @Column(name = "project_percentage")
     private int projectPercentage;
 
-    @NonNull
     @Column(name = "attendance_percentage")
     private int attendancePercentage;
 
-    @NonNull
     @Column(name = "start_date")
     private LocalDate startDate;
 
-    @NonNull
     @Column(name = "end_date")
     private LocalDate endDate;
+
+    private boolean isActive;
 
 }

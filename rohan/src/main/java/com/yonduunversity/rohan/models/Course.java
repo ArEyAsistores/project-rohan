@@ -17,17 +17,13 @@ public class Course {
     @NonNull
     @Id
     @Column(name = "code", nullable = false, unique = true)
-    private Long courseCode;
+    private String code;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
-    private List<ClassBatch> classBatches;
-
-    @NonNull
+    // @NonNull
     @Column(name = "title", nullable = false)
     private String title;
 
-    @NonNull
+    // @NonNull
     @Column(name = "description", nullable = false)
     private String description;
 

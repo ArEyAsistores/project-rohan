@@ -10,33 +10,23 @@ import com.yonduunversity.rohan.services.ExerciseService;
 import com.yonduunversity.rohan.services.GradeService;
 import com.yonduunversity.rohan.services.QuizService;
 import com.yonduunversity.rohan.services.UserService;
-
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
-import javax.swing.text.html.Option;
-import com.yonduunversity.rohan.models.Role;
-import com.yonduunversity.rohan.models.User;
-import com.yonduunversity.rohan.services.UserService;
-
 import java.net.URI;
-import java.net.http.HttpResponse;
 import java.util.List;
-import java.util.Optional;
 
-@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api") // Root path
 public class UserController {
+    @Autowired
+    private ModelMapper modelMapper;
     private final UserService userService;
     private final QuizService quizService;
     private final ExerciseService exerciseService;
@@ -63,12 +53,8 @@ public class UserController {
         return userService.getUsers(pageNumber, pageSize);
     }
 
-    ///////////////////////////
-    /// POST: ADD NEW USER ///
-    /////////////////////////
     @PostMapping("/user/add/{roleName}")
     public ResponseEntity<?> addUser(@RequestBody User user, @PathVariable String roleName) {
-
         URI uri = URI
                 .create(ServletUriComponentsBuilder
                         .fromCurrentContextPath()
@@ -76,10 +62,6 @@ public class UserController {
 
         return ResponseEntity.created(uri).body(userService.saveUser(user, roleName));
     }
-
-    ///////////////////////////
-    /// POST: ADD NEW ROLE ///
-    /////////////////////////
 
     @PostMapping("/role/add")
     public ResponseEntity<Role> addRole(@RequestBody Role role) {
@@ -100,9 +82,13 @@ public class UserController {
     }
 
     @GetMapping("/courses")
-    public List<Course> getAllCourses(@RequestParam(name = "page", defaultValue = "0") int pageNumber,
+    public ResponseEntity<?> getAllCourses(@RequestParam(name = "page", defaultValue = "0") int pageNumber,
             @RequestParam(name = "pageSize", defaultValue = "10") int pageSize) {
-        return userService.getCourses(pageNumber, pageSize);
+        URI uri = URI
+                .create(ServletUriComponentsBuilder
+                        .fromCurrentContextPath()
+                        .path("api/courses").toUriString());
+        return ResponseEntity.created(uri).body(userService.getCourses(pageNumber, pageSize));
     }
 
     @GetMapping("/courses/search")
@@ -111,13 +97,11 @@ public class UserController {
         return ResponseEntity.ok().body(listOfUser);
     }
 
-    @GetMapping("/course")
-    public Course getCourse(@Param("courseCode") long courseCode) {
-        return userService.getCourse(courseCode);
+    @GetMapping("/course/{code}")
+
+    public Course getCourse(@PathVariable String code) {
+        return userService.getCourse(code);
     }
-    /////////////////////////////////
-    /// POST: ASSIGN ROLE TO USER ///
-    //////////////////////////////
 
     @PostMapping("/user/add")
     public ResponseEntity<User> addUser(@RequestBody User user) {
@@ -128,35 +112,20 @@ public class UserController {
         return ResponseEntity.created(uri).body(userService.saveUser(user));
     }
 
-    ///////////////////////////
-    /// POST: ADD NEW ROLE ///
-    /////////////////////////
-
-    /////////////////////////////////
-    /// POST: ASSIGN ROLE TO USER ///
-    //////////////////////////////
-
     @PostMapping("/role/assign")
     public ResponseEntity<?> assignRole(@RequestBody RoleUser form) {
         userService.assignRole(form.getEmail(), form.getRoleName());
         return ResponseEntity.ok().build();
     }
 
-    /////////////////////////////////
-    /// POST: ASSIGN ROLE TO USER ///
-    //////////////////////////////
     @PutMapping("/user/deactivate")
     public User deactivateUser(@RequestParam(name = "email", defaultValue = "") String email) {
         return userService.deactivateUser(email);
-
     }
 
-    /////////////////////////////////
-    /// POST: ASSIGN ROLE TO USER ///
-    //////////////////////////////
     @PutMapping("/course/deactivate")
-    public Course deactivateCourse(@RequestParam(name = "courseCode", defaultValue = "") Long courseCode) {
-        return userService.deactivateCourse(courseCode);
+    public Course deactivateCourse(@RequestParam(name = "courseCode", defaultValue = "") String code) {
+        return userService.deactivateCourse(code);
     }
 
     // Quiz

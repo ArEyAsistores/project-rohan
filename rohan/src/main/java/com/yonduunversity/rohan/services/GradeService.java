@@ -1,8 +1,6 @@
 package com.yonduunversity.rohan.services;
 
 import java.util.List;
-
-import com.yonduunversity.rohan.models.ClassBatchId;
 import com.yonduunversity.rohan.models.Grade;
 
 public interface GradeService {
