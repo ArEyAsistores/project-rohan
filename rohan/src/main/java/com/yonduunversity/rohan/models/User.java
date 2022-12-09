@@ -9,18 +9,23 @@ import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Set;
 
-
-@Entity @Data @NoArgsConstructor @AllArgsConstructor @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class User {
-    @Id @GeneratedValue(strategy = GenerationType.AUTO) @JsonProperty( value = "id", access = JsonProperty.Access.WRITE_ONLY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @JsonProperty(value = "id", access = JsonProperty.Access.WRITE_ONLY)
 
     private Long id;
-
     private String email;
     private String firstname;
     private String lastname;
-    @JsonProperty( value = "password", access = JsonProperty.Access.WRITE_ONLY)
+    @JsonProperty(value = "password", access = JsonProperty.Access.WRITE_ONLY)
     private String password;
     private boolean isActive;
 
