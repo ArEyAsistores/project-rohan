@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.hibernate.cache.spi.entry.StructuredMapCacheEntry;
 import org.springframework.stereotype.Service;
 
+import com.yonduunversity.rohan.exception.GradeOutOfBoundException;
 import com.yonduunversity.rohan.models.*;
 import com.yonduunversity.rohan.models.student.Student;
 import com.yonduunversity.rohan.repository.ClassBatchRepo;
@@ -29,11 +30,11 @@ public class GradeServiceImpl implements GradeService {
     GradeRepo gradeRepo;
 
     public Grade giveQuizScore(int quiz_id, String email, int score) {
-        // searchstudent;
-        Optional<Quiz> optionalQuiz = quizRepo.findById(quiz_id);
-        Quiz quiz = optionalQuiz.get();
+        Quiz quiz = QuizServiceImpl.unwrapQuiz(quizRepo.findById(quiz_id), quiz_id);
+        checkScore(score, quiz.getMinScore(), quiz.getMaxScore());
         Student student = studentRepo.findByEmail(email);
         ClassBatch classBatch = quiz.getClassBatch();
+
         Grade grade = new Grade();
         grade.setQuiz(quiz);
         grade.setStudent(student);
@@ -44,10 +45,11 @@ public class GradeServiceImpl implements GradeService {
     }
 
     public Grade giveExerciseScore(int exercise_id, String email, int score) {
-        Optional<Exercise> optionalExercise = exerciseRepo.findById(exercise_id);
-        Exercise exercise = optionalExercise.get();
+        Exercise exercise = ExerciseServiceImpl.unwrapExercise(exerciseRepo.findById(exercise_id), exercise_id);
+        checkScore(score, exercise.getMinScore(), exercise.getMaxScore());
         Student student = studentRepo.findByEmail(email);
         ClassBatch classBatch = exercise.getClassBatch();
+
         Grade grade = new Grade();
         grade.setExercise(exercise);
         grade.setStudent(student);
@@ -58,8 +60,8 @@ public class GradeServiceImpl implements GradeService {
     }
 
     public Grade giveProjectScore(long project_id, String email, int score) {
-        Optional<Project> optionalProject = projectRepo.findById(project_id);
-        Project project = optionalProject.get();
+        Project project = ProjectServiceImpl.unwrapProject(projectRepo.findById(project_id), project_id);
+        checkScore(score, 0, 100);
         Student student = studentRepo.findByEmail(email);
         ClassBatch classBatch = project.getClassBatch();
         Grade grade = new Grade();
@@ -76,6 +78,12 @@ public class GradeServiceImpl implements GradeService {
 
     public List<Grade> retrieveClassGrades(long id) {
         return (List<Grade>) gradeRepo.findByClassBatchId(id);
+    }
+
+    static void checkScore(int score, int min, int max) {
+        if (score < min && score > max) {
+            throw new GradeOutOfBoundException(score, min, max);
+        }
     }
 
 }
