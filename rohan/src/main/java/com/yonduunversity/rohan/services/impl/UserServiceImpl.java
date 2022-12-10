@@ -59,24 +59,51 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
 
     @Override
-    public UserAccountDTO saveUser(UserAccountDTO userPasswordDTO) throws Exception {
+    public UserAccountDTO saveUser(UserAccountDTO userPasswordDTO, String whoAdded) throws Exception {
+        Role role = roleRepo.findByName(userPasswordDTO.getRole());
+        User userAdded = userRepo.findByEmail(whoAdded);
+        String userPass = PasswordGen.generateUserPassaword(12);
+        if(userAdded.getRoles().get(0).getName().equalsIgnoreCase("ADMIN")){
+            User user = new User();
+            user.setEmail(userPasswordDTO.getEmail());
+            user.setFirstname(userPasswordDTO.getFirstname());
+            user.setLastname(userPasswordDTO.getLastname());
+            user.setActive(true);
+            user.getRoles().add(role);
+            userPasswordDTO.setPassword(userPass);
+            log.info(userPasswordDTO.getEmail() + " the password id: " + userPass);
+            user.setPassword(passwordEncoder.encode(userPasswordDTO.getPassword()));
+
+            if (userPasswordDTO.getRole().equalsIgnoreCase("STUDENT")) {
+                saveUser(new Student(user));
+            } else{
+                userRepo.save(user);
+            }
+        }else{
+            throw new Exception("This " + userAdded.getEmail() + " is unauthorized to add a user.");
+        }
+
+
+        return userPasswordDTO;
+    }
+    @Override
+    public UserAccountDTO defaultUsers(UserAccountDTO userPasswordDTO) {
         Role role = roleRepo.findByName(userPasswordDTO.getRole());
         String userPass = PasswordGen.generateUserPassaword(12);
-        User user = new User();
-        user.setEmail(userPasswordDTO.getEmail());
-        user.setFirstname(userPasswordDTO.getFirstname());
-        user.setLastname(userPasswordDTO.getLastname());
-        user.setActive(true);
-        user.getRoles().add(role);
-        userPasswordDTO.setPassword(userPass);
-        log.info(userPasswordDTO.getEmail() + " the password id: " + userPass);
-        user.setPassword(passwordEncoder.encode(userPasswordDTO.getPassword()));
-
-        if (userPasswordDTO.getRole().equalsIgnoreCase("STUDENT")) {
+            User user = new User();
+            user.setEmail(userPasswordDTO.getEmail());
+            user.setFirstname(userPasswordDTO.getFirstname());
+            user.setLastname(userPasswordDTO.getLastname());
+            user.setActive(true);
+            user.getRoles().add(role);
+            userPasswordDTO.setPassword(userPass);
+            log.info(userPasswordDTO.getEmail() + " the password id: " + userPass);
+            user.setPassword(passwordEncoder.encode(userPasswordDTO.getPassword()));
+            if (userPasswordDTO.getRole().equalsIgnoreCase("STUDENT")) {
                 saveUser(new Student(user));
-        } else {
+            } else {
                 userRepo.save(user);
-        }
+            }
         return userPasswordDTO;
     }
 

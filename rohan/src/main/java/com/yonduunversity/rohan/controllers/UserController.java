@@ -1,10 +1,15 @@
 package com.yonduunversity.rohan.controllers;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTVerifier;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.yonduunversity.rohan.models.*;
 import com.yonduunversity.rohan.services.ExerciseService;
 import com.yonduunversity.rohan.services.GradeService;
 import com.yonduunversity.rohan.services.QuizService;
 import com.yonduunversity.rohan.services.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +21,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 @RestController
 @RequiredArgsConstructor
@@ -55,14 +62,20 @@ public class UserController {
     }
 
     @PostMapping("/users")
-    public ResponseEntity<?> addUser(@RequestBody UserAccountDTO user) throws Exception {
+    public ResponseEntity<?> addUser(@RequestBody UserAccountDTO user, HttpServletRequest request) throws Exception {
         URI uri = URI
                 .create(ServletUriComponentsBuilder
                         .fromCurrentContextPath()
                         .path("api/user/add").toUriString());
 
-//        return ResponseEntity.created(uri).body(new UserPasswordDTO(userService.saveUser(user, "i")));
-        return ResponseEntity.created(uri).body(userService.saveUser(user));
+        String authorizationHeader = request.getHeader(AUTHORIZATION);
+        String whoAddedToken = authorizationHeader.substring("Bearer ".length());
+        Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
+        JWTVerifier jwtVerifier = JWT.require(algorithm).build();
+        DecodedJWT decodedJWT = jwtVerifier.verify(whoAddedToken);
+        String whoAdded = decodedJWT.getSubject();
+
+        return ResponseEntity.created(uri).body(userService.saveUser(user,whoAdded));
     }
 
     @PostMapping("/role/add")

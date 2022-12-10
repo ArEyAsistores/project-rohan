@@ -9,7 +9,8 @@ import com.yonduunversity.rohan.models.student.Student;
 public interface UserService {
 
 
-    UserAccountDTO saveUser(UserAccountDTO user) throws Exception;
+    UserAccountDTO saveUser(UserAccountDTO user, String whoAdded) throws Exception;
+    UserAccountDTO defaultUsers(UserAccountDTO user) ;
     User saveUser(User user);
     ClassBatch enrollStudent(String email, String code,long batchNumber);
     ClassBatch unEnrollStudent(String email,  String code, long batchNumber);

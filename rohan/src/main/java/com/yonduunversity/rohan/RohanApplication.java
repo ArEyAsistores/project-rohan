@@ -50,27 +50,27 @@ public class RohanApplication {
 			 ///////////////////
 			/// INITIAL USERS///
 			//////////////////
-			userService.saveUser(new UserAccountDTO(
+			userService.defaultUsers(new UserAccountDTO(
 					"aj.piedragoza@yahoo.com",
 					"Almira Jane",
 					"Piedragoza",
 					 "ADMIN"));
-			userService.saveUser(new UserAccountDTO(
+			userService.defaultUsers(new UserAccountDTO(
 					"rna.rey@yahoo.com",
 					"Roberto II",
 					"Asistores",
 					"student"));
-			userService.saveUser(new UserAccountDTO(
+			userService.defaultUsers(new UserAccountDTO(
 					"sme.rey@yahoo.com",
 					"Roberto II",
 					"Asistores",
 					 "SME"));
-			userService.saveUser(new UserAccountDTO(
+			userService.defaultUsers(new UserAccountDTO(
 					"student10.rey@yahoo.com",
 					"Roberto II",
 					"Asistores",
 					 "student"));
-			userService.saveUser(new UserAccountDTO(
+			userService.defaultUsers(new UserAccountDTO(
 					"student2.rey@yahoo.com",
 					"Roberto II",
 					"Asistores",
