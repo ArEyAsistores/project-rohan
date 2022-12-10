@@ -54,14 +54,15 @@ public class UserController {
         return pager ;
     }
 
-    @PostMapping("/user/add/{roleName}")
-    public ResponseEntity<?> addUser(@RequestBody User user, @PathVariable String roleName) {
+    @PostMapping("/users")
+    public ResponseEntity<?> addUser(@RequestBody UserAccountDTO user) throws Exception {
         URI uri = URI
                 .create(ServletUriComponentsBuilder
                         .fromCurrentContextPath()
                         .path("api/user/add").toUriString());
 
-        return ResponseEntity.created(uri).body(userService.saveUser(user, roleName));
+//        return ResponseEntity.created(uri).body(new UserPasswordDTO(userService.saveUser(user, "i")));
+        return ResponseEntity.created(uri).body(userService.saveUser(user));
     }
 
     @PostMapping("/role/add")

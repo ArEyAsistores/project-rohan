@@ -6,6 +6,7 @@ import com.yonduunversity.rohan.repository.*;
 import com.yonduunversity.rohan.repository.pagination.CourseRepoPaginate;
 import com.yonduunversity.rohan.repository.pagination.UserRepoPaginate;
 import com.yonduunversity.rohan.services.UserService;
+import com.yonduunversity.rohan.util.PasswordGen;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -18,11 +19,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.*;
-import static org.springframework.http.HttpStatus.FORBIDDEN;
-import static org.springframework.http.HttpStatus.OK;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -59,49 +57,44 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), authorities);
     }
 
-    @Override
-    public Map<String, Object> saveUser(User user, String roleName) {
-        Role role = roleRepo.findByName(roleName);
-        Map<String, Object> message = new LinkedHashMap<>();
-        if (!userRepo.emailEquals(user.getEmail())) {
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-            user.setPassword(user.getPassword());
-            user.getRoles().add(role);
-            user.setActive(true);
 
-            if (roleName.equals("student")) {
+    @Override
+    public UserAccountDTO saveUser(UserAccountDTO userPasswordDTO) throws Exception {
+        Role role = roleRepo.findByName(userPasswordDTO.getRole());
+        String userPass = PasswordGen.generateUserPassaword(12);
+        User user = new User();
+        user.setEmail(userPasswordDTO.getEmail());
+        user.setFirstname(userPasswordDTO.getFirstname());
+        user.setLastname(userPasswordDTO.getLastname());
+        user.setActive(true);
+        user.getRoles().add(role);
+        userPasswordDTO.setPassword(userPass);
+        log.info(userPasswordDTO.getEmail() + " the password id: " + userPass);
+        user.setPassword(passwordEncoder.encode(userPasswordDTO.getPassword()));
+
+        if (userPasswordDTO.getRole().equalsIgnoreCase("STUDENT")) {
                 saveUser(new Student(user));
-            } else {
-                userRepo.save(user);
-            }
-            message.put("user", user);
-            message.put("message", user.getEmail() + " successfully created.");
-            message.put("status", String.valueOf(OK.value()));
         } else {
-            message.put("message", "This Email: " + user.getEmail() + " is taken.");
-            message.put("status", String.valueOf(FORBIDDEN.value()));
+                userRepo.save(user);
         }
-        return message;
+        return userPasswordDTO;
     }
 
     @Override
     public User saveUser(User user) {
         return null;
     }
-
     @Override
     public void saveUser(Student student) {
         student.setClass(false);
         log.info("{} added to Database", student.getId());
         studentRepo.save(student);
     }
-
     @Override
     public Role saveRole(Role role) {
         log.info("{} added to Database", role.getName());
         return roleRepo.save(role);
     }
-
     @Override
     public void assignRole(String email, String roleName) {
         User user = userRepo.findByEmail(email);
@@ -109,7 +102,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         user.getRoles().add(role);
         log.info("Adding Role to {} to user {} ", roleName, email);
     }
-
 
     @Override
     public ClassBatch enrollStudent(String email, String code, long batchNumber) {
@@ -145,32 +137,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public void assignCourse(String email, long roleName) {
-
-    }
-
-    @Override
     public Course addCourse(Course course) {
         log.info("{} added to Database", course.getTitle());
         log.info("{} added to Database", course.getCode());
         course.setActive(true);
         return courseRepo.save(course);
-    }
-
-    @Override
-    public void addStudent(User user, Student student) {
-
-        student.setEmail(user.getEmail());
-        student.setPassword(passwordEncoder.encode(user.getPassword()));
-        student.setPassword(student.getPassword());
-        student.setFirstname(user.getFirstname());
-        student.setLastname(user.getLastname());
-        Role role = roleRepo.findByName("STUDENT");
-        student.getRoles().add(role);
-        student.setActive(true);
-        student.setClass(false);
-        log.info("{} added to Database", student.getId());
-        studentRepo.save(student);
     }
 
     @Override

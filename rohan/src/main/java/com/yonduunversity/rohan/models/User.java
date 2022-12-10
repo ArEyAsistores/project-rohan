@@ -26,7 +26,6 @@ public class User {
     private String email;
     private String firstname;
     private String lastname;
-    @JsonProperty(value = "password", access = JsonProperty.Access.WRITE_ONLY)
     private String password;
     private boolean isActive;
 
