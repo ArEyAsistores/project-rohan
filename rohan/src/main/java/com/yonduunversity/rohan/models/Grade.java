@@ -21,7 +21,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(uniqueConstraints = {
-        @UniqueConstraint(columnNames = { "student_email", "classbatch_id", "quiz_id", "project_id", "exercise_id" })
+        @UniqueConstraint(columnNames = { "student_email", "classbatch_id", "combination" })
 })
 public class Grade {
 
@@ -46,18 +46,23 @@ public class Grade {
     // Many grade to one quiz
     @ManyToOne
     @JoinColumn(name = "quiz_id", referencedColumnName = "id")
+    @NonNull
     private Quiz quiz;
 
     // Many grade to one project
     @ManyToOne
     @JoinColumn(name = "project_id", referencedColumnName = "id")
+    @NonNull
     private Project project;
 
     // many grade to one exercise
     @ManyToOne
     @JoinColumn(name = "exercise_id", referencedColumnName = "id")
+    @NonNull
     private Exercise exercise;
 
     private int score;
+
+    private String combination;
 
 }

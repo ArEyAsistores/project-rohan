@@ -40,6 +40,7 @@ public class GradeServiceImpl implements GradeService {
         grade.setStudent(student);
         grade.setScore(score);
         grade.setClassBatch(classBatch);
+        grade.setCombination("q" + Integer.toString(quiz_id));
 
         return gradeRepo.save(grade);
     }
@@ -55,6 +56,7 @@ public class GradeServiceImpl implements GradeService {
         grade.setStudent(student);
         grade.setScore(score);
         grade.setClassBatch(classBatch);
+        grade.setCombination("e" + Integer.toString(exercise_id));
 
         return gradeRepo.save(grade);
     }
@@ -64,11 +66,13 @@ public class GradeServiceImpl implements GradeService {
         checkScore(score, 0, 100);
         Student student = studentRepo.findByEmail(email);
         ClassBatch classBatch = project.getClassBatch();
+
         Grade grade = new Grade();
         grade.setProject(project);
         grade.setStudent(student);
         grade.setScore(score);
         grade.setClassBatch(classBatch);
+        grade.setCombination("p" + Long.toString(project_id));
         return gradeRepo.save(grade);
     }
 
@@ -81,7 +85,7 @@ public class GradeServiceImpl implements GradeService {
     }
 
     static void checkScore(int score, int min, int max) {
-        if (score < min && score > max) {
+        if (score < min || score > max) {
             throw new GradeOutOfBoundException(score, min, max);
         }
     }
