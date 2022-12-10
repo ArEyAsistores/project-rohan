@@ -5,10 +5,12 @@ import com.yonduunversity.rohan.models.student.Student;
 import com.yonduunversity.rohan.repository.*;
 import com.yonduunversity.rohan.repository.pagination.CourseRepoPaginate;
 import com.yonduunversity.rohan.repository.pagination.UserRepoPaginate;
+import com.yonduunversity.rohan.services.EmailSenderService;
 import com.yonduunversity.rohan.services.UserService;
 import com.yonduunversity.rohan.util.PasswordGen;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -31,15 +33,15 @@ import java.util.List;
 @Transactional
 @Slf4j
 public class UserServiceImpl implements UserService, UserDetailsService {
-
     private final UserRepo userRepo;
+
     private final RoleRepo roleRepo;
     private final StudentRepo studentRepo;
     private final PasswordEncoder passwordEncoder;
     private final UserRepoPaginate userRepoPagingate;
     private final CourseRepoPaginate courseRepoPaginate;
     private final CourseRepo courseRepo;
-
+    private final EmailSenderService emailSenderService;
     private final ClassBatchRepo classBatchRepo;
 
     @Override
@@ -79,10 +81,20 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             } else{
                 userRepo.save(user);
             }
+
+            String message = """
+                    Welcome to Project Rohan\n
+                    Here is your Project Rohan Account
+                    Email Address: %s
+                    Password: %s
+                    Role: %s
+                    """.formatted(userPasswordDTO.getEmail(), userPasswordDTO.getPassword(), userPasswordDTO.getRole());
+
+            emailSenderService.sendEmail(userPasswordDTO.getEmail(),"Project Rohan Account - " + userPasswordDTO.getLastname() + ", " + userPasswordDTO.getFirstname(), message);
+
         }else{
             throw new Exception("This " + userAdded.getEmail() + " is unauthorized to add a user.");
         }
-
 
         return userPasswordDTO;
     }
