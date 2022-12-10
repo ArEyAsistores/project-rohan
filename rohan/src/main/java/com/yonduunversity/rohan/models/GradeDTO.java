@@ -32,24 +32,4 @@ public class GradeDTO {
         this.score = grade.getScore();
         this.combination = grade.getCombination();
     }
-
-    // public GradeDTO(Grade grade, Exercise exercise) {
-    // this.id = grade.getId();
-    // this.code = grade.getClassBatch().getCourse().getCode();
-    // this.batch = grade.getClassBatch().getBatch();
-    // this.email = grade.getStudent().getEmail();
-    // this.exercise_id = exercise.getId();
-    // this.score = grade.getScore();
-    // this.combination = grade.getCombination();
-    // }
-
-    // public GradeDTO(Grade grade, Project project) {
-    // this.id = grade.getId();
-    // this.code = grade.getClassBatch().getCourse().getCode();
-    // this.batch = grade.getClassBatch().getBatch();
-    // this.email = grade.getStudent().getEmail();
-    // this.project_id = project.getId();
-    // this.score = grade.getScore();
-    // this.combination = grade.getCombination();
-    // }
 }

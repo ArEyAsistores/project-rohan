@@ -161,13 +161,13 @@ public class UserController {
     }
 
     @PostMapping("/quiz/add")
-    public ResponseEntity<Quiz> addQuiz(@RequestBody Quiz quiz, @Param("code") String code,
+    public ResponseEntity<QuizDTO> addQuiz(@RequestBody Quiz quiz, @Param("code") String code,
             @Param("batch") long batch) {
         URI uri = URI
                 .create(ServletUriComponentsBuilder
                         .fromCurrentContextPath()
                         .path("api/quiz/add").toUriString());
-        return ResponseEntity.created(uri).body(quizService.addQuiz(quiz, code, batch));
+        return ResponseEntity.created(uri).body(new QuizDTO(quizService.addQuiz(quiz, code, batch)));
     }
 
     @GetMapping("/quiz/remove")
@@ -187,13 +187,13 @@ public class UserController {
     }
 
     @PostMapping("/exercise/add")
-    public ResponseEntity<Exercise> addExercise(@RequestBody Exercise exercise, @Param("code") String code,
+    public ResponseEntity<ExerciseDTO> addExercise(@RequestBody Exercise exercise, @Param("code") String code,
             @Param("batch") long batch) {
         URI uri = URI
                 .create(ServletUriComponentsBuilder
                         .fromCurrentContextPath()
                         .path("api/exercise/add").toUriString());
-        return ResponseEntity.created(uri).body(exerciseService.addExercise(exercise, code, batch));
+        return ResponseEntity.created(uri).body(new ExerciseDTO(exerciseService.addExercise(exercise, code, batch)));
     }
 
     @GetMapping("/exercise/remove")
@@ -233,8 +233,9 @@ public class UserController {
     }
 
     @GetMapping("/grade/retrieveClassGrades")
-    public ResponseEntity<List<Grade>> retrieveClassGrades(@Param("code") String code, @Param("batch") long batch) {
-        return new ResponseEntity<List<Grade>>(gradeService.retrieveClassGrades(code, batch),
+    public ResponseEntity<List<GradeDTO>> retrieveClassGrades(@Param("code") String code, @Param("batch") long batch) {
+        return new ResponseEntity<List<GradeDTO>>(
+                gradeService.retrieveClassGrades(code, batch).stream().map(GradeDTO::new).toList(),
                 HttpStatus.OK);
     }
 
