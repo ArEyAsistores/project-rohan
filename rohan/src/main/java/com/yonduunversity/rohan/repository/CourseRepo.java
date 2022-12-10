@@ -1,5 +1,6 @@
 package com.yonduunversity.rohan.repository;
 
+import com.yonduunversity.rohan.models.ClassBatch;
 import com.yonduunversity.rohan.models.Course;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -13,4 +14,8 @@ public interface CourseRepo extends JpaRepository<Course,Long> {
             + " OR p.title LIKE %?1%"
             + " OR p.description LIKE %?1%")
     List<Course> findAllByKeyword(String keyword);
+//    Course findByCodeAndClassBatches(String code, ClassBatch classBatch);
+    Course findByCodeAndClassBatches(String code, ClassBatch classBatch);
+
+
 }

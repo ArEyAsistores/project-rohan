@@ -98,7 +98,7 @@ public class RohanApplication {
 					true,
 					new ArrayList<>()), "student");
 			userService
-					.addCourse(new Course("DATASTRUCT", "Computer Programming", "Data structures and algorithm", true));
+					.addCourse(new Course("DATASTRUCT", "Computer Programming", "Data structures and algorithm", true, new ArrayList<>()));
 
 
 		};

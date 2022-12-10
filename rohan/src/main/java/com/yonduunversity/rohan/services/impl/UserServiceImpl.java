@@ -18,6 +18,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
+
 import java.util.*;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.OK;
@@ -108,14 +110,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         log.info("Adding Role to {} to user {} ", roleName, email);
     }
 
-    @Override
-    public ClassBatch saveClass(ClassBatch classBatch, String whoAdded) {
-        Course course = courseRepo.findCourseByCode(classBatch.getCourse().getCode());
-        User userSme = userRepo.findByEmail(whoAdded);
-        classBatch.setCourse(course);
-        classBatch.setSme(userSme);
-        return classBatchRepo.save(classBatch);
-    }
 
     @Override
     public ClassBatch enrollStudent(String email, String code, long batchNumber) {
@@ -193,14 +187,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public HashMap<String, Object> getCourses(int pageNumber, int pageSize) {
+    public List<Course> getCourses(int pageNumber, int pageSize) {
         Pageable paging = PageRequest.of(pageNumber, pageSize);
         Page<Course> pagedResult = courseRepoPaginate.findAll(paging);
-        HashMap<String, Object> courses = new LinkedHashMap<>();
-        courses.put("data", pagedResult.stream().toList());
-        courses.put("page", pageNumber);
-        courses.put("size", pageSize);
-        return courses;
+        return pagedResult.stream().toList();
     }
 
     @Override
@@ -248,6 +238,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         }
         return course;
     }
+
 
     @Override
     public List<ClassBatch> getAllClassBatch() {

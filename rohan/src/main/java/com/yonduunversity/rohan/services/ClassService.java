@@ -17,7 +17,7 @@ public interface ClassService {
     ClassBatch enrollStudent(String email, String code,long batchNumber);
     ClassBatch unEnrollStudent(String email, String code, long batchNumber);
     ClassBatch deactivateClass(String code, long batchNumber);
-    List<ClassBatch> findStudentCourse();
+    List<ClassBatch> findStudentClass(String email);
     List<ClassBatch>getAllClassBatch();
 
 }

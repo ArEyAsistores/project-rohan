@@ -2,7 +2,6 @@ package com.yonduunversity.rohan.services.impl;
 
 import com.yonduunversity.rohan.models.ClassBatch;
 import com.yonduunversity.rohan.models.Course;
-import com.yonduunversity.rohan.models.Project;
 import com.yonduunversity.rohan.models.User;
 import com.yonduunversity.rohan.models.student.Student;
 import com.yonduunversity.rohan.repository.ClassBatchRepo;
@@ -10,20 +9,12 @@ import com.yonduunversity.rohan.repository.CourseRepo;
 import com.yonduunversity.rohan.repository.StudentRepo;
 import com.yonduunversity.rohan.repository.UserRepo;
 import com.yonduunversity.rohan.services.ClassService;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.coyote.Request;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
-
-import static org.springframework.http.HttpStatus.*;
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Service
 @RequiredArgsConstructor
@@ -39,14 +30,35 @@ public class ClassServiceImpl implements ClassService {
     public ClassBatch saveClass(ClassBatch classBatch, String whoAdded) {
         Course course = courseRepo.findCourseByCode(classBatch.getCourse().getCode());
         User userSme = userRepo.findByEmail(whoAdded);
+
         classBatch.setCourse(course);
         classBatch.setSme(userSme);
-        return classBatchRepo.save(classBatch);
+        classBatch.setBatch(classBatchRepo.findClassBatchByCourseCode(course.getCode()) + 1);
+
+        classBatchRepo.save(classBatch);
+        course.getClassBatches().add(classBatch);
+        courseRepo.save(course);
+        return classBatch;
+    }
+
+    public Course viewCoursesWithClasses(String code, long batch) {
+//        Course course = courseRepo.findByCodeAndClassBatches();
+//        User userSme = userRepo.findByEmail(whoAdded);
+//
+//        classBatch.setCourse(course);
+//        classBatch.setSme(userSme);
+//        classBatch.setBatch(classBatchRepo.findClassBatchByCourseCodeAndBatch(course.getCode()) + 1);
+//
+//        classBatchRepo.save(classBatch);
+//        course.getClassBatches().add(classBatch);
+//        courseRepo.save(course);
+//        return course;
+        return null;
     }
 
     @Override
     public ClassBatch enrollStudent(String email, String code, long batchNumber) {
-        ClassBatch classBatch = classBatchRepo.findClassBatchByCourseCodeAndId(code, batchNumber);
+        ClassBatch classBatch = classBatchRepo.findClassBatchByCourseCodeAndBatch(code, batchNumber);
         Student studentEnrolled = studentRepo.findByEmail(email);
         studentEnrolled.setActive(true);
         classBatch.getStudents().add(studentEnrolled);
@@ -79,8 +91,8 @@ public class ClassServiceImpl implements ClassService {
     }
 
     @Override
-    public List<ClassBatch> findStudentCourse() {
-        Student studentUnEnroll = studentRepo.findByEmail("student2.rey@yahoo.com");
+    public List<ClassBatch> findStudentClass(String email) {
+        Student studentUnEnroll = studentRepo.findByEmail(email);
         return studentUnEnroll.getClassBatches().stream().toList();
     }
 

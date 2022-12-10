@@ -16,7 +16,6 @@ public interface UserService {
     Map<String, Object> saveUser(User user, String roleName);
 
     User saveUser(User user);
-    ClassBatch saveClass(ClassBatch classBatch, String whoAdded);
     ClassBatch enrollStudent(String email, String code,long batchNumber);
     ClassBatch unEnrollStudent(String email,  String code, long batchNumber);
     ClassBatch deactivateClass(String code, long batchNumber);
@@ -30,7 +29,7 @@ public interface UserService {
     List<User>getUsers();//Default getAllUser
     List<ClassBatch>getAllClassBatch();
     List<User>getUsers(int pageNumber, int pageSize);//With Pagination
-    HashMap<String, Object> getCourses(int pageNumber, int pageSize);//With Pagination
+    List<Course> getCourses(int pageNumber, int pageSize);//With Pagination
     List<Course>getCourseByKeyword(String keyword);
     User getUser(String email);
     Course getCourse(String code);

@@ -85,11 +85,13 @@ public class UserController {
     @GetMapping("/courses")
     public ResponseEntity<?> getAllCourses(@RequestParam(name = "page", defaultValue = "0") int pageNumber,
             @RequestParam(name = "pageSize", defaultValue = "10") int pageSize) {
+        List<CourseDTO> courseDTO = userService.getCourses(pageNumber, pageSize).stream().map(CourseDTO::new).toList();
+        Pager pager = new Pager(courseDTO, pageNumber,pageSize);
         URI uri = URI
                 .create(ServletUriComponentsBuilder
                         .fromCurrentContextPath()
                         .path("api/courses").toUriString());
-        return ResponseEntity.created(uri).body(userService.getCourses(pageNumber, pageSize));
+        return ResponseEntity.created(uri).body(pager);
     }
 
     @GetMapping("/courses/search")
@@ -195,6 +197,11 @@ public class UserController {
     public ResponseEntity<List<Grade>> retrieveClassGrades(@Param("id") long id) {
         return new ResponseEntity<List<Grade>>(gradeService.retrieveClassGrades(id),
                 HttpStatus.OK);
+    }
+
+    @GetMapping("/user/courses/{code}/classes")
+    public CourseClassDTO getAllCoursesClasses(@PathVariable String code){
+        return new CourseClassDTO(userService.getCourse(code));
     }
 
 }
