@@ -45,6 +45,13 @@ public class ExerciseServiceImpl implements ExerciseService {
 
     }
 
+    public Exercise addExercise(Exercise exercise, String code, long id) {
+        exercise.setActive(true);
+        ClassBatch classBatch = classBatchRepo.findClassBatchByCourseCodeAndBatch(code, id);
+        exercise.setClassBatch(classBatch);
+        return exerciseRepo.save(exercise);
+    }
+
     static Exercise unwrapExercise(Optional<Exercise> entity, int id) {
         if (entity.isPresent())
             return entity.get();

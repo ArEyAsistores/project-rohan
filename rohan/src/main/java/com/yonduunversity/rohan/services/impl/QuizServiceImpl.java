@@ -31,6 +31,13 @@ public class QuizServiceImpl implements QuizService {
         return quizRepo.save(quiz);
     }
 
+    public Quiz addQuiz(Quiz quiz, String code, long batch) {
+        quiz.setActive(true);
+        ClassBatch classBatch = classBatchRepo.findClassBatchByCourseCodeAndBatch(code, batch);
+        quiz.setClassBatch(classBatch);
+        return quizRepo.save(quiz);
+    }
+
     public void removeQuiz(int id) {
         Quiz quiz = QuizServiceImpl.unwrapQuiz(quizRepo.findById(id), id);
         Optional<Grade> grade = gradeRepo.findByExerciseId(id);

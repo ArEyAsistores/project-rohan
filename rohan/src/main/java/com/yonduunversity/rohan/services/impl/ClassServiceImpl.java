@@ -2,10 +2,12 @@ package com.yonduunversity.rohan.services.impl;
 
 import com.yonduunversity.rohan.models.ClassBatch;
 import com.yonduunversity.rohan.models.Course;
+import com.yonduunversity.rohan.models.Project;
 import com.yonduunversity.rohan.models.User;
 import com.yonduunversity.rohan.models.student.Student;
 import com.yonduunversity.rohan.repository.ClassBatchRepo;
 import com.yonduunversity.rohan.repository.CourseRepo;
+import com.yonduunversity.rohan.repository.ProjectRepo;
 import com.yonduunversity.rohan.repository.StudentRepo;
 import com.yonduunversity.rohan.repository.UserRepo;
 import com.yonduunversity.rohan.services.ClassService;
@@ -26,24 +28,30 @@ public class ClassServiceImpl implements ClassService {
     private final UserRepo userRepo;
     private final StudentRepo studentRepo;
     private final ClassBatchRepo classBatchRepo;
+    private final ProjectRepo projectRepo;
 
     @Override
     public ClassBatch saveClass(ClassBatch classBatch, String whoAdded) throws Exception {
         Course course = courseRepo.findCourseByCode(classBatch.getCourse().getCode());
         User userSme = userRepo.findByEmail(whoAdded);
 
-        int totalPercentage = classBatch.getExercisePercentage() + classBatch.getQuizPercentage() + classBatch.getAttendancePercentage() + classBatch.getProjectPercentage();
-        if(totalPercentage == 100){
+        int totalPercentage = classBatch.getExercisePercentage() + classBatch.getQuizPercentage()
+                + classBatch.getAttendancePercentage() + classBatch.getProjectPercentage();
+        if (totalPercentage == 100) {
             classBatch.setCourse(course);
             classBatch.setSme(userSme);
             classBatch.setBatch(classBatchRepo.findClassBatchByCourseCode(course.getCode()) + 1);
+            Project project = new Project();
+            project.setClassBatch(classBatch);
+            projectRepo.save(project);
+            classBatch.setProject(project);
 
             classBatchRepo.save(classBatch);
             course.getClassBatches().add(classBatch);
             courseRepo.save(course);
             return classBatch;
-        }else{
-           throw new Exception("Quiz, Attendance, Exercise and Project must be total to 100% ");
+        } else {
+            throw new Exception("Quiz, Attendance, Exercise and Project must be total to 100% ");
         }
 
     }

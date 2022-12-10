@@ -53,12 +53,12 @@ public class UserController {
 
     @GetMapping("/users")
     public Pager getAllUser(@RequestParam(name = "page", defaultValue = "0") int pageNumber,
-                                    @RequestParam(name = "pageSize", defaultValue = "10") int pageSize) {
+            @RequestParam(name = "pageSize", defaultValue = "10") int pageSize) {
 
-
-        List<UserDTO> userDTOS = userService.getUsers(pageNumber, pageSize).stream().map(UserDTO::new).collect(Collectors.toList());
-        Pager pager = new Pager(userDTOS,pageNumber,pageSize);
-        return pager ;
+        List<UserDTO> userDTOS = userService.getUsers(pageNumber, pageSize).stream().map(UserDTO::new)
+                .collect(Collectors.toList());
+        Pager pager = new Pager(userDTOS, pageNumber, pageSize);
+        return pager;
     }
 
     @PostMapping("/users")
@@ -75,7 +75,7 @@ public class UserController {
         DecodedJWT decodedJWT = jwtVerifier.verify(whoAddedToken);
         String whoAdded = decodedJWT.getSubject();
 
-        return ResponseEntity.created(uri).body(userService.saveUser(user,whoAdded));
+        return ResponseEntity.created(uri).body(userService.saveUser(user, whoAdded));
     }
 
     @PostMapping("/role/add")
@@ -100,7 +100,7 @@ public class UserController {
     public ResponseEntity<?> getAllCourses(@RequestParam(name = "page", defaultValue = "0") int pageNumber,
             @RequestParam(name = "pageSize", defaultValue = "10") int pageSize) {
         List<CourseDTO> courseDTO = userService.getCourses(pageNumber, pageSize).stream().map(CourseDTO::new).toList();
-        Pager pager = new Pager(courseDTO, pageNumber,pageSize);
+        Pager pager = new Pager(courseDTO, pageNumber, pageSize);
         URI uri = URI
                 .create(ServletUriComponentsBuilder
                         .fromCurrentContextPath()
@@ -152,12 +152,22 @@ public class UserController {
     }
 
     @PostMapping("/quiz/addById")
-    public ResponseEntity<Quiz> addQuiz(@RequestBody Quiz quiz, @Param("id") long id) {
+    public ResponseEntity<Quiz> addQuizById(@RequestBody Quiz quiz, @Param("id") long id) {
+        URI uri = URI
+                .create(ServletUriComponentsBuilder
+                        .fromCurrentContextPath()
+                        .path("api/quiz/addById").toUriString());
+        return ResponseEntity.created(uri).body(quizService.addQuizById(quiz, id));
+    }
+
+    @PostMapping("/quiz/add")
+    public ResponseEntity<Quiz> addQuiz(@RequestBody Quiz quiz, @Param("code") String code,
+            @Param("batch") long batch) {
         URI uri = URI
                 .create(ServletUriComponentsBuilder
                         .fromCurrentContextPath()
                         .path("api/quiz/add").toUriString());
-        return ResponseEntity.created(uri).body(quizService.addQuizById(quiz, id));
+        return ResponseEntity.created(uri).body(quizService.addQuiz(quiz, code, batch));
     }
 
     @GetMapping("/quiz/remove")
@@ -174,6 +184,16 @@ public class UserController {
                         .fromCurrentContextPath()
                         .path("api/exercise/add").toUriString());
         return ResponseEntity.created(uri).body(exerciseService.addExerciseById(exercise, id));
+    }
+
+    @PostMapping("/exercise/add")
+    public ResponseEntity<Exercise> addExercise(@RequestBody Exercise exercise, @Param("code") String code,
+            @Param("batch") long batch) {
+        URI uri = URI
+                .create(ServletUriComponentsBuilder
+                        .fromCurrentContextPath()
+                        .path("api/exercise/add").toUriString());
+        return ResponseEntity.created(uri).body(exerciseService.addExercise(exercise, code, batch));
     }
 
     @GetMapping("/exercise/remove")
@@ -196,9 +216,10 @@ public class UserController {
     }
 
     @GetMapping("/grade/giveProjectScore")
-    public ResponseEntity<Grade> giveProjectScore(@Param("id") int id, @Param("email") String email,
+    public ResponseEntity<Grade> giveProjectScore(@Param("code") String code, @Param("batch") long batch,
+            @Param("email") String email,
             @Param("score") int score) {
-        return new ResponseEntity<Grade>(gradeService.giveProjectScore(id, email, score), HttpStatus.OK);
+        return new ResponseEntity<Grade>(gradeService.giveProjectScore(code, batch, email, score), HttpStatus.OK);
     }
 
     @GetMapping("/grade/retrieveStudentGrades")
@@ -214,7 +235,7 @@ public class UserController {
     }
 
     @GetMapping("/user/courses/{code}/classes")
-    public CourseClassDTO getAllCoursesClasses(@PathVariable String code){
+    public CourseClassDTO getAllCoursesClasses(@PathVariable String code) {
         return new CourseClassDTO(userService.getCourse(code));
     }
 

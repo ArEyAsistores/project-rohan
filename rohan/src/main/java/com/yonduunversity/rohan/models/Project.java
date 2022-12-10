@@ -3,6 +3,8 @@ package com.yonduunversity.rohan.models;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
@@ -36,6 +38,7 @@ public class Project {
 
     // One project to many grades
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Grade> grades;
 
 }

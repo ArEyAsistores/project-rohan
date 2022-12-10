@@ -12,5 +12,5 @@ public interface GradeService {
 
     Grade giveExerciseScore(int exercise_id, String email, int score);
 
-    Grade giveProjectScore(long project_id, String email, int score);
+    Grade giveProjectScore(String code, long batch, String email, int score);
 }

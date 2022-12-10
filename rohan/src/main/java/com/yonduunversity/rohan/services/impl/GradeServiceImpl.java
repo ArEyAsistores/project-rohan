@@ -61,18 +61,18 @@ public class GradeServiceImpl implements GradeService {
         return gradeRepo.save(grade);
     }
 
-    public Grade giveProjectScore(long project_id, String email, int score) {
-        Project project = ProjectServiceImpl.unwrapProject(projectRepo.findById(project_id), project_id);
+    public Grade giveProjectScore(String code, long batch, String email, int score) {
+        ClassBatch classBatch = classBatchRepo.findClassBatchByCourseCodeAndBatch(code, batch);
+        Project project = classBatch.getProject();
         checkScore(score, 0, 100);
         Student student = studentRepo.findByEmail(email);
-        ClassBatch classBatch = project.getClassBatch();
 
         Grade grade = new Grade();
         grade.setProject(project);
         grade.setStudent(student);
         grade.setScore(score);
         grade.setClassBatch(classBatch);
-        grade.setCombination("p" + Long.toString(project_id));
+        grade.setCombination("p" + Long.toString(project.getId()));
         return gradeRepo.save(grade);
     }
 
