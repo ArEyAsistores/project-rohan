@@ -1,15 +1,15 @@
 package com.yonduunversity.rohan.controllers;
 
-import com.yonduunversity.rohan.models.Course;
-import com.yonduunversity.rohan.models.Exercise;
-import com.yonduunversity.rohan.models.Grade;
-import com.yonduunversity.rohan.models.Quiz;
-import com.yonduunversity.rohan.models.Role;
-import com.yonduunversity.rohan.models.User;
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTVerifier;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.interfaces.DecodedJWT;
+import com.yonduunversity.rohan.models.*;
 import com.yonduunversity.rohan.services.ExerciseService;
 import com.yonduunversity.rohan.services.GradeService;
 import com.yonduunversity.rohan.services.QuizService;
 import com.yonduunversity.rohan.services.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +20,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 @RestController
 @RequiredArgsConstructor
@@ -44,23 +47,35 @@ public class UserController {
     @GetMapping("/users/search")
     public ResponseEntity<List<User>> getAllUser(@Param("keyword") String keyword) {
         List<User> listOfUser = userService.getUserByKeyword(keyword);
+
         return ResponseEntity.ok().body(listOfUser);
     }
 
     @GetMapping("/users")
-    public List<User> getAllUser(@RequestParam(name = "page", defaultValue = "0") int pageNumber,
-            @RequestParam(name = "pageSize", defaultValue = "10") int pageSize) {
-        return userService.getUsers(pageNumber, pageSize);
+    public Pager getAllUser(@RequestParam(name = "page", defaultValue = "0") int pageNumber,
+                                    @RequestParam(name = "pageSize", defaultValue = "10") int pageSize) {
+
+
+        List<UserDTO> userDTOS = userService.getUsers(pageNumber, pageSize).stream().map(UserDTO::new).collect(Collectors.toList());
+        Pager pager = new Pager(userDTOS,pageNumber,pageSize);
+        return pager ;
     }
 
-    @PostMapping("/user/add/{roleName}")
-    public ResponseEntity<?> addUser(@RequestBody User user, @PathVariable String roleName) {
+    @PostMapping("/users")
+    public ResponseEntity<?> addUser(@RequestBody UserAccountDTO user, HttpServletRequest request) throws Exception {
         URI uri = URI
                 .create(ServletUriComponentsBuilder
                         .fromCurrentContextPath()
                         .path("api/user/add").toUriString());
 
-        return ResponseEntity.created(uri).body(userService.saveUser(user, roleName));
+        String authorizationHeader = request.getHeader(AUTHORIZATION);
+        String whoAddedToken = authorizationHeader.substring("Bearer ".length());
+        Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
+        JWTVerifier jwtVerifier = JWT.require(algorithm).build();
+        DecodedJWT decodedJWT = jwtVerifier.verify(whoAddedToken);
+        String whoAdded = decodedJWT.getSubject();
+
+        return ResponseEntity.created(uri).body(userService.saveUser(user,whoAdded));
     }
 
     @PostMapping("/role/add")
@@ -84,11 +99,13 @@ public class UserController {
     @GetMapping("/courses")
     public ResponseEntity<?> getAllCourses(@RequestParam(name = "page", defaultValue = "0") int pageNumber,
             @RequestParam(name = "pageSize", defaultValue = "10") int pageSize) {
+        List<CourseDTO> courseDTO = userService.getCourses(pageNumber, pageSize).stream().map(CourseDTO::new).toList();
+        Pager pager = new Pager(courseDTO, pageNumber,pageSize);
         URI uri = URI
                 .create(ServletUriComponentsBuilder
                         .fromCurrentContextPath()
                         .path("api/courses").toUriString());
-        return ResponseEntity.created(uri).body(userService.getCourses(pageNumber, pageSize));
+        return ResponseEntity.created(uri).body(pager);
     }
 
     @GetMapping("/courses/search")
@@ -194,6 +211,11 @@ public class UserController {
     public ResponseEntity<List<Grade>> retrieveClassGrades(@Param("id") long id) {
         return new ResponseEntity<List<Grade>>(gradeService.retrieveClassGrades(id),
                 HttpStatus.OK);
+    }
+
+    @GetMapping("/user/courses/{code}/classes")
+    public CourseClassDTO getAllCoursesClasses(@PathVariable String code){
+        return new CourseClassDTO(userService.getCourse(code));
     }
 
 }

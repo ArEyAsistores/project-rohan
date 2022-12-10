@@ -6,14 +6,12 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.yonduunversity.rohan.models.*;
 import com.yonduunversity.rohan.services.ClassService;
-import com.yonduunversity.rohan.services.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -52,13 +50,13 @@ public class ClassController {
 
         return ResponseEntity.created(uri).body(classService.unEnrollStudent(email.get("email").toString(),code, batch));
     }
-    @GetMapping("/user/courses/sample")
-    public ResponseEntity<?> findStudentCourse (){
+    @GetMapping("/user/classes/student")
+    public ResponseEntity<?> findStudentCourse (@RequestParam(name = "email") String email ){
         URI uri = URI
                 .create(ServletUriComponentsBuilder
                         .fromCurrentContextPath()
                         .path("api/user/class/add").toUriString());
-        return ResponseEntity.created(uri).body(classService.findStudentCourse().stream().map(post -> modelMapper.map(post, ClassBatchDTO.class)).collect(Collectors.toList()));
+        return ResponseEntity.created(uri).body(classService.findStudentClass(email).stream().map(ClassCourseDTO::new).collect(Collectors.toList()));
     }
     @PostMapping("/user/courses/{code}/classes/{batch}/deactivate")
     public ResponseEntity<?> deactivateClass (@PathVariable String code, @PathVariable long batch){
@@ -69,7 +67,7 @@ public class ClassController {
         return ResponseEntity.created(uri).body(classService.deactivateClass(code, batch));
     }
     @PostMapping("/user/add/class")
-    public ResponseEntity<?> saveClass(@RequestBody ClassBatch classBatch, HttpServletRequest request, HttpServletResponse response) {
+    public ResponseEntity<?> saveClass(@RequestBody ClassBatch classBatch, HttpServletRequest request, HttpServletResponse response) throws Exception {
         URI uri = URI
                 .create(ServletUriComponentsBuilder
                         .fromCurrentContextPath()
@@ -84,9 +82,12 @@ public class ClassController {
         return ResponseEntity.created(uri).body(classService.saveClass(classBatch,whoAdded));
     }
     @GetMapping("/user/classes")
-    public List<ClassBatchDTO> getAllClassBatch(){
-            return classService.getAllClassBatch().stream().map(post -> modelMapper.map(post, ClassBatchDTO.class)).collect(Collectors.toList());
+    public List<ClassCourseDTO> getAllClassBatch(){
+
+        List<ClassCourseDTO> classBatchDTOV2 = classService.getAllClassBatch().stream().map(ClassCourseDTO::new).toList();
+            return classBatchDTOV2;
     }
+
 }
 
 

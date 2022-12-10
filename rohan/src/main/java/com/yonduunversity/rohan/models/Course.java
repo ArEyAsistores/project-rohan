@@ -3,6 +3,9 @@ package com.yonduunversity.rohan.models;
 import lombok.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Getter
@@ -28,5 +31,10 @@ public class Course {
     private String description;
 
     private boolean isActive;
+
+    @ManyToMany(fetch = FetchType.EAGER)// load Database From Role when this user RUN
+    @JsonIgnore
+
+    private Collection<ClassBatch> classBatches = new ArrayList<>();
 
 }
