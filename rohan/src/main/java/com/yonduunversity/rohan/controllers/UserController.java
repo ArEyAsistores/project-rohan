@@ -204,33 +204,37 @@ public class UserController {
 
     // Grade
     @GetMapping("/grade/giveQuizScore")
-    public ResponseEntity<Grade> giveQuizScore(@Param("id") int id, @Param("email") String email,
+    public ResponseEntity<GradeDTO> giveQuizScore(@Param("id") int id, @Param("email") String email,
             @Param("score") int score) {
-        return new ResponseEntity<Grade>(gradeService.giveQuizScore(id, email, score), HttpStatus.OK);
+        return new ResponseEntity<GradeDTO>(new GradeDTO(gradeService.giveQuizScore(id, email, score)), HttpStatus.OK);
     }
 
     @GetMapping("/grade/giveExerciseScore")
-    public ResponseEntity<Grade> giveExerciseScore(@Param("id") int id, @Param("email") String email,
+    public ResponseEntity<GradeDTO> giveExerciseScore(@Param("id") int id, @Param("email") String email,
             @Param("score") int score) {
-        return new ResponseEntity<Grade>(gradeService.giveExerciseScore(id, email, score), HttpStatus.OK);
+        return new ResponseEntity<GradeDTO>(new GradeDTO(gradeService.giveExerciseScore(id, email, score)),
+                HttpStatus.OK);
     }
 
     @GetMapping("/grade/giveProjectScore")
-    public ResponseEntity<Grade> giveProjectScore(@Param("code") String code, @Param("batch") long batch,
+    public ResponseEntity<GradeDTO> giveProjectScore(@Param("code") String code, @Param("batch") long batch,
             @Param("email") String email,
             @Param("score") int score) {
-        return new ResponseEntity<Grade>(gradeService.giveProjectScore(code, batch, email, score), HttpStatus.OK);
+        return new ResponseEntity<GradeDTO>(new GradeDTO(gradeService.giveProjectScore(code, batch, email, score)),
+                HttpStatus.OK);
     }
 
     @GetMapping("/grade/retrieveStudentGrades")
-    public ResponseEntity<List<Grade>> retrieveStudentGrades(@Param("email") String email) {
-        return new ResponseEntity<List<Grade>>(gradeService.retrieveStudentGrades(email),
+    public ResponseEntity<List<GradeDTO>> retrieveStudentGrades(@Param("email") String email) {
+
+        return new ResponseEntity<List<GradeDTO>>(
+                gradeService.retrieveStudentGrades(email).stream().map(GradeDTO::new).toList(),
                 HttpStatus.OK);
     }
 
     @GetMapping("/grade/retrieveClassGrades")
-    public ResponseEntity<List<Grade>> retrieveClassGrades(@Param("id") long id) {
-        return new ResponseEntity<List<Grade>>(gradeService.retrieveClassGrades(id),
+    public ResponseEntity<List<Grade>> retrieveClassGrades(@Param("code") String code, @Param("batch") long batch) {
+        return new ResponseEntity<List<Grade>>(gradeService.retrieveClassGrades(code, batch),
                 HttpStatus.OK);
     }
 

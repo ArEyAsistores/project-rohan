@@ -77,11 +77,13 @@ public class GradeServiceImpl implements GradeService {
     }
 
     public List<Grade> retrieveStudentGrades(String email) {
-        return (List<Grade>) gradeRepo.findByStudentEmail(email);
+        Student student = studentRepo.findByEmail(email);
+        return (List<Grade>) gradeRepo.findByStudentEmail(student.getEmail());
     }
 
-    public List<Grade> retrieveClassGrades(long id) {
-        return (List<Grade>) gradeRepo.findByClassBatchId(id);
+    public List<Grade> retrieveClassGrades(String code, long batch) {
+        ClassBatch classBatch = classBatchRepo.findClassBatchByCourseCodeAndBatch(code, batch);
+        return (List<Grade>) gradeRepo.findByClassBatchId(classBatch.getId());
     }
 
     static void checkScore(int score, int min, int max) {
