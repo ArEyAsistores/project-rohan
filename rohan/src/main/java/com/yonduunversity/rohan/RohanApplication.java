@@ -10,7 +10,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.yonduunversity.rohan.models.student.Student;
 import com.yonduunversity.rohan.repository.ClassBatchRepo;
 import com.yonduunversity.rohan.repository.StudentRepo;
 import com.yonduunversity.rohan.services.UserService;
@@ -33,6 +32,8 @@ public class RohanApplication {
 	PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
+
+
 
 	@Autowired
 	ClassBatchRepo classBatchRepo;
