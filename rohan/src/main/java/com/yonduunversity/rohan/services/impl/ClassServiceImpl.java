@@ -11,6 +11,7 @@ import com.yonduunversity.rohan.repository.UserRepo;
 import com.yonduunversity.rohan.services.ClassService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.sql.exec.ExecutionException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,32 +28,28 @@ public class ClassServiceImpl implements ClassService {
     private final ClassBatchRepo classBatchRepo;
 
     @Override
-    public ClassBatch saveClass(ClassBatch classBatch, String whoAdded) {
+    public ClassBatch saveClass(ClassBatch classBatch, String whoAdded) throws Exception {
         Course course = courseRepo.findCourseByCode(classBatch.getCourse().getCode());
         User userSme = userRepo.findByEmail(whoAdded);
 
-        classBatch.setCourse(course);
-        classBatch.setSme(userSme);
-        classBatch.setBatch(classBatchRepo.findClassBatchByCourseCode(course.getCode()) + 1);
+        int totalPercentage = classBatch.getExercisePercentage() + classBatch.getQuizPercentage() + classBatch.getAttendancePercentage() + classBatch.getProjectPercentage();
+        if(totalPercentage == 100){
+            classBatch.setCourse(course);
+            classBatch.setSme(userSme);
+            classBatch.setBatch(classBatchRepo.findClassBatchByCourseCode(course.getCode()) + 1);
 
-        classBatchRepo.save(classBatch);
-        course.getClassBatches().add(classBatch);
-        courseRepo.save(course);
-        return classBatch;
+            classBatchRepo.save(classBatch);
+            course.getClassBatches().add(classBatch);
+            courseRepo.save(course);
+            return classBatch;
+        }else{
+           throw new Exception("Quiz, Attendance, Exercise and Project must be total to 100% ");
+        }
+
     }
 
     public Course viewCoursesWithClasses(String code, long batch) {
-//        Course course = courseRepo.findByCodeAndClassBatches();
-//        User userSme = userRepo.findByEmail(whoAdded);
-//
-//        classBatch.setCourse(course);
-//        classBatch.setSme(userSme);
-//        classBatch.setBatch(classBatchRepo.findClassBatchByCourseCodeAndBatch(course.getCode()) + 1);
-//
-//        classBatchRepo.save(classBatch);
-//        course.getClassBatches().add(classBatch);
-//        courseRepo.save(course);
-//        return course;
+
         return null;
     }
 

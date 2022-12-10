@@ -67,7 +67,7 @@ public class ClassController {
         return ResponseEntity.created(uri).body(classService.deactivateClass(code, batch));
     }
     @PostMapping("/user/add/class")
-    public ResponseEntity<?> saveClass(@RequestBody ClassBatch classBatch, HttpServletRequest request, HttpServletResponse response) {
+    public ResponseEntity<?> saveClass(@RequestBody ClassBatch classBatch, HttpServletRequest request, HttpServletResponse response) throws Exception {
         URI uri = URI
                 .create(ServletUriComponentsBuilder
                         .fromCurrentContextPath()
