@@ -48,6 +48,8 @@ public class ClassBatch implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
+    private long batch ;
+
     // Many class to one course;
     @ManyToOne
     @JoinColumn(name = "code", referencedColumnName = "code")
