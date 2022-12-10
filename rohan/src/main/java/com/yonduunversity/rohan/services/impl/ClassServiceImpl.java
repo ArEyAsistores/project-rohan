@@ -68,7 +68,7 @@ public class ClassServiceImpl implements ClassService {
     public ClassBatch unEnrollStudent(String email, String code, long batchNumber) {
         if (classBatchRepo.findClassBatchByCourseCodeAndId(code, batchNumber) != null
                 || studentRepo.findByEmail(email) != null) {
-            ClassBatch classBatch = classBatchRepo.findClassBatchByCourseCodeAndId(code, batchNumber);
+            ClassBatch classBatch = classBatchRepo.findClassBatchByCourseCodeAndBatch(code, batchNumber);
             Student studentUnEnroll = studentRepo.findByEmail(email);
             classBatch.getStudents().remove(studentUnEnroll);
             studentUnEnroll.getClassBatches().remove(classBatch);
@@ -96,5 +96,10 @@ public class ClassServiceImpl implements ClassService {
     @Override
     public List<ClassBatch> getAllClassBatch() {
         return classBatchRepo.findAll();
+    }
+
+    @Override
+    public ClassBatch getClassStudents(String code, long batchNumber) {
+        return classBatchRepo.findClassBatchByCourseCodeAndBatch(code, batchNumber);
     }
 }

@@ -19,5 +19,6 @@ public interface ClassService {
     ClassBatch deactivateClass(String code, long batchNumber);
     List<ClassBatch> findStudentClass(String email);
     List<ClassBatch>getAllClassBatch();
+    ClassBatch getClassStudents(String code, long batchNumber);
 
 }
