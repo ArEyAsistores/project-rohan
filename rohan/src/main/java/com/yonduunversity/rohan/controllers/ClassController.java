@@ -39,7 +39,7 @@ public class ClassController {
                         .fromCurrentContextPath()
                         .path("api/user/class/add").toUriString());
 
-       return ResponseEntity.created(uri).body(classService.enrollStudent(email.get("email").toString(),code, batch));
+       return ResponseEntity.created(uri).body(new ClassStudentsDTO(classService.enrollStudent(email.get("email").toString(),code, batch)));
     }
     @PostMapping("/user/courses/{code}/classes/{batch}/unenroll")
     public ResponseEntity<?> unrollStudent (@RequestBody Map<String, Object> email, @PathVariable String code, @PathVariable long batch, HttpServletRequest request, HttpServletResponse response){
@@ -79,13 +79,22 @@ public class ClassController {
         JWTVerifier jwtVerifier = JWT.require(algorithm).build();
         DecodedJWT decodedJWT = jwtVerifier.verify(whoAddedToken);
         String whoAdded = decodedJWT.getSubject();
-        return ResponseEntity.created(uri).body(classService.saveClass(classBatch,whoAdded));
+        return ResponseEntity.created(uri).body(new ClassCourseDTO(classService.saveClass(classBatch,whoAdded)));
     }
     @GetMapping("/user/classes")
     public List<ClassCourseDTO> getAllClassBatch(){
 
         List<ClassCourseDTO> classBatchDTOV2 = classService.getAllClassBatch().stream().map(ClassCourseDTO::new).toList();
             return classBatchDTOV2;
+    }
+    @GetMapping("/user/courses/{code}/classes/{batch}/students")
+    public ResponseEntity<?>  getClass(@PathVariable String code, @PathVariable Long batch){
+        URI uri = URI
+                .create(ServletUriComponentsBuilder
+                        .fromCurrentContextPath()
+                        .path("").toUriString());
+
+        return ResponseEntity.created(uri).body(new ClassStudentsDTO(classService.getClassStudents(code,batch)));
     }
 
 }
