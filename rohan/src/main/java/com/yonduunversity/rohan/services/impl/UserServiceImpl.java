@@ -6,6 +6,7 @@ import com.yonduunversity.rohan.models.*;
 import com.yonduunversity.rohan.models.student.Student;
 import com.yonduunversity.rohan.repository.*;
 import com.yonduunversity.rohan.repository.pagination.CourseRepoPaginate;
+import com.yonduunversity.rohan.repository.pagination.StudentRepoPaginate;
 import com.yonduunversity.rohan.repository.pagination.UserRepoPaginate;
 import com.yonduunversity.rohan.services.EmailSenderService;
 import com.yonduunversity.rohan.services.UserService;
@@ -47,6 +48,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private final CourseRepo courseRepo;
     private final EmailSenderService emailSenderService;
     private final ClassBatchRepo classBatchRepo;
+    private final StudentRepoPaginate studentRepoPaginate;
 
     @Override
     public UserDetails loadUserByUsername(String email) {
@@ -231,6 +233,24 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         } else {
             return   pagedResult.stream().collect(Collectors.toList());
         }
+    }
+
+    @Override
+    public List<StudentDTO> getStudentsByKeyword(String keyword, int pageNumber, int pageSize) {
+        Pageable paging = PageRequest.of(pageNumber, pageSize);
+        Page<StudentDTO> pagedResult = studentRepoPaginate.findAll(paging).map(StudentDTO::new);
+        if (keyword != null) {
+            return studentRepoPaginate.findAllByKeyword(keyword,paging).stream().map(StudentDTO::new).collect(Collectors.toList());
+        } else {
+            return   pagedResult.stream().collect(Collectors.toList());
+        }
+    }
+
+    @Override
+    public StudentDTO getStudent(String email) {
+        Student student = studentRepo.findByEmail(email);
+
+        return new StudentDTO(student);
     }
 
     @Override

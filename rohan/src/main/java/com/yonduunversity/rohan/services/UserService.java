@@ -28,6 +28,8 @@ public interface UserService {
     User getUser(String email);
     Course getCourse(String code);
     List<UserDTO>getUserByKeyword(String keyword, int pageNumber, int pageSize);
+    List<StudentDTO>getStudentsByKeyword(String keyword, int pageNumber, int pageSize);
+    StudentDTO getStudent(String email);
     User deactivateUser(String email);
     Course deactivateCourse(String code);
 

@@ -55,12 +55,16 @@ public class SecurityConfiguration {
         httpSecurity.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         httpSecurity.authorizeHttpRequests().requestMatchers("/api/login/**", "/api/token/refresh/**").permitAll();
 
-        httpSecurity.authorizeHttpRequests().requestMatchers(GET,"/api/**").hasAnyAuthority("ADMIN","SME");
-        httpSecurity.authorizeHttpRequests().requestMatchers(PUT,"/api/**").hasAnyAuthority("ADMIN","SME");
-        httpSecurity.authorizeHttpRequests().requestMatchers(POST,"/api/**").hasAnyAuthority("ADMIN","SME");
+        httpSecurity.authorizeHttpRequests().requestMatchers(GET,"/api/users/**").hasAuthority("ADMIN");
+        httpSecurity.authorizeHttpRequests().requestMatchers(PUT,"/api/users/**").hasAuthority("ADMIN");
+        httpSecurity.authorizeHttpRequests().requestMatchers(POST,"/api/users/**").hasAuthority("ADMIN");
+        httpSecurity.authorizeHttpRequests().requestMatchers(PUT,"/api/courses").hasAnyAuthority("ADMIN","SME");
+        httpSecurity.authorizeHttpRequests().requestMatchers(GET,"/api/courses").hasAnyAuthority("ADMIN","SME");
+        httpSecurity.authorizeHttpRequests().requestMatchers(POST,"/api/courses").hasAnyAuthority("ADMIN","SME");
 
 
-        httpSecurity.authorizeHttpRequests().requestMatchers(GET,"/api/student/").hasAuthority("STUDENT");
+
+        httpSecurity.authorizeHttpRequests().requestMatchers(GET,"/api/students/").hasAuthority("STUDENT");
 
 
         httpSecurity.authorizeHttpRequests().anyRequest().authenticated();

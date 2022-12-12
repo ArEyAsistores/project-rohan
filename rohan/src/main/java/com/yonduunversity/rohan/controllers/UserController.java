@@ -95,7 +95,7 @@ public class UserController {
         URI uri = URI
                 .create(ServletUriComponentsBuilder
                         .fromCurrentContextPath()
-                        .path("api/course/add").toUriString());
+                        .path("api/courses/add").toUriString());
         return ResponseEntity.created(uri).body(userService.addCourse(course));
     }
 
@@ -119,8 +119,26 @@ public class UserController {
         Pager pager = new Pager(listOfCourses, pageNumber, pageSize);
         return ResponseEntity.ok().body(pager);
     }
+    @GetMapping("/students")
+    public ResponseEntity<?> getStudentsByKeyword(@Param("keyword") String keyword,@RequestParam(name = "page", defaultValue = "0") int pageNumber,
+                                                @RequestParam(name = "pageSize", defaultValue = "10") int pageSize) {
+        List<StudentDTO> studentDTOS = userService.getStudentsByKeyword(keyword,pageNumber,pageSize);
+        Pager pager = new Pager(studentDTOS, pageNumber, pageSize);
+        return ResponseEntity.ok().body(pager);
+    }
+    @GetMapping("/students/search")
+    public ResponseEntity<?> saerchStudentsByKeyword(@Param("keyword") String keyword,@RequestParam(name = "page", defaultValue = "0") int pageNumber,
+                                                  @RequestParam(name = "pageSize", defaultValue = "10") int pageSize) {
+        List<StudentDTO> studentDTOS = userService.getStudentsByKeyword(keyword,pageNumber,pageSize);
+        Pager pager = new Pager(studentDTOS, pageNumber, pageSize);
+        return ResponseEntity.ok().body(pager);
+    }
+    @GetMapping("/students/{email}")
+    public ResponseEntity<?> getStudent(@PathVariable String email) {
+        return ResponseEntity.ok().body(userService.getStudent(email));
+    }
 
-    @GetMapping("/course/{code}")
+    @GetMapping("/courses/{code}")
 
     public Course getCourse(@PathVariable String code) {
         return userService.getCourse(code);
@@ -146,7 +164,7 @@ public class UserController {
         return new UserDTO(userService.deactivateUser(email));
     }
 
-    @PutMapping("/course/deactivate")
+    @PutMapping("/courses/deactivate")
     public Course deactivateCourse(@RequestParam(name = "courseCode", defaultValue = "") String code) {
         return userService.deactivateCourse(code);
     }
@@ -246,7 +264,7 @@ public class UserController {
                 HttpStatus.OK);
     }
 
-    @GetMapping("/user/courses/{code}/classes")
+    @GetMapping("/courses/{code}/classes")
     public CourseClassDTO getAllCoursesClasses(@PathVariable String code) {
         return new CourseClassDTO(userService.getCourse(code));
     }
