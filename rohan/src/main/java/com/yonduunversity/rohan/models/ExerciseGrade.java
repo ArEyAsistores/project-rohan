@@ -1,5 +1,18 @@
 package com.yonduunversity.rohan.models;
 
-public class ExerciseGrade {
+import lombok.Data;
 
+@Data
+public class ExerciseGrade {
+    int id;
+    int score;
+    int min;
+    int max;
+
+    public ExerciseGrade(int id, int score, int min, int max) {
+        this.id = id;
+        this.score = score;
+        this.min = min;
+        this.max = max;
+    }
 }

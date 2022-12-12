@@ -230,12 +230,12 @@ public class UserController {
     }
 
     @GetMapping("/grade/retrieveStudentGrades")
-    public ResponseEntity<List<GradeDTO>> retrieveStudentGrades(@Param("email") String email,
+    public ResponseEntity<GradeSheet> retrieveStudentGrades(@Param("email") String email,
             @Param("code") String code,
             @Param("batch") long batch) {
 
-        return new ResponseEntity<List<GradeDTO>>(
-                gradeService.retrieveStudentGrades(email, code, batch).stream().map(GradeDTO::new).toList(),
+        return new ResponseEntity<GradeSheet>(
+                new GradeSheet(gradeService.retrieveStudentGrades(email, code, batch), email, code, batch),
                 HttpStatus.OK);
     }
 
