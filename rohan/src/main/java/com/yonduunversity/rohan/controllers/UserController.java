@@ -117,6 +117,24 @@ public class UserController {
         Pager pager = new Pager(listOfCourses, pageNumber, pageSize);
         return ResponseEntity.ok().body(pager);
     }
+    @GetMapping("/students")
+    public ResponseEntity<?> getStudentsByKeyword(@Param("keyword") String keyword,@RequestParam(name = "page", defaultValue = "0") int pageNumber,
+                                                @RequestParam(name = "pageSize", defaultValue = "10") int pageSize) {
+        List<StudentDTO> studentDTOS = userService.getStudentsByKeyword(keyword,pageNumber,pageSize);
+        Pager pager = new Pager(studentDTOS, pageNumber, pageSize);
+        return ResponseEntity.ok().body(pager);
+    }
+    @GetMapping("/students/search")
+    public ResponseEntity<?> saerchStudentsByKeyword(@Param("keyword") String keyword,@RequestParam(name = "page", defaultValue = "0") int pageNumber,
+                                                  @RequestParam(name = "pageSize", defaultValue = "10") int pageSize) {
+        List<StudentDTO> studentDTOS = userService.getStudentsByKeyword(keyword,pageNumber,pageSize);
+        Pager pager = new Pager(studentDTOS, pageNumber, pageSize);
+        return ResponseEntity.ok().body(pager);
+    }
+    @GetMapping("/students/{email}")
+    public ResponseEntity<?> getStudent(@PathVariable String email) {
+        return ResponseEntity.ok().body(userService.getStudent(email));
+    }
 
     @GetMapping("/course/{code}")
 
