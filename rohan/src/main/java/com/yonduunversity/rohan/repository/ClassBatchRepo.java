@@ -8,10 +8,11 @@ import org.springframework.data.repository.query.Param;
 public interface ClassBatchRepo extends JpaRepository<ClassBatch, Long> {
 
     ClassBatch findClassBatchByCourseCodeAndId(String code, long batch);
-    @Query("SELECT COUNT(u) FROM ClassBatch u WHERE u.course.code =:code")
-    long findClassBatchByCourseCode(@Param("code")String code);
-    @Query("SELECT u FROM ClassBatch u WHERE u.course.code =:code AND u.batch =:batch ")
-    ClassBatch findClassBatchByCourseCodeAndBatch(@Param("code")String code, @Param("batch")Long batch);
 
+    @Query("SELECT COUNT(u) FROM ClassBatch u WHERE u.course.code =:code")
+    long findClassBatchByCourseCode(@Param("code") String code);
+
+    @Query("SELECT u FROM ClassBatch u WHERE u.course.code =:code AND u.batch =:batch ")
+    ClassBatch findClassBatchByCourseCodeAndBatch(@Param("code") String code, @Param("batch") Long batch);
 
 }

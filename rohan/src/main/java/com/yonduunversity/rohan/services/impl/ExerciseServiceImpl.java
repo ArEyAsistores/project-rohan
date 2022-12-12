@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.yonduunversity.rohan.exception.ClassBatchNotFoundException;
 import com.yonduunversity.rohan.exception.ExerciseNotFoundException;
 import com.yonduunversity.rohan.exception.StudentAlreadyGradedException;
 import com.yonduunversity.rohan.models.ClassBatch;
@@ -31,7 +32,7 @@ public class ExerciseServiceImpl implements ExerciseService {
         return exerciseRepo.save(exercise);
     }
 
-    public void removeExercise(int id) {
+    public Exercise removeExercise(int id) {
         Exercise exercise = ExerciseServiceImpl.unwrapExercise(exerciseRepo.findById(id), id);
         Optional<Grade> grade = gradeRepo.findByExerciseId(id);
         if (grade.isPresent()) {
@@ -40,7 +41,7 @@ public class ExerciseServiceImpl implements ExerciseService {
             if (exercise.isActive()) {
                 exercise.setActive(false);
             }
-            exerciseRepo.save(exercise);
+            return exerciseRepo.save(exercise);
         }
 
     }
@@ -48,6 +49,9 @@ public class ExerciseServiceImpl implements ExerciseService {
     public Exercise addExercise(Exercise exercise, String code, long id) {
         exercise.setActive(true);
         ClassBatch classBatch = classBatchRepo.findClassBatchByCourseCodeAndBatch(code, id);
+        if (classBatch == null) {
+            throw new ClassBatchNotFoundException(code, id);
+        }
         exercise.setClassBatch(classBatch);
         return exerciseRepo.save(exercise);
     }

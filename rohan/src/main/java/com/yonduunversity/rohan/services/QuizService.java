@@ -7,5 +7,5 @@ public interface QuizService {
 
     Quiz addQuiz(Quiz quiz, String code, long batch);
 
-    void removeQuiz(int id);
+    Quiz removeQuiz(int id);
 }
