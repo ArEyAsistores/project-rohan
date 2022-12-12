@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,26 +40,27 @@ public class UserController {
     /// GET: RETRIEVE ALL USER ///
     ////////////////////////////
 
-    @GetMapping("/user")
-    public User getUser(@Param("email") String email) {
-        return userService.getUser(email);
+    @GetMapping("/users/{email}")
+    public UserDTO getUser(@PathVariable String email) {
+        return new UserDTO(userService.getUser(email));
     }
 
     @GetMapping("/users/search")
-    public ResponseEntity<List<User>> getAllUser(@Param("keyword") String keyword) {
-        List<User> listOfUser = userService.getUserByKeyword(keyword);
-
-        return ResponseEntity.ok().body(listOfUser);
+    public ResponseEntity<?> getAllUser(@Param("keyword") String keyword,@RequestParam(name = "page", defaultValue = "0") int pageNumber,
+                                        @RequestParam(name = "pageSize", defaultValue = "10") int pageSize) {//With Pagination dapat
+        List<UserDTO> listOfUser = userService.getUserByKeyword(keyword,pageNumber,pageSize);
+        Pager pager = new Pager(listOfUser, pageNumber, pageSize);
+        return ResponseEntity.ok().body(pager);
     }
 
     @GetMapping("/users")
     public Pager getAllUser(@RequestParam(name = "page", defaultValue = "0") int pageNumber,
-                                    @RequestParam(name = "pageSize", defaultValue = "10") int pageSize) {
+            @RequestParam(name = "pageSize", defaultValue = "10") int pageSize) {
 
-
-        List<UserDTO> userDTOS = userService.getUsers(pageNumber, pageSize).stream().map(UserDTO::new).collect(Collectors.toList());
-        Pager pager = new Pager(userDTOS,pageNumber,pageSize);
-        return pager ;
+        List<UserDTO> userDTOS = userService.getUsers(pageNumber, pageSize).stream().map(UserDTO::new)
+                .collect(Collectors.toList());
+        Pager pager = new Pager(userDTOS, pageNumber, pageSize);
+        return pager;
     }
 
     @PostMapping("/users")
@@ -75,7 +77,7 @@ public class UserController {
         DecodedJWT decodedJWT = jwtVerifier.verify(whoAddedToken);
         String whoAdded = decodedJWT.getSubject();
 
-        return ResponseEntity.created(uri).body(userService.saveUser(user,whoAdded));
+        return ResponseEntity.created(uri).body(userService.saveUser(user, whoAdded));
     }
 
     @PostMapping("/role/add")
@@ -87,7 +89,7 @@ public class UserController {
         return ResponseEntity.created(uri).body(userService.saveRole(role));
     }
 
-    @PostMapping("/course/add")
+    @PostMapping("/courses")
     public ResponseEntity<Course> addCourse(@RequestBody Course course) {
         URI uri = URI
                 .create(ServletUriComponentsBuilder
@@ -100,7 +102,7 @@ public class UserController {
     public ResponseEntity<?> getAllCourses(@RequestParam(name = "page", defaultValue = "0") int pageNumber,
             @RequestParam(name = "pageSize", defaultValue = "10") int pageSize) {
         List<CourseDTO> courseDTO = userService.getCourses(pageNumber, pageSize).stream().map(CourseDTO::new).toList();
-        Pager pager = new Pager(courseDTO, pageNumber,pageSize);
+        Pager pager = new Pager(courseDTO, pageNumber, pageSize);
         URI uri = URI
                 .create(ServletUriComponentsBuilder
                         .fromCurrentContextPath()
@@ -109,9 +111,29 @@ public class UserController {
     }
 
     @GetMapping("/courses/search")
-    public ResponseEntity<List<Course>> getCourseByKeyword(@Param("keyword") String keyword) {
-        List<Course> listOfUser = userService.getCourseByKeyword(keyword);
-        return ResponseEntity.ok().body(listOfUser);
+    public ResponseEntity<?> getCourseByKeyword(@Param("keyword") String keyword,@RequestParam(name = "page", defaultValue = "0") int pageNumber,
+                                                           @RequestParam(name = "pageSize", defaultValue = "10") int pageSize) {
+        List<CourseDTO> listOfCourses = userService.getCourseByKeyword(keyword,pageNumber,pageSize);
+        Pager pager = new Pager(listOfCourses, pageNumber, pageSize);
+        return ResponseEntity.ok().body(pager);
+    }
+    @GetMapping("/students")
+    public ResponseEntity<?> getStudentsByKeyword(@Param("keyword") String keyword,@RequestParam(name = "page", defaultValue = "0") int pageNumber,
+                                                @RequestParam(name = "pageSize", defaultValue = "10") int pageSize) {
+        List<StudentDTO> studentDTOS = userService.getStudentsByKeyword(keyword,pageNumber,pageSize);
+        Pager pager = new Pager(studentDTOS, pageNumber, pageSize);
+        return ResponseEntity.ok().body(pager);
+    }
+    @GetMapping("/students/search")
+    public ResponseEntity<?> saerchStudentsByKeyword(@Param("keyword") String keyword,@RequestParam(name = "page", defaultValue = "0") int pageNumber,
+                                                  @RequestParam(name = "pageSize", defaultValue = "10") int pageSize) {
+        List<StudentDTO> studentDTOS = userService.getStudentsByKeyword(keyword,pageNumber,pageSize);
+        Pager pager = new Pager(studentDTOS, pageNumber, pageSize);
+        return ResponseEntity.ok().body(pager);
+    }
+    @GetMapping("/students/{email}")
+    public ResponseEntity<?> getStudent(@PathVariable String email) {
+        return ResponseEntity.ok().body(userService.getStudent(email));
     }
 
     @GetMapping("/course/{code}")
@@ -135,9 +157,9 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("/user/deactivate")
-    public User deactivateUser(@RequestParam(name = "email", defaultValue = "") String email) {
-        return userService.deactivateUser(email);
+    @PutMapping("/users/deactivate")
+    public UserDTO deactivateUser(@RequestParam(name = "email", defaultValue = "") String email) {
+        return new UserDTO(userService.deactivateUser(email));
     }
 
     @PutMapping("/course/deactivate")
@@ -152,12 +174,22 @@ public class UserController {
     }
 
     @PostMapping("/quiz/addById")
-    public ResponseEntity<Quiz> addQuiz(@RequestBody Quiz quiz, @Param("id") long id) {
+    public ResponseEntity<Quiz> addQuizById(@RequestBody Quiz quiz, @Param("id") long id) {
+        URI uri = URI
+                .create(ServletUriComponentsBuilder
+                        .fromCurrentContextPath()
+                        .path("api/quiz/addById").toUriString());
+        return ResponseEntity.created(uri).body(quizService.addQuizById(quiz, id));
+    }
+
+    @PostMapping("/quiz/add")
+    public ResponseEntity<QuizDTO> addQuiz(@RequestBody Quiz quiz, @Param("code") String code,
+            @Param("batch") long batch) {
         URI uri = URI
                 .create(ServletUriComponentsBuilder
                         .fromCurrentContextPath()
                         .path("api/quiz/add").toUriString());
-        return ResponseEntity.created(uri).body(quizService.addQuizById(quiz, id));
+        return ResponseEntity.created(uri).body(new QuizDTO(quizService.addQuiz(quiz, code, batch)));
     }
 
     @GetMapping("/quiz/remove")
@@ -176,6 +208,16 @@ public class UserController {
         return ResponseEntity.created(uri).body(exerciseService.addExerciseById(exercise, id));
     }
 
+    @PostMapping("/exercise/add")
+    public ResponseEntity<ExerciseDTO> addExercise(@RequestBody Exercise exercise, @Param("code") String code,
+            @Param("batch") long batch) {
+        URI uri = URI
+                .create(ServletUriComponentsBuilder
+                        .fromCurrentContextPath()
+                        .path("api/exercise/add").toUriString());
+        return ResponseEntity.created(uri).body(new ExerciseDTO(exerciseService.addExercise(exercise, code, batch)));
+    }
+
     @GetMapping("/exercise/remove")
     public ResponseEntity removeExercise(@Param("id") int id) {
         exerciseService.removeExercise(id);
@@ -184,37 +226,43 @@ public class UserController {
 
     // Grade
     @GetMapping("/grade/giveQuizScore")
-    public ResponseEntity<Grade> giveQuizScore(@Param("id") int id, @Param("email") String email,
+    public ResponseEntity<GradeDTO> giveQuizScore(@Param("id") int id, @Param("email") String email,
             @Param("score") int score) {
-        return new ResponseEntity<Grade>(gradeService.giveQuizScore(id, email, score), HttpStatus.OK);
+        return new ResponseEntity<GradeDTO>(new GradeDTO(gradeService.giveQuizScore(id, email, score)), HttpStatus.OK);
     }
 
     @GetMapping("/grade/giveExerciseScore")
-    public ResponseEntity<Grade> giveExerciseScore(@Param("id") int id, @Param("email") String email,
+    public ResponseEntity<GradeDTO> giveExerciseScore(@Param("id") int id, @Param("email") String email,
             @Param("score") int score) {
-        return new ResponseEntity<Grade>(gradeService.giveExerciseScore(id, email, score), HttpStatus.OK);
+        return new ResponseEntity<GradeDTO>(new GradeDTO(gradeService.giveExerciseScore(id, email, score)),
+                HttpStatus.OK);
     }
 
     @GetMapping("/grade/giveProjectScore")
-    public ResponseEntity<Grade> giveProjectScore(@Param("id") int id, @Param("email") String email,
+    public ResponseEntity<GradeDTO> giveProjectScore(@Param("code") String code, @Param("batch") long batch,
+            @Param("email") String email,
             @Param("score") int score) {
-        return new ResponseEntity<Grade>(gradeService.giveProjectScore(id, email, score), HttpStatus.OK);
+        return new ResponseEntity<GradeDTO>(new GradeDTO(gradeService.giveProjectScore(code, batch, email, score)),
+                HttpStatus.OK);
     }
 
     @GetMapping("/grade/retrieveStudentGrades")
-    public ResponseEntity<List<Grade>> retrieveStudentGrades(@Param("email") String email) {
-        return new ResponseEntity<List<Grade>>(gradeService.retrieveStudentGrades(email),
+    public ResponseEntity<List<GradeDTO>> retrieveStudentGrades(@Param("email") String email) {
+
+        return new ResponseEntity<List<GradeDTO>>(
+                gradeService.retrieveStudentGrades(email).stream().map(GradeDTO::new).toList(),
                 HttpStatus.OK);
     }
 
     @GetMapping("/grade/retrieveClassGrades")
-    public ResponseEntity<List<Grade>> retrieveClassGrades(@Param("id") long id) {
-        return new ResponseEntity<List<Grade>>(gradeService.retrieveClassGrades(id),
+    public ResponseEntity<List<GradeDTO>> retrieveClassGrades(@Param("code") String code, @Param("batch") long batch) {
+        return new ResponseEntity<List<GradeDTO>>(
+                gradeService.retrieveClassGrades(code, batch).stream().map(GradeDTO::new).toList(),
                 HttpStatus.OK);
     }
 
     @GetMapping("/user/courses/{code}/classes")
-    public CourseClassDTO getAllCoursesClasses(@PathVariable String code){
+    public CourseClassDTO getAllCoursesClasses(@PathVariable String code) {
         return new CourseClassDTO(userService.getCourse(code));
     }
 

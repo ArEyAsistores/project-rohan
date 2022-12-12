@@ -32,5 +32,4 @@ public class User {
     @ManyToMany(fetch = FetchType.EAGER) // load Database From Role when this user RUN
     private List<Role> roles = new ArrayList<>();
 
-
 }

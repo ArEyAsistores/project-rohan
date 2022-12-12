@@ -1,6 +1,7 @@
 package com.yonduunversity.rohan.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -10,5 +11,9 @@ public interface GradeRepo extends JpaRepository<Grade, Integer> {
     List<Grade> findByStudentEmail(String email);
 
     List<Grade> findByClassBatchId(long id);
+
+    Optional<Grade> findByExerciseId(int id);
+
+    Optional<Grade> findByQuizId(int id);
 
 }

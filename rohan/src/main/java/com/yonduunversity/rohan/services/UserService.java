@@ -24,10 +24,12 @@ public interface UserService {
     List<ClassBatch>getAllClassBatch();
     List<User>getUsers(int pageNumber, int pageSize);//With Pagination
     List<Course> getCourses(int pageNumber, int pageSize);//With Pagination
-    List<Course>getCourseByKeyword(String keyword);
+    List<CourseDTO>getCourseByKeyword(String keyword, int pageNumber, int pageSize);
     User getUser(String email);
     Course getCourse(String code);
-    List<User>getUserByKeyword(String keyword);
+    List<UserDTO>getUserByKeyword(String keyword, int pageNumber, int pageSize);
+    List<StudentDTO>getStudentsByKeyword(String keyword, int pageNumber, int pageSize);
+    StudentDTO getStudent(String email);
     User deactivateUser(String email);
     Course deactivateCourse(String code);
 

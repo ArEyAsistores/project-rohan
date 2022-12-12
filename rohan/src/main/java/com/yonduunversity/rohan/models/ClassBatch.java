@@ -48,7 +48,7 @@ public class ClassBatch implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    private long batch ;
+    private long batch;
 
     // Many class to one course;
     @ManyToOne
@@ -69,6 +69,7 @@ public class ClassBatch implements Serializable {
     @OneToOne(mappedBy = "classBatch", cascade = CascadeType.ALL)
     @PrimaryKeyJoinColumn
     @NonNull
+    @JsonIgnore
     private Project project;
 
     @ManyToOne

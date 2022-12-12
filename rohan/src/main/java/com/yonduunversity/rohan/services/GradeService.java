@@ -6,11 +6,11 @@ import com.yonduunversity.rohan.models.Grade;
 public interface GradeService {
     List<Grade> retrieveStudentGrades(String email);
 
-    List<Grade> retrieveClassGrades(long id);
+    List<Grade> retrieveClassGrades(String code, long batch);
 
     Grade giveQuizScore(int quiz_id, String email, int score);
 
     Grade giveExerciseScore(int exercise_id, String email, int score);
 
-    Grade giveProjectScore(long project_id, String email, int score);
+    Grade giveProjectScore(String code, long batch, String email, int score);
 }
