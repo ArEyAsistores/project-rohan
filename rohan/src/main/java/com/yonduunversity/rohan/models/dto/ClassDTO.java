@@ -1,15 +1,15 @@
-package com.yonduunversity.rohan.models;
+package com.yonduunversity.rohan.models.dto;
 
+import com.yonduunversity.rohan.models.ClassBatch;
 import lombok.Data;
 
 import java.time.LocalDate;
 
 @Data
-public class ClassCourseDTO {
+public class ClassDTO {
 
 
     private long batch;
-    private  Course course;
     private UserDTO sme;
     private int quizPercentage;
     private int exercisePercentage;
@@ -19,7 +19,7 @@ public class ClassCourseDTO {
     private LocalDate endDate;
     private  boolean isActive;
 
-    public ClassCourseDTO(ClassBatch classBatch){
+    public ClassDTO(ClassBatch classBatch){
         this.batch =  classBatch.getBatch();
         this.quizPercentage = classBatch.getQuizPercentage();
         this.exercisePercentage = classBatch.getExercisePercentage();
@@ -29,7 +29,6 @@ public class ClassCourseDTO {
         this.endDate = classBatch.getEndDate();
         this.isActive = classBatch.isActive();
         this.sme = new UserDTO(classBatch.getSme());
-        this.course = classBatch.getCourse();
     }
 
 }

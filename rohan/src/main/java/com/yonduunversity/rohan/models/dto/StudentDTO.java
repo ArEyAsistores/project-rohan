@@ -1,4 +1,4 @@
-package com.yonduunversity.rohan.models;
+package com.yonduunversity.rohan.models.dto;
 
 import com.yonduunversity.rohan.models.student.Student;
 import lombok.Data;

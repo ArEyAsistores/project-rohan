@@ -3,7 +3,9 @@ package com.yonduunversity.rohan.services;
 import com.yonduunversity.rohan.models.*;
 
 import java.util.List;
-
+import com.yonduunversity.rohan.models.dto.StudentDTO;
+import com.yonduunversity.rohan.models.dto.UserAccountDTO;
+import com.yonduunversity.rohan.models.dto.UserDTO;
 import com.yonduunversity.rohan.models.student.Student;
 
 public interface UserService {
@@ -18,19 +20,16 @@ public interface UserService {
     List<ClassBatch> findStudentCourse();
     Role saveRole(Role role);
     void assignRole(String email, String roleName);
-    Course addCourse(Course course);
     void saveUser(Student student);
     List<User>getUsers();//Default getAllUser
     List<ClassBatch>getAllClassBatch();
-    List<User>getUsers(int pageNumber, int pageSize);//With Pagination
-    List<Course> getCourses(int pageNumber, int pageSize);//With Pagination
-    List<CourseDTO>getCourseByKeyword(String keyword, int pageNumber, int pageSize);
+    List<User>getUsers(int pageNumber, int pageSize);
+
     User getUser(String email);
-    Course getCourse(String code);
     List<UserDTO>getUserByKeyword(String keyword, int pageNumber, int pageSize);
     List<StudentDTO>getStudentsByKeyword(String keyword, int pageNumber, int pageSize);
     StudentDTO getStudent(String email);
     User deactivateUser(String email);
-    Course deactivateCourse(String code);
+
 
 }

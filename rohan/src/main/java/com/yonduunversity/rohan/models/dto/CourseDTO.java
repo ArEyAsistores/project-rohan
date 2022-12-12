@@ -1,6 +1,7 @@
-package com.yonduunversity.rohan.models;
+package com.yonduunversity.rohan.models.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.yonduunversity.rohan.models.Course;
 import jakarta.persistence.Column;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;

@@ -1,5 +1,6 @@
-package com.yonduunversity.rohan.models;
+package com.yonduunversity.rohan.models.dto;
 
+import com.yonduunversity.rohan.models.Grade;
 import lombok.Data;
 
 @Data

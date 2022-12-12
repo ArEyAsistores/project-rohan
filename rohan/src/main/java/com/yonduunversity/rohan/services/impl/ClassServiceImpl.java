@@ -2,6 +2,7 @@ package com.yonduunversity.rohan.services.impl;
 
 import com.yonduunversity.rohan.exception.TotalGradePercentageInvalidException;
 import com.yonduunversity.rohan.models.*;
+import com.yonduunversity.rohan.models.dto.ClassCourseDTO;
 import com.yonduunversity.rohan.models.student.Student;
 import com.yonduunversity.rohan.repository.ClassBatchRepo;
 import com.yonduunversity.rohan.repository.CourseRepo;
@@ -12,7 +13,6 @@ import com.yonduunversity.rohan.repository.pagination.ClassRepoPaginate;
 import com.yonduunversity.rohan.services.ClassService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.sql.exec.ExecutionException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -40,7 +40,7 @@ public class ClassServiceImpl implements ClassService {
         Course course = courseRepo.findCourseByCode(classBatch.getCourse().getCode());
         User userSme = userRepo.findByEmail(whoAdded);
 
-        if(userSme.isActive()){
+        if(userSme.isActive() && course.isActive()){
             int totalPercentage = classBatch.getExercisePercentage() + classBatch.getQuizPercentage()
                     + classBatch.getAttendancePercentage() + classBatch.getProjectPercentage();
             if (totalPercentage == 100) {
@@ -61,7 +61,7 @@ public class ClassServiceImpl implements ClassService {
                 throw new TotalGradePercentageInvalidException();
             }
         }else{
-            throw new Exception("SME IS IN-ACTIVE");
+            throw new Exception("SME OR COURSE IS IN-ACTIVE");
         }
 
     }
