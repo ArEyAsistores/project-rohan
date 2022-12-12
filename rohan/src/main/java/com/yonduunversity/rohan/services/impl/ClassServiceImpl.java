@@ -1,5 +1,6 @@
 package com.yonduunversity.rohan.services.impl;
 
+import com.yonduunversity.rohan.exception.TotalGradePercentageInvalidException;
 import com.yonduunversity.rohan.models.ClassBatch;
 import com.yonduunversity.rohan.models.Course;
 import com.yonduunversity.rohan.models.Project;
@@ -51,7 +52,7 @@ public class ClassServiceImpl implements ClassService {
             courseRepo.save(course);
             return classBatch;
         } else {
-            throw new Exception("Quiz, Attendance, Exercise and Project must be total to 100% ");
+            throw new TotalGradePercentageInvalidException();
         }
 
     }
