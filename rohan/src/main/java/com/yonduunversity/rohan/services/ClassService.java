@@ -12,8 +12,8 @@ import java.util.Map;
 public interface ClassService {
     ClassBatch saveClass(ClassBatch classBatch, String whoAdded) throws Exception;
     ClassBatch enrollStudent(String email, String code,long batchNumber) throws Exception;
-    ClassBatch unEnrollStudent(String email, String code, long batchNumber);
-    ClassBatch deactivateClass(String code, long batchNumber);
+    ClassBatch unEnrollStudent(String email, String code, long batchNumber) throws Exception;
+    ClassBatch deactivateClass(String code, long batchNumber) throws Exception;
     List<ClassBatch> findStudentClass(String email);
     List<ClassBatch>getAllClassBatch();
     ClassBatch getClassStudents(String code, long batchNumber);
