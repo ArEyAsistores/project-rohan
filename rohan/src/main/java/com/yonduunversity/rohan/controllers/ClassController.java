@@ -28,8 +28,6 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 @RequiredArgsConstructor
 @RequestMapping("/api") // Root path
 public class ClassController {
-    @Autowired
-    private ModelMapper modelMapper;
     private final ClassService classService;
 
     @PostMapping("/user/courses/{code}/classes/{batch}/enroll")
@@ -81,12 +79,6 @@ public class ClassController {
         String whoAdded = decodedJWT.getSubject();
         return ResponseEntity.created(uri).body(new ClassCourseDTO(classService.saveClass(classBatch,whoAdded)));
     }
-    @GetMapping("/user/classes")
-    public List<ClassCourseDTO> getAllClassBatch(){
-
-        List<ClassCourseDTO> classBatchDTOV2 = classService.getAllClassBatch().stream().map(ClassCourseDTO::new).toList();
-            return classBatchDTOV2;
-    }
     @GetMapping("/user/courses/{code}/classes/{batch}/students")
     public ResponseEntity<?>  getClass(@PathVariable String code, @PathVariable Long batch){
         URI uri = URI
@@ -95,6 +87,18 @@ public class ClassController {
                         .path("").toUriString());
 
         return ResponseEntity.created(uri).body(new ClassStudentsDTO(classService.getClassStudents(code,batch)));
+    }
+
+    @GetMapping("/classes")
+    public ResponseEntity<?> getAllCourses(@RequestParam(name = "page", defaultValue = "0") int pageNumber,
+                                           @RequestParam(name = "pageSize", defaultValue = "10") int pageSize) {
+        List<ClassCourseDTO> classCourseDTOS = classService.getAllClassBatch(pageNumber, pageSize).stream().map(ClassCourseDTO::new).toList();
+        Pager pager = new Pager(classCourseDTOS, pageNumber, pageSize);
+        URI uri = URI
+                .create(ServletUriComponentsBuilder
+                        .fromCurrentContextPath()
+                        .path("api/classes").toUriString());
+        return ResponseEntity.created(uri).body(pager);
     }
 
 }

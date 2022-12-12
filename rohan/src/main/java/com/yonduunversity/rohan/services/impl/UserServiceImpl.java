@@ -12,6 +12,7 @@ import com.yonduunversity.rohan.services.UserService;
 import com.yonduunversity.rohan.util.PasswordGen;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.engine.jdbc.Size;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -29,6 +30,7 @@ import java.util.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -221,20 +223,24 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public List<User> getUserByKeyword(String keyword) {
+    public List<UserDTO> getUserByKeyword(String keyword, int pageNumber, int pageSize) {
+        Pageable paging = PageRequest.of(pageNumber, pageSize);
+        Page<UserDTO> pagedResult = userRepoPagingate.findAll(paging).map(UserDTO::new);
         if (keyword != null) {
-            return userRepo.findAllByKeyword(keyword);
+            return userRepoPagingate.findAllByKeyword(keyword,paging).stream().map(UserDTO::new).collect(Collectors.toList());
         } else {
-            return userRepo.findAll();
+            return   pagedResult.stream().collect(Collectors.toList());
         }
     }
 
     @Override
-    public List<Course> getCourseByKeyword(String keyword) {
+    public List<CourseDTO> getCourseByKeyword(String keyword,int pageNumber, int pageSize) {
+        Pageable paging = PageRequest.of(pageNumber, pageSize);
+        Page<CourseDTO> pagedResult = courseRepoPaginate.findAll(paging).map(CourseDTO::new);
         if (keyword != null) {
-            return courseRepo.findAllByKeyword(keyword);
+            return courseRepoPaginate.findAllByKeyword(keyword,paging).stream().map(CourseDTO::new).collect(Collectors.toList());
         } else {
-            return courseRepo.findAll();
+            return  pagedResult.stream().collect(Collectors.toList());
         }
     }
 

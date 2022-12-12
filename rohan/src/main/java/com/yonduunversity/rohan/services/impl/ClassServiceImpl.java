@@ -11,10 +11,14 @@ import com.yonduunversity.rohan.repository.CourseRepo;
 import com.yonduunversity.rohan.repository.ProjectRepo;
 import com.yonduunversity.rohan.repository.StudentRepo;
 import com.yonduunversity.rohan.repository.UserRepo;
+import com.yonduunversity.rohan.repository.pagination.ClassRepoPaginate;
 import com.yonduunversity.rohan.services.ClassService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.sql.exec.ExecutionException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +34,7 @@ public class ClassServiceImpl implements ClassService {
     private final StudentRepo studentRepo;
     private final ClassBatchRepo classBatchRepo;
     private final ProjectRepo projectRepo;
+    private final ClassRepoPaginate classRepoPaginate;
 
     @Override
     public ClassBatch saveClass(ClassBatch classBatch, String whoAdded) throws Exception {
@@ -110,5 +115,12 @@ public class ClassServiceImpl implements ClassService {
     @Override
     public ClassBatch getClassStudents(String code, long batchNumber) {
         return classBatchRepo.findClassBatchByCourseCodeAndBatch(code, batchNumber);
+    }
+
+    @Override
+    public List<ClassBatch> getAllClassBatch(int pageNumber, int pageSize) {
+        Pageable paging = PageRequest.of(pageNumber, pageSize);
+        Page<ClassBatch> pagedResult = classRepoPaginate.findAll(paging);
+        return pagedResult.stream().toList();
     }
 }

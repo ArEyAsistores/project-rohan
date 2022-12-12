@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,16 +40,17 @@ public class UserController {
     /// GET: RETRIEVE ALL USER ///
     ////////////////////////////
 
-    @GetMapping("/user")
-    public User getUser(@Param("email") String email) {
-        return userService.getUser(email);
+    @GetMapping("/users/{email}")
+    public UserDTO getUser(@PathVariable String email) {
+        return new UserDTO(userService.getUser(email));
     }
 
     @GetMapping("/users/search")
-    public ResponseEntity<List<User>> getAllUser(@Param("keyword") String keyword) {
-        List<User> listOfUser = userService.getUserByKeyword(keyword);
-
-        return ResponseEntity.ok().body(listOfUser);
+    public ResponseEntity<?> getAllUser(@Param("keyword") String keyword,@RequestParam(name = "page", defaultValue = "0") int pageNumber,
+                                        @RequestParam(name = "pageSize", defaultValue = "10") int pageSize) {//With Pagination dapat
+        List<UserDTO> listOfUser = userService.getUserByKeyword(keyword,pageNumber,pageSize);
+        Pager pager = new Pager(listOfUser, pageNumber, pageSize);
+        return ResponseEntity.ok().body(pager);
     }
 
     @GetMapping("/users")
@@ -87,7 +89,7 @@ public class UserController {
         return ResponseEntity.created(uri).body(userService.saveRole(role));
     }
 
-    @PostMapping("/course/add")
+    @PostMapping("/courses")
     public ResponseEntity<Course> addCourse(@RequestBody Course course) {
         URI uri = URI
                 .create(ServletUriComponentsBuilder
@@ -109,9 +111,11 @@ public class UserController {
     }
 
     @GetMapping("/courses/search")
-    public ResponseEntity<List<Course>> getCourseByKeyword(@Param("keyword") String keyword) {
-        List<Course> listOfUser = userService.getCourseByKeyword(keyword);
-        return ResponseEntity.ok().body(listOfUser);
+    public ResponseEntity<?> getCourseByKeyword(@Param("keyword") String keyword,@RequestParam(name = "page", defaultValue = "0") int pageNumber,
+                                                           @RequestParam(name = "pageSize", defaultValue = "10") int pageSize) {
+        List<CourseDTO> listOfCourses = userService.getCourseByKeyword(keyword,pageNumber,pageSize);
+        Pager pager = new Pager(listOfCourses, pageNumber, pageSize);
+        return ResponseEntity.ok().body(pager);
     }
 
     @GetMapping("/course/{code}")
@@ -135,9 +139,9 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("/user/deactivate")
-    public User deactivateUser(@RequestParam(name = "email", defaultValue = "") String email) {
-        return userService.deactivateUser(email);
+    @PutMapping("/users/deactivate")
+    public UserDTO deactivateUser(@RequestParam(name = "email", defaultValue = "") String email) {
+        return new UserDTO(userService.deactivateUser(email));
     }
 
     @PutMapping("/course/deactivate")

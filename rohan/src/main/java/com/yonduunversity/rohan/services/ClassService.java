@@ -20,5 +20,6 @@ public interface ClassService {
     List<ClassBatch> findStudentClass(String email);
     List<ClassBatch>getAllClassBatch();
     ClassBatch getClassStudents(String code, long batchNumber);
+    List<ClassBatch> getAllClassBatch(int pageNumber, int pageSize);
 
 }
