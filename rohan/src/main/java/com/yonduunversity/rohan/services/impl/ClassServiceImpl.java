@@ -1,24 +1,26 @@
 package com.yonduunversity.rohan.services.impl;
 
 import com.yonduunversity.rohan.exception.TotalGradePercentageInvalidException;
-import com.yonduunversity.rohan.models.ClassBatch;
-import com.yonduunversity.rohan.models.Course;
-import com.yonduunversity.rohan.models.Project;
-import com.yonduunversity.rohan.models.User;
+import com.yonduunversity.rohan.models.*;
 import com.yonduunversity.rohan.models.student.Student;
 import com.yonduunversity.rohan.repository.ClassBatchRepo;
 import com.yonduunversity.rohan.repository.CourseRepo;
 import com.yonduunversity.rohan.repository.ProjectRepo;
 import com.yonduunversity.rohan.repository.StudentRepo;
 import com.yonduunversity.rohan.repository.UserRepo;
+import com.yonduunversity.rohan.repository.pagination.ClassRepoPaginate;
 import com.yonduunversity.rohan.services.ClassService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.sql.exec.ExecutionException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -30,29 +32,35 @@ public class ClassServiceImpl implements ClassService {
     private final StudentRepo studentRepo;
     private final ClassBatchRepo classBatchRepo;
     private final ProjectRepo projectRepo;
+    private final ClassRepoPaginate classRepoPaginate;
 
     @Override
     public ClassBatch saveClass(ClassBatch classBatch, String whoAdded) throws Exception {
         Course course = courseRepo.findCourseByCode(classBatch.getCourse().getCode());
         User userSme = userRepo.findByEmail(whoAdded);
 
-        int totalPercentage = classBatch.getExercisePercentage() + classBatch.getQuizPercentage()
-                + classBatch.getAttendancePercentage() + classBatch.getProjectPercentage();
-        if (totalPercentage == 100) {
-            classBatch.setCourse(course);
-            classBatch.setSme(userSme);
-            classBatch.setBatch(classBatchRepo.findClassBatchByCourseCode(course.getCode()) + 1);
-            Project project = new Project();
-            project.setClassBatch(classBatch);
-            projectRepo.save(project);
-            classBatch.setProject(project);
+        if(userSme.isActive()){
+            int totalPercentage = classBatch.getExercisePercentage() + classBatch.getQuizPercentage()
+                    + classBatch.getAttendancePercentage() + classBatch.getProjectPercentage();
+            if (totalPercentage == 100) {
+                classBatch.setCourse(course);
+                classBatch.setSme(userSme);
+                classBatch.setBatch(classBatchRepo.findClassBatchByCourseCode(course.getCode()) + 1);
+                Project project = new Project();
+                project.setClassBatch(classBatch);
+                projectRepo.save(project);
+                classBatch.setProject(project);
+                classBatch.setActive(true);
 
-            classBatchRepo.save(classBatch);
-            course.getClassBatches().add(classBatch);
-            courseRepo.save(course);
-            return classBatch;
-        } else {
-            throw new TotalGradePercentageInvalidException();
+                classBatchRepo.save(classBatch);
+                course.getClassBatches().add(classBatch);
+                courseRepo.save(course);
+                return classBatch;
+            } else {
+                throw new TotalGradePercentageInvalidException();
+            }
+        }else{
+            throw new Exception("SME IS IN-ACTIVE");
         }
 
     }
@@ -63,14 +71,19 @@ public class ClassServiceImpl implements ClassService {
     }
 
     @Override
-    public ClassBatch enrollStudent(String email, String code, long batchNumber) {
+    public ClassBatch enrollStudent(String email, String code, long batchNumber) throws Exception {
         ClassBatch classBatch = classBatchRepo.findClassBatchByCourseCodeAndBatch(code, batchNumber);
         Student studentEnrolled = studentRepo.findByEmail(email);
-        studentEnrolled.setActive(true);
-        classBatch.getStudents().add(studentEnrolled);
-        studentEnrolled.getClassBatches().add(classBatch);
-        studentRepo.save(studentEnrolled);
-        return classBatchRepo.save(classBatch);
+        if(studentEnrolled.isActive()){
+            studentEnrolled.setActive(true);
+            classBatch.getStudents().add(studentEnrolled);
+            studentEnrolled.getClassBatches().add(classBatch);
+            studentRepo.save(studentEnrolled);
+            return classBatchRepo.save(classBatch);
+
+        }else{
+            throw new Exception("STUDENT IS IN-ACTIVE");
+        }
     }
 
     @Override
@@ -110,5 +123,23 @@ public class ClassServiceImpl implements ClassService {
     @Override
     public ClassBatch getClassStudents(String code, long batchNumber) {
         return classBatchRepo.findClassBatchByCourseCodeAndBatch(code, batchNumber);
+    }
+
+    @Override
+    public List<ClassBatch> getAllClassBatch(int pageNumber, int pageSize) {
+        Pageable paging = PageRequest.of(pageNumber, pageSize);
+        Page<ClassBatch> pagedResult = classRepoPaginate.findAll(paging);
+        return pagedResult.stream().toList();
+    }
+
+    @Override
+    public List<ClassCourseDTO> getClassByKeyword(String keyword, int pageNumber, int pageSize) {
+        Pageable paging = PageRequest.of(pageNumber, pageSize);
+        Page<ClassCourseDTO> pagedResult = classRepoPaginate.findAll(paging).map(ClassCourseDTO::new);
+        if (keyword != null) {
+            return classRepoPaginate.findAllByKeyword(keyword,paging).stream().map(ClassCourseDTO::new).collect(Collectors.toList());
+        } else {
+            return  pagedResult.stream().collect(Collectors.toList());
+        }
     }
 }
