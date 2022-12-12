@@ -19,6 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -74,7 +75,7 @@ public class ClassServiceImpl implements ClassService {
     public ClassBatch enrollStudent(String email, String code, long batchNumber) throws Exception {
         ClassBatch classBatch = classBatchRepo.findClassBatchByCourseCodeAndBatch(code, batchNumber);
         Student studentEnrolled = studentRepo.findByEmail(email);
-        if(studentEnrolled.isActive()){
+        if(studentEnrolled.isActive() && classBatch.isActive()){
             studentEnrolled.setActive(true);
             classBatch.getStudents().add(studentEnrolled);
             studentEnrolled.getClassBatches().add(classBatch);
@@ -87,26 +88,39 @@ public class ClassServiceImpl implements ClassService {
     }
 
     @Override
-    public ClassBatch unEnrollStudent(String email, String code, long batchNumber) {
+    public ClassBatch unEnrollStudent(String email, String code, long batchNumber) throws Exception {
+
         if (classBatchRepo.findClassBatchByCourseCodeAndId(code, batchNumber) != null
                 || studentRepo.findByEmail(email) != null) {
             ClassBatch classBatch = classBatchRepo.findClassBatchByCourseCodeAndBatch(code, batchNumber);
             Student studentUnEnroll = studentRepo.findByEmail(email);
-            classBatch.getStudents().remove(studentUnEnroll);
-            studentUnEnroll.getClassBatches().remove(classBatch);
-            studentRepo.save(studentUnEnroll);
-            classBatch.setActive(false);
-            return classBatchRepo.save(classBatch);
+            LocalDate localDate = LocalDate.now();
+            boolean studentClassStatus = localDate.compareTo(classBatch.getStartDate()) > 0 && localDate.compareTo(classBatch.getEndDate()) < 0;
+            if(studentClassStatus){
+                 throw new Exception("This student is currently enrolled in this class: " + classBatch.getBatch() + " - " + classBatch.getCourse().getCode());
+            }else{
+                classBatch.getStudents().remove(studentUnEnroll);
+                studentUnEnroll.getClassBatches().remove(classBatch);
+                studentRepo.save(studentUnEnroll);
+                return classBatchRepo.save(classBatch);
+            }
+
+        }else{
+            throw new Exception("Batch or Student not found");
         }
-        return null;
     }
 
     @Override
-    public ClassBatch deactivateClass(String code, long batchNumber) {
+    public ClassBatch deactivateClass(String code, long batchNumber) throws Exception {
         ClassBatch classBatch = classBatchRepo.findClassBatchByCourseCodeAndId(code, batchNumber);
-        classBatch.getStudents().removeAll(classBatch.getStudents());
-        classBatch.setActive(false);
-        return classBatchRepo.save(classBatch);
+        LocalDate localDate = LocalDate.now();
+        if(localDate.compareTo(classBatch.getStartDate()) > 0 && localDate.compareTo(classBatch.getEndDate()) < 0) {
+            throw new Exception("This Class is still on-going, thus it cannot be terminated.");
+        }else {
+            classBatch.getStudents().removeAll(classBatch.getStudents());
+            classBatch.setActive(false);
+            return classBatchRepo.save(classBatch);
+        }
     }
 
     @Override

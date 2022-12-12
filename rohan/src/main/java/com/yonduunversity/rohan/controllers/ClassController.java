@@ -41,7 +41,7 @@ public class ClassController {
        return ResponseEntity.created(uri).body(new ClassStudentsDTO(classService.enrollStudent(email.get("email").toString(),code, batch)));
     }
     @PutMapping("/user/courses/{code}/classes/{batch}/unenroll")
-    public ResponseEntity<?> unrollStudent (@RequestBody Map<String, Object> email, @PathVariable String code, @PathVariable long batch, HttpServletRequest request, HttpServletResponse response){
+    public ResponseEntity<?> unrollStudent (@RequestBody Map<String, Object> email, @PathVariable String code, @PathVariable long batch, HttpServletRequest request, HttpServletResponse response) throws Exception {
         URI uri = URI
                 .create(ServletUriComponentsBuilder
                         .fromCurrentContextPath()
@@ -58,7 +58,7 @@ public class ClassController {
         return ResponseEntity.created(uri).body(classService.findStudentClass(email).stream().map(ClassCourseDTO::new).collect(Collectors.toList()));
     }
     @PutMapping("/user/courses/{code}/classes/{batch}/deactivate")
-    public ResponseEntity<?> deactivateClass (@PathVariable String code, @PathVariable long batch){
+    public ResponseEntity<?> deactivateClass (@PathVariable String code, @PathVariable long batch) throws Exception {
         URI uri = URI
                 .create(ServletUriComponentsBuilder
                         .fromCurrentContextPath()
