@@ -1,4 +1,4 @@
-package com.yonduunversity.rohan.models;
+package com.yonduunversity.rohan.models.dto;
 import lombok.Data;
 @Data
 public class UserAccountDTO {

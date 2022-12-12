@@ -1,7 +1,7 @@
 package com.yonduunversity.rohan;
 
 import com.yonduunversity.rohan.models.*;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.yonduunversity.rohan.models.dto.UserAccountDTO;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -10,11 +10,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.yonduunversity.rohan.repository.ClassBatchRepo;
-import com.yonduunversity.rohan.repository.StudentRepo;
 import com.yonduunversity.rohan.services.UserService;
-
-import java.util.ArrayList;
 
 @SpringBootApplication
 public class RohanApplication {

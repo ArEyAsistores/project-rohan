@@ -1,7 +1,8 @@
-package com.yonduunversity.rohan.models;
+package com.yonduunversity.rohan.models.dto;
 
 import java.time.LocalDate;
 
+import com.yonduunversity.rohan.models.Quiz;
 import lombok.Data;
 
 @Data

@@ -3,16 +3,12 @@ package com.yonduunversity.rohan.services;
 import java.util.List;
 
 import com.yonduunversity.rohan.models.Course;
+import com.yonduunversity.rohan.models.dto.CourseDTO;
 
 public interface CourseService {
-
-    Course createCourse(int courseCode, String title, String description);
-
-    List<Course> retrieveCourses(int pageNumber, int pageSize);
-
-    Course retrieveCourse(int courseCode);
-
-    List<Course> searchCourse(String info);
-
-    void deactivateCourse(int courseCode);
+    Course deactivateCourse(String code);
+    Course addCourse(Course course);
+    List<Course> getCourses(int pageNumber, int pageSize);
+    Course getCourse(String code);
+    List<CourseDTO>getCourseByKeyword(String keyword, int pageNumber, int pageSize);
 }

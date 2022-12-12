@@ -5,6 +5,7 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.yonduunversity.rohan.models.*;
+import com.yonduunversity.rohan.models.dto.*;
 import com.yonduunversity.rohan.services.ExerciseService;
 import com.yonduunversity.rohan.services.GradeService;
 import com.yonduunversity.rohan.services.QuizService;
@@ -13,7 +14,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,10 +35,6 @@ public class UserController {
     private final QuizService quizService;
     private final ExerciseService exerciseService;
     private final GradeService gradeService;
-
-    //////////////////////////////
-    /// GET: RETRIEVE ALL USER ///
-    ////////////////////////////
 
     @GetMapping("/users/{email}")
     public UserDTO getUser(@PathVariable String email) {
@@ -90,36 +86,6 @@ public class UserController {
         return ResponseEntity.created(uri).body(userService.saveRole(role));
     }
 
-    @PostMapping("/courses")
-    public ResponseEntity<Course> addCourse(@RequestBody Course course) {
-        URI uri = URI
-                .create(ServletUriComponentsBuilder
-                        .fromCurrentContextPath()
-                        .path("api/courses/add").toUriString());
-        return ResponseEntity.created(uri).body(userService.addCourse(course));
-    }
-
-    @GetMapping("/courses")
-    public ResponseEntity<?> getAllCourses(@RequestParam(name = "page", defaultValue = "0") int pageNumber,
-            @RequestParam(name = "pageSize", defaultValue = "10") int pageSize) {
-        List<CourseDTO> courseDTO = userService.getCourses(pageNumber, pageSize).stream().map(CourseDTO::new).toList();
-        Pager pager = new Pager(courseDTO, pageNumber, pageSize);
-        URI uri = URI
-                .create(ServletUriComponentsBuilder
-                        .fromCurrentContextPath()
-                        .path("api/courses").toUriString());
-        return ResponseEntity.created(uri).body(pager);
-    }
-
-    @GetMapping("/courses/search")
-    public ResponseEntity<?> getCourseByKeyword(@Param("keyword") String keyword,
-            @RequestParam(name = "page", defaultValue = "0") int pageNumber,
-            @RequestParam(name = "pageSize", defaultValue = "10") int pageSize) {
-        List<CourseDTO> listOfCourses = userService.getCourseByKeyword(keyword, pageNumber, pageSize);
-        Pager pager = new Pager(listOfCourses, pageNumber, pageSize);
-        return ResponseEntity.ok().body(pager);
-    }
-
     @GetMapping("/students")
     public ResponseEntity<?> getStudentsByKeyword(@Param("keyword") String keyword,
             @RequestParam(name = "page", defaultValue = "0") int pageNumber,
@@ -153,12 +119,6 @@ public class UserController {
                 HttpStatus.OK);
     }
 
-    @GetMapping("/courses/{code}")
-
-    public Course getCourse(@PathVariable String code) {
-        return userService.getCourse(code);
-    }
-
     @PostMapping("/user/add")
     public ResponseEntity<User> addUser(@RequestBody User user) {
         URI uri = URI
@@ -168,20 +128,15 @@ public class UserController {
         return ResponseEntity.created(uri).body(userService.saveUser(user));
     }
 
-    @PostMapping("/role/assign")
-    public ResponseEntity<?> assignRole(@RequestBody RoleUser form) {
-        userService.assignRole(form.getEmail(), form.getRoleName());
+    @PostMapping("/role/assign/{email}/{role}")
+    public ResponseEntity<?> assignRole(@PathVariable String email, @PathVariable String role) {
+        userService.assignRole(email, role);
         return ResponseEntity.ok().build();
     }
 
     @PutMapping("/users/deactivate")
     public UserDTO deactivateUser(@RequestParam(name = "email", defaultValue = "") String email) {
         return new UserDTO(userService.deactivateUser(email));
-    }
-
-    @PutMapping("/courses/deactivate")
-    public Course deactivateCourse(@RequestParam(name = "courseCode", defaultValue = "") String code) {
-        return userService.deactivateCourse(code);
     }
 
     // Quiz
@@ -201,7 +156,7 @@ public class UserController {
 
     @PostMapping("/quiz/add")
     public ResponseEntity<QuizDTO> addQuiz(@RequestBody Quiz quiz, @Param("code") String code,
-            @Param("batch") long batch) {
+                                           @Param("batch") long batch) {
         URI uri = URI
                 .create(ServletUriComponentsBuilder
                         .fromCurrentContextPath()
@@ -226,7 +181,7 @@ public class UserController {
 
     @PostMapping("/exercise/add")
     public ResponseEntity<ExerciseDTO> addExercise(@RequestBody Exercise exercise, @Param("code") String code,
-            @Param("batch") long batch) {
+                                                   @Param("batch") long batch) {
         URI uri = URI
                 .create(ServletUriComponentsBuilder
                         .fromCurrentContextPath()
@@ -243,7 +198,7 @@ public class UserController {
     // Grade
     @PostMapping("/grade/giveQuizScore")
     public ResponseEntity<GradeDTO> giveQuizScore(@Param("id") int id, @Param("email") String email,
-            @Param("score") int score) {
+                                                  @Param("score") int score) {
         return new ResponseEntity<GradeDTO>(new GradeDTO(gradeService.giveQuizScore(id, email, score)), HttpStatus.OK);
     }
 
@@ -267,11 +222,6 @@ public class UserController {
         return new ResponseEntity<List<GradeDTO>>(
                 gradeService.retrieveClassGrades(code, batch).stream().map(GradeDTO::new).toList(),
                 HttpStatus.OK);
-    }
-
-    @GetMapping("/courses/{code}/classes")
-    public CourseClassDTO getAllCoursesClasses(@PathVariable String code) {
-        return new CourseClassDTO(userService.getCourse(code));
     }
 
 }

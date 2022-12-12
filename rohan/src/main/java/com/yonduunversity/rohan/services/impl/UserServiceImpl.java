@@ -3,6 +3,10 @@ package com.yonduunversity.rohan.services.impl;
 import com.yonduunversity.rohan.exception.EmailNotFoundException;
 import com.yonduunversity.rohan.exception.UnauthenticatedAccessException;
 import com.yonduunversity.rohan.models.*;
+import com.yonduunversity.rohan.models.dto.CourseDTO;
+import com.yonduunversity.rohan.models.dto.StudentDTO;
+import com.yonduunversity.rohan.models.dto.UserAccountDTO;
+import com.yonduunversity.rohan.models.dto.UserDTO;
 import com.yonduunversity.rohan.models.student.Student;
 import com.yonduunversity.rohan.repository.*;
 import com.yonduunversity.rohan.repository.pagination.CourseRepoPaginate;
@@ -13,20 +17,15 @@ import com.yonduunversity.rohan.services.UserService;
 import com.yonduunversity.rohan.util.PasswordGen;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.engine.jdbc.Size;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -44,8 +43,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private final StudentRepo studentRepo;
     private final PasswordEncoder passwordEncoder;
     private final UserRepoPaginate userRepoPagingate;
-    private final CourseRepoPaginate courseRepoPaginate;
-    private final CourseRepo courseRepo;
+
     private final EmailSenderService emailSenderService;
     private final ClassBatchRepo classBatchRepo;
     private final StudentRepoPaginate studentRepoPaginate;
@@ -185,45 +183,21 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         classBatch.setActive(false);
         return classBatchRepo.save(classBatch);
     }
-
-    @Override
-    public Course addCourse(Course course) {
-        log.info("{} added to Database", course.getTitle());
-        log.info("{} added to Database", course.getCode());
-        course.setActive(true);
-        return courseRepo.save(course);
-    }
-
     @Override
     public List<User> getUsers() {
         log.info("Fetching all users {} ");
         return userRepo.findAll();
     }
-
     @Override
     public List<User> getUsers(int pageNumber, int pageSize) {
         Pageable paging = PageRequest.of(pageNumber, pageSize);
         Page<User> pagedResult = userRepoPagingate.findAll(paging);
         return pagedResult.stream().toList();
     }
-
-    @Override
-    public List<Course> getCourses(int pageNumber, int pageSize) {
-        Pageable paging = PageRequest.of(pageNumber, pageSize);
-        Page<Course> pagedResult = courseRepoPaginate.findAll(paging);
-        return pagedResult.stream().toList();
-    }
-
     @Override
     public User getUser(String email) {
         return userRepo.findByEmail(email);
     }
-
-    @Override
-    public Course getCourse(String code) {
-        return courseRepo.findCourseByCode(code);
-    }
-
     @Override
     public List<UserDTO> getUserByKeyword(String keyword, int pageNumber, int pageSize) {
         Pageable paging = PageRequest.of(pageNumber, pageSize);
@@ -234,7 +208,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             return   pagedResult.stream().collect(Collectors.toList());
         }
     }
-
     @Override
     public List<StudentDTO> getStudentsByKeyword(String keyword, int pageNumber, int pageSize) {
         Pageable paging = PageRequest.of(pageNumber, pageSize);
@@ -245,7 +218,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             return   pagedResult.stream().collect(Collectors.toList());
         }
     }
-
     @Override
     public StudentDTO getStudent(String email) {
         Student student = studentRepo.findByEmail(email);
@@ -253,16 +225,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return new StudentDTO(student);
     }
 
-    @Override
-    public List<CourseDTO> getCourseByKeyword(String keyword,int pageNumber, int pageSize) {
-        Pageable paging = PageRequest.of(pageNumber, pageSize);
-        Page<CourseDTO> pagedResult = courseRepoPaginate.findAll(paging).map(CourseDTO::new);
-        if (keyword != null) {
-            return courseRepoPaginate.findAllByKeyword(keyword,paging).stream().map(CourseDTO::new).collect(Collectors.toList());
-        } else {
-            return  pagedResult.stream().collect(Collectors.toList());
-        }
-    }
+
 
     @Override
     public User deactivateUser(String email) {
@@ -273,14 +236,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return user;
     }
 
-    @Override
-    public Course deactivateCourse(String code) {
-        Course course = courseRepo.findCourseByCode(code);
-        if (course.isActive()) {
-            course.setActive(false);
-        }
-        return course;
-    }
+
 
     @Override
     public List<ClassBatch> getAllClassBatch() {

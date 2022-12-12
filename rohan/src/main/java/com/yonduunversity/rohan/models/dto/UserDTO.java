@@ -1,6 +1,7 @@
-package com.yonduunversity.rohan.models;
+package com.yonduunversity.rohan.models.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.yonduunversity.rohan.models.User;
 import jakarta.persistence.*;
 import lombok.Data;
 
