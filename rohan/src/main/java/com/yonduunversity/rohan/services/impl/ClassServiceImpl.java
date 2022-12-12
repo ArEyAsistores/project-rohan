@@ -1,5 +1,6 @@
 package com.yonduunversity.rohan.services.impl;
 
+import com.itextpdf.text.DocumentException;
 import com.yonduunversity.rohan.exception.TotalGradePercentageInvalidException;
 import com.yonduunversity.rohan.models.*;
 import com.yonduunversity.rohan.models.dto.ClassCourseDTO;
@@ -13,6 +14,9 @@ import com.yonduunversity.rohan.repository.UserRepo;
 import com.yonduunversity.rohan.repository.pagination.ClassRepoPaginate;
 import com.yonduunversity.rohan.repository.pagination.StudentRepoPaginate;
 import com.yonduunversity.rohan.services.ClassService;
+import com.yonduunversity.rohan.services.EmailSenderService;
+import com.yonduunversity.rohan.util.CertificateGen;
+import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -21,6 +25,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.FileNotFoundException;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -37,6 +42,7 @@ public class ClassServiceImpl implements ClassService {
     private final ProjectRepo projectRepo;
     private final ClassRepoPaginate classRepoPaginate;
     private final StudentRepoPaginate studentRepoPaginate;
+    private final EmailSenderService emailSenderService;
 
     @Override
     public ClassBatch saveClass(ClassBatch classBatch, String whoAdded) throws Exception {
@@ -161,6 +167,22 @@ public class ClassServiceImpl implements ClassService {
             return classRepoPaginate.findAllByKeyword(keyword,paging).stream().map(ClassCourseDTO::new).collect(Collectors.toList());
         } else {
             return  pagedResult.stream().collect(Collectors.toList());
+        }
+    }
+
+    @Override
+    public void sendStudentCertificate(String email, String code, long batch) throws Exception {
+
+        if(studentRepo.findByEmail(email) != null &&  classBatchRepo.findClassBatchByCourseCodeAndBatch(code,batch) != null){
+            ClassBatch classBatch = classBatchRepo.findClassBatchByCourseCodeAndBatch(code,batch);
+            Student student = studentRepo.findStudentByClassBatches(classBatch);
+            String certificatePath =   CertificateGen.generateCertificate(student.getFirstname() + " " + student.getLastname(),
+                    code,
+                    classBatch.getCourse().getTitle(),batch);
+            emailSenderService.sendCert(email,"Certificate","Congratulation",certificatePath);
+
+        }else{
+            throw new Exception("NO USER/CLASS FOUND");
         }
     }
 }

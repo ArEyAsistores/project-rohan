@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.itextpdf.text.DocumentException;
 import com.yonduunversity.rohan.models.*;
 import com.yonduunversity.rohan.models.dto.ClassCourseDTO;
 import com.yonduunversity.rohan.models.dto.ClassDTO;
@@ -11,6 +12,7 @@ import com.yonduunversity.rohan.models.dto.ClassStudentsDTO;
 import com.yonduunversity.rohan.models.dto.StudentDTO;
 import com.yonduunversity.rohan.models.student.Student;
 import com.yonduunversity.rohan.services.ClassService;
+import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -22,12 +24,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.io.FileNotFoundException;
 import java.net.URI;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
+import static org.springframework.http.HttpHeaders.EMPTY;
 
 @Slf4j
 @RestController
@@ -117,6 +121,14 @@ public class ClassController {
         List<ClassCourseDTO> classCourseDTOS = classService.getClassByKeyword(keyword,pageNumber,pageSize);
         Pager pager = new Pager(classCourseDTOS, pageNumber, pageSize);
         return ResponseEntity.ok().body(pager);
+    }
+    @PostMapping("/grade/certificate")
+    public ResponseEntity<?> sendStudentCertificate( @RequestParam(name = "email") String email, @RequestParam(name = "code") String code,
+                                                @RequestParam(name = "batch") Long batch) throws Exception {
+
+
+        classService.sendStudentCertificate(email,code,batch);
+        return ResponseEntity.ok().body("");
     }
 
 }
