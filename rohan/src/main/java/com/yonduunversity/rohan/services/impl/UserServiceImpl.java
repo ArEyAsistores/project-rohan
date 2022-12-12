@@ -1,7 +1,7 @@
 package com.yonduunversity.rohan.services.impl;
 
 import com.yonduunversity.rohan.exception.EmailNotFoundException;
-import com.yonduunversity.rohan.exception.UnauthorizedException;
+import com.yonduunversity.rohan.exception.UnauthenticatedAccessException;
 import com.yonduunversity.rohan.models.*;
 import com.yonduunversity.rohan.models.student.Student;
 import com.yonduunversity.rohan.repository.*;
@@ -96,7 +96,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                     message);
 
         } else {
-            throw new UnauthorizedException(userAdded.getEmail());
+            throw new UnauthenticatedAccessException(userAdded.getEmail());
         }
 
         return userPasswordDTO;
