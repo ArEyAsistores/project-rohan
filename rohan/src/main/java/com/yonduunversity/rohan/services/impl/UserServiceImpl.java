@@ -3,12 +3,10 @@ package com.yonduunversity.rohan.services.impl;
 import com.yonduunversity.rohan.exception.EmailNotFoundException;
 import com.yonduunversity.rohan.exception.UnauthenticatedAccessException;
 import com.yonduunversity.rohan.models.*;
-import com.yonduunversity.rohan.models.dto.CourseDTO;
-import com.yonduunversity.rohan.models.dto.StudentDTO;
-import com.yonduunversity.rohan.models.dto.UserAccountDTO;
-import com.yonduunversity.rohan.models.dto.UserDTO;
+import com.yonduunversity.rohan.models.dto.*;
 import com.yonduunversity.rohan.models.student.Student;
 import com.yonduunversity.rohan.repository.*;
+import com.yonduunversity.rohan.repository.pagination.ClassRepoPaginate;
 import com.yonduunversity.rohan.repository.pagination.CourseRepoPaginate;
 import com.yonduunversity.rohan.repository.pagination.StudentRepoPaginate;
 import com.yonduunversity.rohan.repository.pagination.UserRepoPaginate;
@@ -46,6 +44,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     private final EmailSenderService emailSenderService;
     private final ClassBatchRepo classBatchRepo;
+    private final ClassRepoPaginate classRepoPaginate;
     private final StudentRepoPaginate studentRepoPaginate;
 
     @Override
@@ -171,9 +170,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public List<ClassBatch> findStudentCourse() {
-        Student studentUnEnroll = studentRepo.findByEmail("student2.rey@yahoo.com");
-        return studentUnEnroll.getClassBatches().stream().toList();
+    public List<ClassDTO> getAllStudentClasses(String email, int pageNumber, int pageSize) {
+        Student student = studentRepo.findByEmail(email);
+        Pageable paging = PageRequest.of(pageNumber, pageSize);
+            return   classRepoPaginate.findClassBatchByStudents(student,paging).stream().map(ClassDTO::new).collect(Collectors.toList());
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.yonduunversity.rohan.repository.pagination;
 
+import com.yonduunversity.rohan.models.ClassBatch;
 import com.yonduunversity.rohan.models.User;
 import com.yonduunversity.rohan.models.student.Student;
 import org.springframework.data.domain.Pageable;
@@ -16,4 +17,6 @@ public interface StudentRepoPaginate extends PagingAndSortingRepository<Student,
             + " OR p.firstname LIKE %?1%"
             + " OR p.lastname LIKE %?1%")
     List<Student> findAllByKeyword(String keyword, Pageable pageable);
+
+    List<Student> findStudentByClassBatches(ClassBatch classBatch, Pageable pageable);
 }
