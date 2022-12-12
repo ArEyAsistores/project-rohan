@@ -10,6 +10,8 @@ import com.yonduunversity.rohan.models.Grade;
 public interface GradeRepo extends JpaRepository<Grade, Integer> {
     List<Grade> findByStudentEmail(String email);
 
+    List<Grade> findByStudentEmailAndClassBatchId(String email, long id);
+
     List<Grade> findByClassBatchId(long id);
 
     Optional<Grade> findByExerciseId(int id);

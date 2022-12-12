@@ -7,6 +7,7 @@ import org.hibernate.cache.spi.entry.StructuredMapCacheEntry;
 import org.springframework.stereotype.Service;
 
 import com.yonduunversity.rohan.exception.GradeOutOfBoundException;
+import com.yonduunversity.rohan.exception.ResourceInactiveException;
 import com.yonduunversity.rohan.models.*;
 import com.yonduunversity.rohan.models.student.Student;
 import com.yonduunversity.rohan.repository.ClassBatchRepo;
@@ -32,6 +33,9 @@ public class GradeServiceImpl implements GradeService {
     public Grade giveQuizScore(int quiz_id, String email, int score) {
         Quiz quiz = QuizServiceImpl.unwrapQuiz(quizRepo.findById(quiz_id), quiz_id);
         checkScore(score, quiz.getMinScore(), quiz.getMaxScore());
+        if (!quiz.isActive()) {
+            throw new ResourceInactiveException(quiz_id);
+        }
         Student student = studentRepo.findByEmail(email);
         ClassBatch classBatch = quiz.getClassBatch();
 
@@ -48,6 +52,9 @@ public class GradeServiceImpl implements GradeService {
     public Grade giveExerciseScore(int exercise_id, String email, int score) {
         Exercise exercise = ExerciseServiceImpl.unwrapExercise(exerciseRepo.findById(exercise_id), exercise_id);
         checkScore(score, exercise.getMinScore(), exercise.getMaxScore());
+        if (!exercise.isActive()) {
+            throw new ResourceInactiveException(exercise_id);
+        }
         Student student = studentRepo.findByEmail(email);
         ClassBatch classBatch = exercise.getClassBatch();
 
@@ -76,9 +83,10 @@ public class GradeServiceImpl implements GradeService {
         return gradeRepo.save(grade);
     }
 
-    public List<Grade> retrieveStudentGrades(String email) {
+    public List<Grade> retrieveStudentGrades(String email, String code, long batch) {
         Student student = studentRepo.findByEmail(email);
-        return (List<Grade>) gradeRepo.findByStudentEmail(student.getEmail());
+        ClassBatch classBatch = classBatchRepo.findClassBatchByCourseCodeAndBatch(code, batch);
+        return (List<Grade>) gradeRepo.findByStudentEmailAndClassBatchId(student.getEmail(), classBatch.getId());
     }
 
     public List<Grade> retrieveClassGrades(String code, long batch) {

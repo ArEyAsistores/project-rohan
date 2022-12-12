@@ -25,7 +25,6 @@ import com.yonduunversity.rohan.security.filter.CustomAuthorizationFilter;
 
 import static org.springframework.http.HttpMethod.GET;
 
-
 @Slf4j
 @Configuration
 @EnableWebSecurity
@@ -48,24 +47,30 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity, AuthenticationConfiguration authConfig)
             throws Exception {
-        CustomAuthenticationFilter customAuthFilter = new CustomAuthenticationFilter(authConfig.getAuthenticationManager());
+        CustomAuthenticationFilter customAuthFilter = new CustomAuthenticationFilter(
+                authConfig.getAuthenticationManager());
         customAuthFilter.setFilterProcessesUrl("/api/login");
 
         httpSecurity.csrf().disable();
         httpSecurity.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         httpSecurity.authorizeHttpRequests().requestMatchers("/api/login/**", "/api/token/refresh/**").permitAll();
 
-        httpSecurity.authorizeHttpRequests().requestMatchers(GET,"/api/users/**").hasAuthority("ADMIN");
-        httpSecurity.authorizeHttpRequests().requestMatchers(PUT,"/api/users/**").hasAuthority("ADMIN");
-        httpSecurity.authorizeHttpRequests().requestMatchers(POST,"/api/users/**").hasAuthority("ADMIN");
-        httpSecurity.authorizeHttpRequests().requestMatchers(PUT,"/api/courses").hasAnyAuthority("ADMIN","SME");
-        httpSecurity.authorizeHttpRequests().requestMatchers(GET,"/api/courses").hasAnyAuthority("ADMIN","SME");
-        httpSecurity.authorizeHttpRequests().requestMatchers(POST,"/api/courses").hasAnyAuthority("ADMIN","SME");
-
-
-
-        httpSecurity.authorizeHttpRequests().requestMatchers(GET,"/api/students/").hasAuthority("STUDENT");
-
+        httpSecurity.authorizeHttpRequests().requestMatchers(GET, "/api/users/**").hasAuthority("ADMIN");
+        httpSecurity.authorizeHttpRequests().requestMatchers(PUT, "/api/users/**").hasAuthority("ADMIN");
+        httpSecurity.authorizeHttpRequests().requestMatchers(POST, "/api/users/**").hasAuthority("ADMIN");
+        httpSecurity.authorizeHttpRequests().requestMatchers(PUT, "/api/courses").hasAnyAuthority("ADMIN", "SME");
+        httpSecurity.authorizeHttpRequests().requestMatchers(GET, "/api/courses").hasAnyAuthority("ADMIN", "SME");
+        httpSecurity.authorizeHttpRequests().requestMatchers(POST, "/api/courses").hasAnyAuthority("ADMIN", "SME");
+        httpSecurity.authorizeHttpRequests().requestMatchers(GET, "/api/quiz/**").hasAuthority("SME");
+        httpSecurity.authorizeHttpRequests().requestMatchers(PUT, "/api/quiz/**").hasAuthority("SME");
+        httpSecurity.authorizeHttpRequests().requestMatchers(POST, "/api/quiz/**").hasAuthority("SME");
+        httpSecurity.authorizeHttpRequests().requestMatchers(GET, "/api/exercise/**").hasAuthority("SME");
+        httpSecurity.authorizeHttpRequests().requestMatchers(PUT, "/api/exercise/**").hasAuthority("SME");
+        httpSecurity.authorizeHttpRequests().requestMatchers(POST, "/api/exercise/**").hasAuthority("SME");
+        httpSecurity.authorizeHttpRequests().requestMatchers(GET, "/api/grade/**").hasAuthority("SME");
+        httpSecurity.authorizeHttpRequests().requestMatchers(PUT, "/api/grade/**").hasAuthority("SME");
+        httpSecurity.authorizeHttpRequests().requestMatchers(POST, "/api/grade/**").hasAuthority("SME");
+        httpSecurity.authorizeHttpRequests().requestMatchers(GET, "/api/students/").hasAuthority("STUDENT");
 
         httpSecurity.authorizeHttpRequests().anyRequest().authenticated();
         httpSecurity.addFilter(customAuthFilter);

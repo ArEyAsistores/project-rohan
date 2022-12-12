@@ -4,7 +4,7 @@ import java.util.List;
 import com.yonduunversity.rohan.models.Grade;
 
 public interface GradeService {
-    List<Grade> retrieveStudentGrades(String email);
+    List<Grade> retrieveStudentGrades(String email, String code, long batch);
 
     List<Grade> retrieveClassGrades(String code, long batch);
 

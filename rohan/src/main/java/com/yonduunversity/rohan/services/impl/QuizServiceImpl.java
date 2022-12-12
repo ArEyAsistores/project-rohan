@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.yonduunversity.rohan.exception.ClassBatchNotFoundException;
 import com.yonduunversity.rohan.exception.QuizNotFoundException;
 import com.yonduunversity.rohan.exception.StudentAlreadyGradedException;
 import com.yonduunversity.rohan.models.ClassBatch;
@@ -34,11 +35,14 @@ public class QuizServiceImpl implements QuizService {
     public Quiz addQuiz(Quiz quiz, String code, long batch) {
         quiz.setActive(true);
         ClassBatch classBatch = classBatchRepo.findClassBatchByCourseCodeAndBatch(code, batch);
+        if (classBatch == null) {
+            throw new ClassBatchNotFoundException(code, batch);
+        }
         quiz.setClassBatch(classBatch);
         return quizRepo.save(quiz);
     }
 
-    public void removeQuiz(int id) {
+    public Quiz removeQuiz(int id) {
         Quiz quiz = QuizServiceImpl.unwrapQuiz(quizRepo.findById(id), id);
         Optional<Grade> grade = gradeRepo.findByExerciseId(id);
         if (grade.isPresent()) {
@@ -47,7 +51,7 @@ public class QuizServiceImpl implements QuizService {
             if (quiz.isActive()) {
                 quiz.setActive(false);
             }
-            quizRepo.save(quiz);
+            return quizRepo.save(quiz);
         }
     }
 

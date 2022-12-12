@@ -7,6 +7,6 @@ public interface ExerciseService {
 
     Exercise addExercise(Exercise exercise, String code, long id);
 
-    void removeExercise(int id);
+    Exercise removeExercise(int id);
 
 }

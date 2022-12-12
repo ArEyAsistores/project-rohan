@@ -46,9 +46,10 @@ public class UserController {
     }
 
     @GetMapping("/users/search")
-    public ResponseEntity<?> getAllUser(@Param("keyword") String keyword,@RequestParam(name = "page", defaultValue = "0") int pageNumber,
-                                        @RequestParam(name = "pageSize", defaultValue = "10") int pageSize) {//With Pagination dapat
-        List<UserDTO> listOfUser = userService.getUserByKeyword(keyword,pageNumber,pageSize);
+    public ResponseEntity<?> getAllUser(@Param("keyword") String keyword,
+            @RequestParam(name = "page", defaultValue = "0") int pageNumber,
+            @RequestParam(name = "pageSize", defaultValue = "10") int pageSize) {// With Pagination dapat
+        List<UserDTO> listOfUser = userService.getUserByKeyword(keyword, pageNumber, pageSize);
         Pager pager = new Pager(listOfUser, pageNumber, pageSize);
         return ResponseEntity.ok().body(pager);
     }
@@ -111,29 +112,45 @@ public class UserController {
     }
 
     @GetMapping("/courses/search")
-    public ResponseEntity<?> getCourseByKeyword(@Param("keyword") String keyword,@RequestParam(name = "page", defaultValue = "0") int pageNumber,
-                                                           @RequestParam(name = "pageSize", defaultValue = "10") int pageSize) {
-        List<CourseDTO> listOfCourses = userService.getCourseByKeyword(keyword,pageNumber,pageSize);
+    public ResponseEntity<?> getCourseByKeyword(@Param("keyword") String keyword,
+            @RequestParam(name = "page", defaultValue = "0") int pageNumber,
+            @RequestParam(name = "pageSize", defaultValue = "10") int pageSize) {
+        List<CourseDTO> listOfCourses = userService.getCourseByKeyword(keyword, pageNumber, pageSize);
         Pager pager = new Pager(listOfCourses, pageNumber, pageSize);
         return ResponseEntity.ok().body(pager);
     }
+
     @GetMapping("/students")
-    public ResponseEntity<?> getStudentsByKeyword(@Param("keyword") String keyword,@RequestParam(name = "page", defaultValue = "0") int pageNumber,
-                                                @RequestParam(name = "pageSize", defaultValue = "10") int pageSize) {
-        List<StudentDTO> studentDTOS = userService.getStudentsByKeyword(keyword,pageNumber,pageSize);
+    public ResponseEntity<?> getStudentsByKeyword(@Param("keyword") String keyword,
+            @RequestParam(name = "page", defaultValue = "0") int pageNumber,
+            @RequestParam(name = "pageSize", defaultValue = "10") int pageSize) {
+        List<StudentDTO> studentDTOS = userService.getStudentsByKeyword(keyword, pageNumber, pageSize);
         Pager pager = new Pager(studentDTOS, pageNumber, pageSize);
         return ResponseEntity.ok().body(pager);
     }
+
     @GetMapping("/students/search")
-    public ResponseEntity<?> saerchStudentsByKeyword(@Param("keyword") String keyword,@RequestParam(name = "page", defaultValue = "0") int pageNumber,
-                                                  @RequestParam(name = "pageSize", defaultValue = "10") int pageSize) {
-        List<StudentDTO> studentDTOS = userService.getStudentsByKeyword(keyword,pageNumber,pageSize);
+    public ResponseEntity<?> saerchStudentsByKeyword(@Param("keyword") String keyword,
+            @RequestParam(name = "page", defaultValue = "0") int pageNumber,
+            @RequestParam(name = "pageSize", defaultValue = "10") int pageSize) {
+        List<StudentDTO> studentDTOS = userService.getStudentsByKeyword(keyword, pageNumber, pageSize);
         Pager pager = new Pager(studentDTOS, pageNumber, pageSize);
         return ResponseEntity.ok().body(pager);
     }
+
     @GetMapping("/students/{email}")
     public ResponseEntity<?> getStudent(@PathVariable String email) {
         return ResponseEntity.ok().body(userService.getStudent(email));
+    }
+
+    @GetMapping("/students/retrieveStudentGrades")
+    public ResponseEntity<GradeSheet> retrieveStudentGrades(@Param("email") String email,
+            @Param("code") String code,
+            @Param("batch") long batch) {
+
+        return new ResponseEntity<GradeSheet>(
+                new GradeSheet(gradeService.retrieveStudentGrades(email, code, batch), email, code, batch),
+                HttpStatus.OK);
     }
 
     @GetMapping("/courses/{code}")
@@ -192,10 +209,9 @@ public class UserController {
         return ResponseEntity.created(uri).body(new QuizDTO(quizService.addQuiz(quiz, code, batch)));
     }
 
-    @GetMapping("/quiz/remove")
-    public ResponseEntity removeQuiz(@Param("id") int id) {
-        quizService.removeQuiz(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    @PostMapping("/quiz/remove")
+    public ResponseEntity<QuizDTO> removeQuiz(@Param("id") int id) {
+        return new ResponseEntity<QuizDTO>(new QuizDTO(quizService.removeQuiz(id)), HttpStatus.OK);
     }
 
     // Exercise
@@ -218,39 +234,31 @@ public class UserController {
         return ResponseEntity.created(uri).body(new ExerciseDTO(exerciseService.addExercise(exercise, code, batch)));
     }
 
-    @GetMapping("/exercise/remove")
-    public ResponseEntity removeExercise(@Param("id") int id) {
-        exerciseService.removeExercise(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    @PostMapping("/exercise/remove")
+    public ResponseEntity<ExerciseDTO> removeExercise(@Param("id") int id) {
+
+        return new ResponseEntity<ExerciseDTO>(new ExerciseDTO(exerciseService.removeExercise(id)), HttpStatus.OK);
     }
 
     // Grade
-    @GetMapping("/grade/giveQuizScore")
+    @PostMapping("/grade/giveQuizScore")
     public ResponseEntity<GradeDTO> giveQuizScore(@Param("id") int id, @Param("email") String email,
             @Param("score") int score) {
         return new ResponseEntity<GradeDTO>(new GradeDTO(gradeService.giveQuizScore(id, email, score)), HttpStatus.OK);
     }
 
-    @GetMapping("/grade/giveExerciseScore")
+    @PostMapping("/grade/giveExerciseScore")
     public ResponseEntity<GradeDTO> giveExerciseScore(@Param("id") int id, @Param("email") String email,
             @Param("score") int score) {
         return new ResponseEntity<GradeDTO>(new GradeDTO(gradeService.giveExerciseScore(id, email, score)),
                 HttpStatus.OK);
     }
 
-    @GetMapping("/grade/giveProjectScore")
+    @PostMapping("/grade/giveProjectScore")
     public ResponseEntity<GradeDTO> giveProjectScore(@Param("code") String code, @Param("batch") long batch,
             @Param("email") String email,
             @Param("score") int score) {
         return new ResponseEntity<GradeDTO>(new GradeDTO(gradeService.giveProjectScore(code, batch, email, score)),
-                HttpStatus.OK);
-    }
-
-    @GetMapping("/grade/retrieveStudentGrades")
-    public ResponseEntity<List<GradeDTO>> retrieveStudentGrades(@Param("email") String email) {
-
-        return new ResponseEntity<List<GradeDTO>>(
-                gradeService.retrieveStudentGrades(email).stream().map(GradeDTO::new).toList(),
                 HttpStatus.OK);
     }
 
