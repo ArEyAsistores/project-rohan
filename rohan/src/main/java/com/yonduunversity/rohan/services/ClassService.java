@@ -2,6 +2,7 @@ package com.yonduunversity.rohan.services;
 
 import com.yonduunversity.rohan.models.*;
 import com.yonduunversity.rohan.models.dto.ClassCourseDTO;
+import com.yonduunversity.rohan.models.dto.StudentDTO;
 
 import java.util.List;
 
@@ -12,7 +13,7 @@ public interface ClassService {
     ClassBatch deactivateClass(String code, long batchNumber) throws Exception;
     List<ClassBatch> findStudentClass(String email);
     List<ClassBatch>getAllClassBatch();
-    ClassBatch getClassStudents(String code, long batchNumber);
+    List<StudentDTO> getClassStudents(String code, long batchNumber, int pageNumber, int pageSize);
     List<ClassBatch> getAllClassBatch(int pageNumber, int pageSize);
     List<ClassCourseDTO>getClassByKeyword(String keyword, int pageNumber, int pageSize);
 

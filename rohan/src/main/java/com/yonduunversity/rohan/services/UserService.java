@@ -3,6 +3,8 @@ package com.yonduunversity.rohan.services;
 import com.yonduunversity.rohan.models.*;
 
 import java.util.List;
+
+import com.yonduunversity.rohan.models.dto.ClassDTO;
 import com.yonduunversity.rohan.models.dto.StudentDTO;
 import com.yonduunversity.rohan.models.dto.UserAccountDTO;
 import com.yonduunversity.rohan.models.dto.UserDTO;
@@ -17,7 +19,7 @@ public interface UserService {
     ClassBatch enrollStudent(String email, String code,long batchNumber);
     ClassBatch unEnrollStudent(String email,  String code, long batchNumber);
     ClassBatch deactivateClass(String code, long batchNumber);
-    List<ClassBatch> findStudentCourse();
+    List<ClassDTO> getAllStudentClasses(String email, int pageNumber, int pageSize);
     Role saveRole(Role role);
     void assignRole(String email, String roleName);
     void saveUser(Student student);

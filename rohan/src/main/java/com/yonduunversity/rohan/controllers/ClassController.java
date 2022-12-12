@@ -6,12 +6,17 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.yonduunversity.rohan.models.*;
 import com.yonduunversity.rohan.models.dto.ClassCourseDTO;
+import com.yonduunversity.rohan.models.dto.ClassDTO;
 import com.yonduunversity.rohan.models.dto.ClassStudentsDTO;
+import com.yonduunversity.rohan.models.dto.StudentDTO;
+import com.yonduunversity.rohan.models.student.Student;
 import com.yonduunversity.rohan.services.ClassService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -81,13 +86,17 @@ public class ClassController {
         return ResponseEntity.created(uri).body(new ClassCourseDTO(classService.saveClass(classBatch,whoAdded)));
     }
     @GetMapping("/user/courses/{code}/classes/{batch}/students")
-    public ResponseEntity<?>  getClass(@PathVariable String code, @PathVariable Long batch){
+    public ResponseEntity<?>  getClass(@PathVariable String code, @PathVariable Long batch ,@RequestParam(name = "page", defaultValue = "0") int pageNumber,
+                                       @RequestParam(name = "pageSize", defaultValue = "10") int pageSize){
         URI uri = URI
                 .create(ServletUriComponentsBuilder
                         .fromCurrentContextPath()
                         .path("").toUriString());
 
-        return ResponseEntity.created(uri).body(new ClassStudentsDTO(classService.getClassStudents(code,batch)));
+        List<StudentDTO> studentDTOS = classService.getClassStudents(code,batch, pageNumber, pageSize);
+        Pager pager = new Pager(studentDTOS, pageNumber, pageSize);
+
+        return ResponseEntity.created(uri).body(pager);
     }
 
     @GetMapping("/classes")

@@ -3,6 +3,7 @@ package com.yonduunversity.rohan.services.impl;
 import com.yonduunversity.rohan.exception.TotalGradePercentageInvalidException;
 import com.yonduunversity.rohan.models.*;
 import com.yonduunversity.rohan.models.dto.ClassCourseDTO;
+import com.yonduunversity.rohan.models.dto.StudentDTO;
 import com.yonduunversity.rohan.models.student.Student;
 import com.yonduunversity.rohan.repository.ClassBatchRepo;
 import com.yonduunversity.rohan.repository.CourseRepo;
@@ -10,6 +11,7 @@ import com.yonduunversity.rohan.repository.ProjectRepo;
 import com.yonduunversity.rohan.repository.StudentRepo;
 import com.yonduunversity.rohan.repository.UserRepo;
 import com.yonduunversity.rohan.repository.pagination.ClassRepoPaginate;
+import com.yonduunversity.rohan.repository.pagination.StudentRepoPaginate;
 import com.yonduunversity.rohan.services.ClassService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,6 +36,7 @@ public class ClassServiceImpl implements ClassService {
     private final ClassBatchRepo classBatchRepo;
     private final ProjectRepo projectRepo;
     private final ClassRepoPaginate classRepoPaginate;
+    private final StudentRepoPaginate studentRepoPaginate;
 
     @Override
     public ClassBatch saveClass(ClassBatch classBatch, String whoAdded) throws Exception {
@@ -135,8 +138,12 @@ public class ClassServiceImpl implements ClassService {
     }
 
     @Override
-    public ClassBatch getClassStudents(String code, long batchNumber) {
-        return classBatchRepo.findClassBatchByCourseCodeAndBatch(code, batchNumber);
+    public List<StudentDTO> getClassStudents(String code, long batchNumber, int pageNumber, int pageSize) {
+        ClassBatch classBatch = classBatchRepo.findClassBatchByCourseCodeAndBatch(code, batchNumber);
+        Pageable paging = PageRequest.of(pageNumber, pageSize);
+        List<StudentDTO> pagedResult = studentRepoPaginate.findStudentByClassBatches(classBatch, paging).stream().map(StudentDTO::new).toList();
+
+        return pagedResult;
     }
 
     @Override

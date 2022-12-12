@@ -108,6 +108,22 @@ public class UserController {
     public ResponseEntity<?> getStudent(@PathVariable String email) {
         return ResponseEntity.ok().body(userService.getStudent(email));
     }
+    @GetMapping("/students/classes")
+    public ResponseEntity<?> getStudentClasses(HttpServletRequest request,
+                                               @RequestParam(name = "page", defaultValue = "0") int pageNumber,
+                                               @RequestParam(name = "pageSize", defaultValue = "10") int pageSize) {
+        String authorizationHeader = request.getHeader(AUTHORIZATION);
+        String whoAddedToken = authorizationHeader.substring("Bearer ".length());
+        Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
+        JWTVerifier jwtVerifier = JWT.require(algorithm).build();
+        DecodedJWT decodedJWT = jwtVerifier.verify(whoAddedToken);
+        String studentReqEmail = decodedJWT.getSubject();
+
+        List<ClassDTO> studentDTOS = userService.getAllStudentClasses(studentReqEmail, pageNumber, pageSize);
+        Pager pager = new Pager(studentDTOS, pageNumber, pageSize);
+
+        return ResponseEntity.ok().body(pager);
+    }
 
     @GetMapping("/students/retrieveStudentGrades")
     public ResponseEntity<GradeSheet> retrieveStudentGrades(@Param("email") String email,
