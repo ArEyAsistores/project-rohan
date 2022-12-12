@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -30,8 +31,8 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 public class ClassController {
     private final ClassService classService;
 
-    @PostMapping("/user/courses/{code}/classes/{batch}/enroll")
-    public ResponseEntity<?> enrollStudent (@RequestBody Map<String, Object> email, @PathVariable String code, @PathVariable long batch){
+    @PutMapping("/user/courses/{code}/classes/{batch}/enroll")
+    public ResponseEntity<?> enrollStudent (@RequestBody Map<String, Object> email, @PathVariable String code, @PathVariable long batch) throws Exception {
         URI uri = URI
                 .create(ServletUriComponentsBuilder
                         .fromCurrentContextPath()
@@ -39,16 +40,16 @@ public class ClassController {
 
        return ResponseEntity.created(uri).body(new ClassStudentsDTO(classService.enrollStudent(email.get("email").toString(),code, batch)));
     }
-    @PostMapping("/user/courses/{code}/classes/{batch}/unenroll")
+    @PutMapping("/user/courses/{code}/classes/{batch}/unenroll")
     public ResponseEntity<?> unrollStudent (@RequestBody Map<String, Object> email, @PathVariable String code, @PathVariable long batch, HttpServletRequest request, HttpServletResponse response){
         URI uri = URI
                 .create(ServletUriComponentsBuilder
                         .fromCurrentContextPath()
                         .path("api/user/class/add").toUriString());
 
-        return ResponseEntity.created(uri).body(classService.unEnrollStudent(email.get("email").toString(),code, batch));
+        return ResponseEntity.created(uri).body(new ClassCourseDTO(classService.unEnrollStudent(email.get("email").toString(),code, batch)));
     }
-    @GetMapping("/user/classes/student")
+    @GetMapping("/classes/student")
     public ResponseEntity<?> findStudentCourse (@RequestParam(name = "email") String email ){
         URI uri = URI
                 .create(ServletUriComponentsBuilder
@@ -56,13 +57,13 @@ public class ClassController {
                         .path("api/user/class/add").toUriString());
         return ResponseEntity.created(uri).body(classService.findStudentClass(email).stream().map(ClassCourseDTO::new).collect(Collectors.toList()));
     }
-    @PostMapping("/user/courses/{code}/classes/{batch}/deactivate")
+    @PutMapping("/user/courses/{code}/classes/{batch}/deactivate")
     public ResponseEntity<?> deactivateClass (@PathVariable String code, @PathVariable long batch){
         URI uri = URI
                 .create(ServletUriComponentsBuilder
                         .fromCurrentContextPath()
                         .path("").toUriString());
-        return ResponseEntity.created(uri).body(classService.deactivateClass(code, batch));
+        return ResponseEntity.created(uri).body(new ClassCourseDTO(classService.deactivateClass(code, batch)));
     }
     @PostMapping("/user/add/class")
     public ResponseEntity<?> saveClass(@RequestBody ClassBatch classBatch, HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -99,6 +100,14 @@ public class ClassController {
                         .fromCurrentContextPath()
                         .path("api/classes").toUriString());
         return ResponseEntity.created(uri).body(pager);
+    }
+
+    @GetMapping("/classes/search")
+    public ResponseEntity<?> getCourseByKeyword(@Param("keyword") String keyword, @RequestParam(name = "page", defaultValue = "0") int pageNumber,
+                                                @RequestParam(name = "pageSize", defaultValue = "10") int pageSize) {
+        List<ClassCourseDTO> classCourseDTOS = classService.getClassByKeyword(keyword,pageNumber,pageSize);
+        Pager pager = new Pager(classCourseDTOS, pageNumber, pageSize);
+        return ResponseEntity.ok().body(pager);
     }
 
 }
