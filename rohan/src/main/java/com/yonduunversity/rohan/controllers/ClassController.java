@@ -31,7 +31,7 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 public class ClassController {
     private final ClassService classService;
 
-    @PutMapping("/user/courses/{code}/classes/{batch}/enroll")
+    @PostMapping("/user/courses/{code}/classes/{batch}/enroll")
     public ResponseEntity<?> enrollStudent (@RequestBody Map<String, Object> email, @PathVariable String code, @PathVariable long batch) throws Exception {
         URI uri = URI
                 .create(ServletUriComponentsBuilder

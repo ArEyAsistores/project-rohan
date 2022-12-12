@@ -94,7 +94,7 @@ public class UserController {
         URI uri = URI
                 .create(ServletUriComponentsBuilder
                         .fromCurrentContextPath()
-                        .path("api/course/add").toUriString());
+                        .path("api/courses/add").toUriString());
         return ResponseEntity.created(uri).body(userService.addCourse(course));
     }
 
@@ -136,7 +136,7 @@ public class UserController {
         return ResponseEntity.ok().body(userService.getStudent(email));
     }
 
-    @GetMapping("/course/{code}")
+    @GetMapping("/courses/{code}")
 
     public Course getCourse(@PathVariable String code) {
         return userService.getCourse(code);
@@ -162,7 +162,7 @@ public class UserController {
         return new UserDTO(userService.deactivateUser(email));
     }
 
-    @PutMapping("/course/deactivate")
+    @PutMapping("/courses/deactivate")
     public Course deactivateCourse(@RequestParam(name = "courseCode", defaultValue = "") String code) {
         return userService.deactivateCourse(code);
     }
@@ -261,7 +261,7 @@ public class UserController {
                 HttpStatus.OK);
     }
 
-    @GetMapping("/user/courses/{code}/classes")
+    @GetMapping("/courses/{code}/classes")
     public CourseClassDTO getAllCoursesClasses(@PathVariable String code) {
         return new CourseClassDTO(userService.getCourse(code));
     }

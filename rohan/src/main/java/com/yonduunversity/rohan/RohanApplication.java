@@ -33,13 +33,6 @@ public class RohanApplication {
 		return new BCryptPasswordEncoder();
 	}
 
-
-
-	@Autowired
-	ClassBatchRepo classBatchRepo;
-	@Autowired
-	StudentRepo studentRepo;
-
 	@Bean
 	CommandLineRunner run(UserService userService) {
 		return args -> {
@@ -52,33 +45,10 @@ public class RohanApplication {
 			/// INITIAL USERS///
 			//////////////////
 			userService.defaultUsers(new UserAccountDTO(
-					"aj.piedragoza@yahoo.com",
-					"Almira Jane",
-					"Piedragoza",
+					"admin.prohan@yahoo.com",
+					"Project",
+					"Rohan",
 					 "ADMIN"));
-			userService.defaultUsers(new UserAccountDTO(
-					"rna.rey@yahoo.com",
-					"Roberto II",
-					"Asistores",
-					"student"));
-			userService.defaultUsers(new UserAccountDTO(
-					"sme.rey@yahoo.com",
-					"Roberto II",
-					"Asistores",
-					 "SME"));
-			userService.defaultUsers(new UserAccountDTO(
-					"student10.rey@yahoo.com",
-					"Roberto II",
-					"Asistores",
-					 "student"));
-			userService.defaultUsers(new UserAccountDTO(
-					"student2.rey@yahoo.com",
-					"Roberto II",
-					"Asistores",
-					"student"));
-			userService
-					.addCourse(new Course("DATASTRUCT", "Computer Programming", "Data structures and algorithm", true, new ArrayList<>()));
-
 		};
 	}
 }
