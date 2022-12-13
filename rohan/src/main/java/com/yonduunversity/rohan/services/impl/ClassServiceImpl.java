@@ -1,6 +1,9 @@
 package com.yonduunversity.rohan.services.impl;
 
 import com.itextpdf.text.DocumentException;
+import com.yonduunversity.rohan.exception.ClassBatchNotFoundException;
+import com.yonduunversity.rohan.exception.EmailNotFoundException;
+import com.yonduunversity.rohan.exception.StudentOnGoingClassException;
 import com.yonduunversity.rohan.exception.TotalGradePercentageInvalidException;
 import com.yonduunversity.rohan.models.*;
 import com.yonduunversity.rohan.models.dto.ClassCourseDTO;
@@ -106,7 +109,7 @@ public class ClassServiceImpl implements ClassService {
             LocalDate localDate = LocalDate.now();
             boolean studentClassStatus = localDate.compareTo(classBatch.getStartDate()) > 0 && localDate.compareTo(classBatch.getEndDate()) < 0;
             if(studentClassStatus){
-                 throw new Exception("This student is currently enrolled in this class: " + classBatch.getBatch() + " - " + classBatch.getCourse().getCode());
+                 throw new StudentOnGoingClassException(classBatch.getCourse().getCode(), classBatch.getBatch());
             }else{
                 classBatch.getStudents().remove(studentUnEnroll);
                 studentUnEnroll.getClassBatches().remove(classBatch);
@@ -115,7 +118,7 @@ public class ClassServiceImpl implements ClassService {
             }
 
         }else{
-            throw new Exception("Batch or Student not found");
+            throw new ClassBatchNotFoundException(code,batchNumber);
         }
     }
 
@@ -182,7 +185,7 @@ public class ClassServiceImpl implements ClassService {
             emailSenderService.sendCert(email,"Certificate","Congratulation",certificatePath);
 
         }else{
-            throw new Exception("NO USER/CLASS FOUND");
+            throw new EmailNotFoundException();
         }
     }
 }
