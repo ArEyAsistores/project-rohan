@@ -55,7 +55,7 @@ public class ClassServiceImpl implements ClassService {
         if(userSme.isActive() && course.isActive()){
             int totalPercentage = classBatch.getExercisePercentage() + classBatch.getQuizPercentage()
                     + classBatch.getAttendancePercentage() + classBatch.getProjectPercentage();
-            if (totalPercentage == 100) {
+            if (totalPercentage == 100 && classBatch.getEndDate().compareTo(classBatch.getStartDate()) > 0) {
                 classBatch.setCourse(course);
                 classBatch.setSme(userSme);
                 classBatch.setBatch(classBatchRepo.findClassBatchByCourseCode(course.getCode()) + 1);

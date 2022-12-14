@@ -1,37 +1,22 @@
 package com.yonduunversity.rohan.controllers;
-
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.JWTVerifier;
-import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.interfaces.DecodedJWT;
-import com.itextpdf.text.DocumentException;
 import com.yonduunversity.rohan.models.*;
 import com.yonduunversity.rohan.models.dto.ClassCourseDTO;
-import com.yonduunversity.rohan.models.dto.ClassDTO;
 import com.yonduunversity.rohan.models.dto.ClassStudentsDTO;
 import com.yonduunversity.rohan.models.dto.StudentDTO;
-import com.yonduunversity.rohan.models.student.Student;
 import com.yonduunversity.rohan.services.ClassService;
-import jakarta.mail.MessagingException;
+import com.yonduunversity.rohan.util.UserRequestJWT;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
-import java.io.FileNotFoundException;
 import java.net.URI;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
-import static org.springframework.http.HttpHeaders.AUTHORIZATION;
-import static org.springframework.http.HttpHeaders.EMPTY;
 
 @Slf4j
 @RestController
@@ -81,12 +66,7 @@ public class ClassController {
                         .fromCurrentContextPath()
                         .path("api/user/class").toUriString());
 
-        String authorizationHeader = request.getHeader(AUTHORIZATION);
-        String whoAddedToken = authorizationHeader.substring("Bearer ".length());
-        Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
-        JWTVerifier jwtVerifier = JWT.require(algorithm).build();
-        DecodedJWT decodedJWT = jwtVerifier.verify(whoAddedToken);
-        String whoAdded = decodedJWT.getSubject();
+        String whoAdded = UserRequestJWT.getEmailJWT(request);
         return ResponseEntity.created(uri).body(new ClassCourseDTO(classService.saveClass(classBatch,whoAdded)));
     }
     @GetMapping("/user/courses/{code}/classes/{batch}/students")

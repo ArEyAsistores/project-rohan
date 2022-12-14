@@ -29,7 +29,7 @@ public class User {
     private String password;
     private boolean isActive;
 
-    @ManyToMany(fetch = FetchType.EAGER) // load Database From Role when this user RUN
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<Role> roles = new ArrayList<>();
 
 }

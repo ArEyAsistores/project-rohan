@@ -22,11 +22,9 @@ public class Course {
     @Column(name = "code", nullable = false, unique = true)
     private String code;
 
-    // @NonNull
     @Column(name = "title", nullable = false)
     private String title;
 
-    // @NonNull
     @Column(name = "description", nullable = false)
     private String description;
 
