@@ -1,6 +1,6 @@
 package com.yonduunversity.rohan.services.impl;
 
-import com.yonduunversity.rohan.exception.TotalGradePercentageInvalidException;
+import com.yonduunversity.rohan.exception.*;
 import com.yonduunversity.rohan.models.*;
 import com.yonduunversity.rohan.models.dto.ClassCourseDTO;
 import com.yonduunversity.rohan.models.dto.StudentDTO;
@@ -13,6 +13,8 @@ import com.yonduunversity.rohan.repository.UserRepo;
 import com.yonduunversity.rohan.repository.pagination.ClassRepoPaginate;
 import com.yonduunversity.rohan.repository.pagination.StudentRepoPaginate;
 import com.yonduunversity.rohan.services.ClassService;
+import com.yonduunversity.rohan.services.EmailSenderService;
+import com.yonduunversity.rohan.util.CertificateGen;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -37,16 +39,17 @@ public class ClassServiceImpl implements ClassService {
     private final ProjectRepo projectRepo;
     private final ClassRepoPaginate classRepoPaginate;
     private final StudentRepoPaginate studentRepoPaginate;
+    private final EmailSenderService emailSenderService;
 
     @Override
-    public ClassBatch saveClass(ClassBatch classBatch, String whoAdded) throws Exception {
+    public ClassBatch saveClass(ClassBatch classBatch, String whoAdded)  {
         Course course = courseRepo.findCourseByCode(classBatch.getCourse().getCode());
         User userSme = userRepo.findByEmail(whoAdded);
 
         if(userSme.isActive() && course.isActive()){
             int totalPercentage = classBatch.getExercisePercentage() + classBatch.getQuizPercentage()
                     + classBatch.getAttendancePercentage() + classBatch.getProjectPercentage();
-            if (totalPercentage == 100) {
+            if (totalPercentage == 100 && classBatch.getEndDate().compareTo(classBatch.getStartDate()) > 0) {
                 classBatch.setCourse(course);
                 classBatch.setSme(userSme);
                 classBatch.setBatch(classBatchRepo.findClassBatchByCourseCode(course.getCode()) + 1);
@@ -61,17 +64,12 @@ public class ClassServiceImpl implements ClassService {
                 courseRepo.save(course);
                 return classBatch;
             } else {
-                throw new TotalGradePercentageInvalidException();
+                throw new CustomParameterConstraintException();
             }
         }else{
-            throw new Exception("SME OR COURSE IS IN-ACTIVE");
+            throw new CustomDataNotFoundException();
         }
 
-    }
-
-    public Course viewCoursesWithClasses(String code, long batch) {
-
-        return null;
     }
 
     @Override
@@ -86,7 +84,7 @@ public class ClassServiceImpl implements ClassService {
             return classBatchRepo.save(classBatch);
 
         }else{
-            throw new Exception("STUDENT IS IN-ACTIVE");
+            throw new CustomDataNotFoundException();
         }
     }
 
@@ -100,7 +98,7 @@ public class ClassServiceImpl implements ClassService {
             LocalDate localDate = LocalDate.now();
             boolean studentClassStatus = localDate.compareTo(classBatch.getStartDate()) > 0 && localDate.compareTo(classBatch.getEndDate()) < 0;
             if(studentClassStatus){
-                 throw new Exception("This student is currently enrolled in this class: " + classBatch.getBatch() + " - " + classBatch.getCourse().getCode());
+                throw new CustomParameterConstraintException("This student is currently enrolled in this class:" + classBatch.getCourse().getCode() + " - " + classBatch.getBatch());
             }else{
                 classBatch.getStudents().remove(studentUnEnroll);
                 studentUnEnroll.getClassBatches().remove(classBatch);
@@ -109,7 +107,8 @@ public class ClassServiceImpl implements ClassService {
             }
 
         }else{
-            throw new Exception("Batch or Student not found");
+
+            throw new CustomDataNotFoundException();
         }
     }
 
@@ -118,7 +117,7 @@ public class ClassServiceImpl implements ClassService {
         ClassBatch classBatch = classBatchRepo.findClassBatchByCourseCodeAndId(code, batchNumber);
         LocalDate localDate = LocalDate.now();
         if(localDate.compareTo(classBatch.getStartDate()) > 0 && localDate.compareTo(classBatch.getEndDate()) < 0) {
-            throw new Exception("This Class is still on-going, thus it cannot be terminated.");
+            throw new CustomParameterConstraintException("This Class is still on-going, thus it cannot be terminated.");
         }else {
             classBatch.getStudents().removeAll(classBatch.getStudents());
             classBatch.setActive(false);
@@ -161,6 +160,22 @@ public class ClassServiceImpl implements ClassService {
             return classRepoPaginate.findAllByKeyword(keyword,paging).stream().map(ClassCourseDTO::new).collect(Collectors.toList());
         } else {
             return  pagedResult.stream().collect(Collectors.toList());
+        }
+    }
+
+    @Override
+    public void sendStudentCertificate(String email, String code, long batch) throws Exception {
+
+        if(studentRepo.findByEmail(email) != null &&  classBatchRepo.findClassBatchByCourseCodeAndBatch(code,batch) != null){
+            ClassBatch classBatch = classBatchRepo.findClassBatchByCourseCodeAndBatch(code,batch);
+            Student student = studentRepo.findStudentByClassBatches(classBatch);
+            String certificatePath =   CertificateGen.generateCertificate(student.getFirstname() + " " + student.getLastname(),
+                    code,
+                    classBatch.getCourse().getTitle(),batch);
+            emailSenderService.sendCert(email,"Certificate","Congratulation",certificatePath);
+
+        }else{
+            throw new CustomDataNotFoundException();
         }
     }
 }

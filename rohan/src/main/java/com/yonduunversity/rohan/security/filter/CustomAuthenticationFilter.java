@@ -24,12 +24,8 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Slf4j
 public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
-
     private final AuthenticationManager authManager;
-    private static final Date ACCESS_TOKEN_EXPIRE_AT = new Date(System.currentTimeMillis() + 1440 * 60 * 1000); //10 minutes
-    private static final Date REFRESH_TOKEN_EXPIRE_AT = new Date(System.currentTimeMillis() + 120 * 60 * 1000); //30 minutes
-
-
+    private static final Date ACCESS_TOKEN_EXPIRE_AT = new Date(System.currentTimeMillis() + (1440 * 7) * 60 * 1000);    //1week
 
         public CustomAuthenticationFilter(AuthenticationManager authManager) {
                 this.authManager = authManager;
@@ -63,15 +59,8 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
                                                                 .collect(Collectors.toList()))
                                 .sign(algorithm);
 
-                String refresh_token = JWT.create()
-                                .withSubject(user.getUsername())
-                                .withExpiresAt(REFRESH_TOKEN_EXPIRE_AT)
-                                .withIssuer(request.getRequestURL().toString()).sign(algorithm);
-
-
                 Map<String, String> tokens = new HashMap<>();
                 tokens.put("access_token", access_token);
-                tokens.put("refresh_token", refresh_token);
                 response.setContentType(APPLICATION_JSON_VALUE);
                 new ObjectMapper().writeValue(response.getOutputStream(), tokens);
 
