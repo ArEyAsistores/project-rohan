@@ -1,122 +1,1725 @@
 {
 	"info": {
-		"_postman_id": "9e5438a0-af75-4b7b-a16a-3c19437d2271",
+		"_postman_id": "fd715326-826c-432c-8c5c-a3abd39415d9",
 		"name": "Rohan",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24874041"
 	},
 	"item": [
 		{
-			"name": "Auth ADMIN",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "c7a38eef-81e2-4394-931c-8656612624df",
-						"type": "default",
-						"disabled": true
-					}
-				],
-				"body": {
-					"mode": "urlencoded",
-					"urlencoded": [
+			"name": "SME Request",
+			"item": [
+				{
+					"name": "Course Request",
+					"item": [
 						{
-							"key": "email",
-							"value": "aj.piedragoza@yahoo.com",
-							"type": "default"
+							"name": "POST Add Course Copy",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{Bearer}}eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyYXNpc3RvcmVzQHlvbmR1LmNvbSIsInJvbGVzIjpbIlNNRSJdLCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwODAvYXBpL2xvZ2luIiwiZXhwIjoxNjcxMDY1Nzc3fQ.B16m1iEnqngrTymJcNadFfpB3ZJcqG_YfK1CMEPROFI",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"code\": \"SPRINGBOOT\",\r\n    \"title\": \"Java Web Services\",\r\n    \"description\": \"Master Java Web Services and REST API with Spring Boot\"       \r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{localhost}}api/courses",
+									"host": [
+										"{{localhost}}api"
+									],
+									"path": [
+										"courses"
+									]
+								}
+							},
+							"response": []
 						},
 						{
-							"key": "password",
-							"value": "aj54@#1!",
-							"type": "default"
-						}
-					]
-				},
-				"url": {
-					"raw": "{{localhost}}api/login",
-					"host": [
-						"{{localhost}}api"
-					],
-					"path": [
-						"login"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Auth SME",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "c7a38eef-81e2-4394-931c-8656612624df",
-						"type": "default",
-						"disabled": true
-					}
-				],
-				"body": {
-					"mode": "urlencoded",
-					"urlencoded": [
-						{
-							"key": "email",
-							"value": "aj.piedragoza@yahoo.com",
-							"type": "default"
+							"name": "GET  Courses with page Copy",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{Bearer}}eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyYXNpc3RvcmVzQHlvbmR1LmNvbSIsInJvbGVzIjpbIlNNRSJdLCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwODAvYXBpL2xvZ2luIiwiZXhwIjoxNjcxMDY1Nzc3fQ.B16m1iEnqngrTymJcNadFfpB3ZJcqG_YfK1CMEPROFI",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": []
+								},
+								"url": {
+									"raw": "{{localhost}}api/courses?page=0&pageSize=3",
+									"host": [
+										"{{localhost}}api"
+									],
+									"path": [
+										"courses"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "0"
+										},
+										{
+											"key": "pageSize",
+											"value": "3"
+										}
+									]
+								}
+							},
+							"response": []
 						},
 						{
-							"key": "password",
-							"value": "aj54@#1!",
-							"type": "default"
+							"name": "GET Search Course by keyword Copy",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{Bearer}}eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyYXNpc3RvcmVzQHlvbmR1LmNvbSIsInJvbGVzIjpbIlNNRSJdLCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwODAvYXBpL2xvZ2luIiwiZXhwIjoxNjcxMDY1Nzc3fQ.B16m1iEnqngrTymJcNadFfpB3ZJcqG_YfK1CMEPROFI",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": []
+								},
+								"url": {
+									"raw": "{{localhost}}api/courses/search?keyword=ux",
+									"host": [
+										"{{localhost}}api"
+									],
+									"path": [
+										"courses",
+										"search"
+									],
+									"query": [
+										{
+											"key": "keyword",
+											"value": "ux"
+										},
+										{
+											"key": "page",
+											"value": "0",
+											"disabled": true
+										},
+										{
+											"key": "pageSize",
+											"value": "10",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET Course by Code Copy",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{Bearer}}eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyYXNpc3RvcmVzQHlvbmR1LmNvbSIsInJvbGVzIjpbIlNNRSJdLCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwODAvYXBpL2xvZ2luIiwiZXhwIjoxNjcxMDY1Nzc3fQ.B16m1iEnqngrTymJcNadFfpB3ZJcqG_YfK1CMEPROFI",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": []
+								},
+								"url": {
+									"raw": "{{localhost}}api/courses/UXUI",
+									"host": [
+										"{{localhost}}api"
+									],
+									"path": [
+										"courses",
+										"UXUI"
+									],
+									"query": [
+										{
+											"key": "code",
+											"value": "DATASTRUCT",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET Courses with batches Copy",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{Bearer}}eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyYXNpc3RvcmVzQHlvbmR1LmNvbSIsInJvbGVzIjpbIlNNRSJdLCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwODAvYXBpL2xvZ2luIiwiZXhwIjoxNjcxMDY1Nzc3fQ.B16m1iEnqngrTymJcNadFfpB3ZJcqG_YfK1CMEPROFI",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": []
+								},
+								"url": {
+									"raw": "{{localhost}}api/courses/UXUI/classes",
+									"host": [
+										"{{localhost}}api"
+									],
+									"path": [
+										"courses",
+										"UXUI",
+										"classes"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "PUT Deactivate Course Copy",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{Bearer}}eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyYXNpc3RvcmVzQHlvbmR1LmNvbSIsInJvbGVzIjpbIlNNRSJdLCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwODAvYXBpL2xvZ2luIiwiZXhwIjoxNjcxMDY1Nzc3fQ.B16m1iEnqngrTymJcNadFfpB3ZJcqG_YfK1CMEPROFI",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{localhost}}api/courses/deactivate?courseCode=UX",
+									"host": [
+										"{{localhost}}api"
+									],
+									"path": [
+										"courses",
+										"deactivate"
+									],
+									"query": [
+										{
+											"key": "courseCode",
+											"value": "UX"
+										}
+									]
+								}
+							},
+							"response": []
 						}
 					]
 				},
-				"url": {
-					"raw": "{{localhost}}api/login",
-					"host": [
-						"{{localhost}}api"
-					],
-					"path": [
-						"login"
+				{
+					"name": "Class Request",
+					"item": [
+						{
+							"name": "POST Add classBatch",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{Bearer}}eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzbWVAeW9uZHUuY29tIiwicm9sZXMiOlsiU01FIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC9hcGkvbG9naW4iLCJleHAiOjE2NzEwNjU3Nzd9.DU3Pbx2SqQj7NhpH8BYZVXjsiyVQPxat66vzDrc6U5k",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"course\": \"SPRINGBOOT\",\r\n    \"quizPercentage\": 20,\r\n    \"exercisePercentage\": 10,\r\n    \"projectPercentage\": 60,\r\n    \"attendancePercentage\": 10,\r\n    \"startDate\": \"2022-12-14\",\r\n    \"endDate\": \"2022-12-11\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{localhost}}api/user/add/class",
+									"host": [
+										"{{localhost}}api"
+									],
+									"path": [
+										"user",
+										"add",
+										"class"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "POST Enroll students in Class",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{Bearer}}eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyYXNpc3RvcmVzQHlvbmR1LmNvbSIsInJvbGVzIjpbIlNNRSJdLCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwODAvYXBpL2xvZ2luIiwiZXhwIjoxNjcwOTg1MDE0fQ.SKFKqYnGV_My-PFoxuQT8QDOphH537OapekEgCdShgU",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"catis200@yondu.com\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{localhost}}api/user/courses/SPRINGBOOT/classes/2/enroll",
+									"host": [
+										"{{localhost}}api"
+									],
+									"path": [
+										"user",
+										"courses",
+										"SPRINGBOOT",
+										"classes",
+										"2",
+										"enroll"
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": "student10.rey@yahoo.com",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "POST Unenroll students in Class",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{Bearer}}eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyYXNpc3RvcmVzQHlvbmR1LmNvbSIsInJvbGVzIjpbIlNNRSJdLCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwODAvYXBpL2xvZ2luIiwiZXhwIjoxNjcwOTg1MDE0fQ.SKFKqYnGV_My-PFoxuQT8QDOphH537OapekEgCdShgU",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"student10.rey@yahoo.com\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{localhost}}api/user/courses/UXUI/classes/1/unenroll",
+									"host": [
+										"{{localhost}}api"
+									],
+									"path": [
+										"user",
+										"courses",
+										"UXUI",
+										"classes",
+										"1",
+										"unenroll"
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": "student10.rey@yahoo.com",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET All Class",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{Bearer}}eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyYXNpc3RvcmVzQHlvbmR1LmNvbSIsInJvbGVzIjpbIlNNRSJdLCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwODAvYXBpL2xvZ2luIiwiZXhwIjoxNjcwOTg1MDE0fQ.SKFKqYnGV_My-PFoxuQT8QDOphH537OapekEgCdShgU",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": []
+								},
+								"url": {
+									"raw": "{{localhost}}api/classes",
+									"host": [
+										"{{localhost}}api"
+									],
+									"path": [
+										"classes"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1",
+											"disabled": true
+										},
+										{
+											"key": "pageSize",
+											"value": "1",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET Search Class by keyword",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{Bearer}}eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyYXNpc3RvcmVzQHlvbmR1LmNvbSIsInJvbGVzIjpbIlNNRSJdLCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwODAvYXBpL2xvZ2luIiwiZXhwIjoxNjcwOTg1MDE0fQ.SKFKqYnGV_My-PFoxuQT8QDOphH537OapekEgCdShgU",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": []
+								},
+								"url": {
+									"raw": "{{localhost}}api/classes/search?keyword=2023-02-10",
+									"host": [
+										"{{localhost}}api"
+									],
+									"path": [
+										"classes",
+										"search"
+									],
+									"query": [
+										{
+											"key": "keyword",
+											"value": "2023-02-10"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "POST Deactivate Class",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{Bearer}}eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyYXNpc3RvcmVzQHlvbmR1LmNvbSIsInJvbGVzIjpbIlNNRSJdLCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwODAvYXBpL2xvZ2luIiwiZXhwIjoxNjcwOTg1MDE0fQ.SKFKqYnGV_My-PFoxuQT8QDOphH537OapekEgCdShgU",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{localhost}}api/user/courses/DATASTRUCT/classes/4/deactivate",
+									"host": [
+										"{{localhost}}api"
+									],
+									"path": [
+										"user",
+										"courses",
+										"DATASTRUCT",
+										"classes",
+										"4",
+										"deactivate"
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": "student10.rey@yahoo.com",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET Search Class by Student",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{Bearer}}eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyYXNpc3RvcmVzQHlvbmR1LmNvbSIsInJvbGVzIjpbIlNNRSJdLCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwODAvYXBpL2xvZ2luIiwiZXhwIjoxNjcwOTg1MDE0fQ.SKFKqYnGV_My-PFoxuQT8QDOphH537OapekEgCdShgU",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{localhost}}api/classes/student?email=student10.rey@yahoo.com",
+									"host": [
+										"{{localhost}}api"
+									],
+									"path": [
+										"classes",
+										"student"
+									],
+									"query": [
+										{
+											"key": "email",
+											"value": "student10.rey@yahoo.com"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET Classes Students",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{Bearer}}eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyYXNpc3RvcmVzQHlvbmR1LmNvbSIsInJvbGVzIjpbIlNNRSJdLCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwODAvYXBpL2xvZ2luIiwiZXhwIjoxNjcwOTg1MDE0fQ.SKFKqYnGV_My-PFoxuQT8QDOphH537OapekEgCdShgU",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{localhost}}api/user/courses/UXUI/classes/1/students",
+									"host": [
+										"{{localhost}}api"
+									],
+									"path": [
+										"user",
+										"courses",
+										"UXUI",
+										"classes",
+										"1",
+										"students"
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": "student10.rey@yahoo.com",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						}
 					]
+				},
+				{
+					"name": "Assessments",
+					"item": [
+						{
+							"name": "Quiz",
+							"item": [
+								{
+									"name": "Add quiz",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"value": "{{Bearer}}eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyYXNpc3RvcmVzQHlvbmR1LmNvbSIsInJvbGVzIjpbIlNNRSJdLCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwODAvYXBpL2xvZ2luIiwiZXhwIjoxNjcwOTQyNjMwfQ.wmBYX-K8HLVPiOYvH2rEIKyXFecuwJrZBtHTM3diR3Q",
+												"type": "default"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"title\":\"quiz1\",\r\n    \"maxScore\":\"10\",\r\n    \"minScore\":\"0\",\r\n    \"date\":\"2022-10-10\"}\r\n",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{localhost}}api/quiz/add?code=BIOCHEM&batch=1",
+											"host": [
+												"{{localhost}}api"
+											],
+											"path": [
+												"quiz",
+												"add"
+											],
+											"query": [
+												{
+													"key": "code",
+													"value": "BIOCHEM"
+												},
+												{
+													"key": "batch",
+													"value": "1"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Remove quiz",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"value": "{{Bearer}}eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhai5waWVkcmFnb3phQHlhaG9vLmNvbSIsInJvbGVzIjpbIkFETUlOIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC9hcGkvbG9naW4iLCJleHAiOjE2NzA5MTM1ODZ9.3OrhKsIy10yOHJskoLfHOzsNocGqMR9Ac33XUjGdZ2E",
+												"type": "default"
+											}
+										],
+										"url": {
+											"raw": "{{localhost}}api/quiz/remove?id=1",
+											"host": [
+												"{{localhost}}api"
+											],
+											"path": [
+												"quiz",
+												"remove"
+											],
+											"query": [
+												{
+													"key": "id",
+													"value": "1"
+												}
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Exercise",
+							"item": [
+								{
+									"name": "Add exercise",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"value": "{{Bearer}}eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhai5waWVkcmFnb3phQHlhaG9vLmNvbSIsInJvbGVzIjpbIkFETUlOIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC9hcGkvbG9naW4iLCJleHAiOjE2NzA3NTU5MzF9.jJmKglIIE2E0xQ5jH4M5kBGifUQy_XEQor-Drbi-0NM",
+												"type": "default"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"title\":\"exercise1\",\r\n    \"maxScore\":\"10\",\r\n    \"minScore\":\"0\",\r\n    \"date\":\"2022-10-10\"}\r\n",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{localhost}}api/exercise/add?code=DATASTRUCT&batch=1",
+											"host": [
+												"{{localhost}}api"
+											],
+											"path": [
+												"exercise",
+												"add"
+											],
+											"query": [
+												{
+													"key": "code",
+													"value": "DATASTRUCT"
+												},
+												{
+													"key": "batch",
+													"value": "1"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Remove exercise",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"value": "{{Bearer}}eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhai5waWVkcmFnb3phQHlhaG9vLmNvbSIsInJvbGVzIjpbIkFETUlOIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC9hcGkvbG9naW4iLCJleHAiOjE2NzA5MTM1ODZ9.3OrhKsIy10yOHJskoLfHOzsNocGqMR9Ac33XUjGdZ2E",
+												"type": "default"
+											}
+										],
+										"url": {
+											"raw": "{{localhost}}api/exercise/remove?id=1",
+											"host": [
+												"{{localhost}}api"
+											],
+											"path": [
+												"exercise",
+												"remove"
+											],
+											"query": [
+												{
+													"key": "id",
+													"value": "1"
+												}
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Grade",
+							"item": [
+								{
+									"name": "Give quiz score",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"value": "{{Bearer}}eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhai5waWVkcmFnb3phQHlhaG9vLmNvbSIsInJvbGVzIjpbIkFETUlOIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC9hcGkvbG9naW4iLCJleHAiOjE2NzA5MTM1ODZ9.3OrhKsIy10yOHJskoLfHOzsNocGqMR9Ac33XUjGdZ2E",
+												"type": "default"
+											}
+										],
+										"url": {
+											"raw": "{{localhost}}api/grade/giveQuizScore?id=1&email=rna.rey@yahoo.com&score=10",
+											"host": [
+												"{{localhost}}api"
+											],
+											"path": [
+												"grade",
+												"giveQuizScore"
+											],
+											"query": [
+												{
+													"key": "id",
+													"value": "1"
+												},
+												{
+													"key": "email",
+													"value": "rna.rey@yahoo.com"
+												},
+												{
+													"key": "score",
+													"value": "10"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Give exercise score",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"value": "{{Bearer}}eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhai5waWVkcmFnb3phQHlhaG9vLmNvbSIsInJvbGVzIjpbIkFETUlOIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC9hcGkvbG9naW4iLCJleHAiOjE2NzA5MTM1ODZ9.3OrhKsIy10yOHJskoLfHOzsNocGqMR9Ac33XUjGdZ2E",
+												"type": "default"
+											}
+										],
+										"url": {
+											"raw": "{{localhost}}api/grade/giveExerciseScore?id=1&email=rna.rey@yahoo.com&score=10",
+											"host": [
+												"{{localhost}}api"
+											],
+											"path": [
+												"grade",
+												"giveExerciseScore"
+											],
+											"query": [
+												{
+													"key": "id",
+													"value": "1"
+												},
+												{
+													"key": "email",
+													"value": "rna.rey@yahoo.com"
+												},
+												{
+													"key": "score",
+													"value": "10"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Give project score",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"value": "{{Bearer}}eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhai5waWVkcmFnb3phQHlhaG9vLmNvbSIsInJvbGVzIjpbIkFETUlOIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC9hcGkvbG9naW4iLCJleHAiOjE2NzA5MTM1ODZ9.3OrhKsIy10yOHJskoLfHOzsNocGqMR9Ac33XUjGdZ2E",
+												"type": "default"
+											}
+										],
+										"url": {
+											"raw": "{{localhost}}api/grade/giveProjectScore?code=DATASTRUCT&email=rna.rey@yahoo.com&score=1&batch=1",
+											"host": [
+												"{{localhost}}api"
+											],
+											"path": [
+												"grade",
+												"giveProjectScore"
+											],
+											"query": [
+												{
+													"key": "code",
+													"value": "DATASTRUCT"
+												},
+												{
+													"key": "email",
+													"value": "rna.rey@yahoo.com"
+												},
+												{
+													"key": "score",
+													"value": "1"
+												},
+												{
+													"key": "batch",
+													"value": "1"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Retrieve class grades",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Authorization",
+												"value": "{{Bearer}}eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhai5waWVkcmFnb3phQHlhaG9vLmNvbSIsInJvbGVzIjpbIkFETUlOIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC9hcGkvbG9naW4iLCJleHAiOjE2NzA5MTM1ODZ9.3OrhKsIy10yOHJskoLfHOzsNocGqMR9Ac33XUjGdZ2E",
+												"type": "default"
+											}
+										],
+										"url": {
+											"raw": "{{localhost}}api/grade/retrieveClassGrades?code=DATASTRUCT&batch=1",
+											"host": [
+												"{{localhost}}api"
+											],
+											"path": [
+												"grade",
+												"retrieveClassGrades"
+											],
+											"query": [
+												{
+													"key": "code",
+													"value": "DATASTRUCT"
+												},
+												{
+													"key": "batch",
+													"value": "1"
+												}
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "c7a38eef-81e2-4394-931c-8656612624df",
+								"type": "default",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "admin.prohan@yahoo.com",
+									"type": "default"
+								},
+								{
+									"key": "password",
+									"value": "EAvnKds%70LH",
+									"type": "default"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{localhost}}api/login",
+							"host": [
+								"{{localhost}}api"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Send Certificate",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{Bearer}}eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyYXNpc3RvcmVzQHlvbmR1LmNvbSIsInJvbGVzIjpbIlNNRSJdLCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwODAvYXBpL2xvZ2luIiwiZXhwIjoxNjcwOTUwNTQzfQ.XtRDNaUsaejWrGyzsJOD1fdjIJPp0qkbsMSuURiXCa8",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "aj.piedragoza@yahoo.com",
+									"type": "default",
+									"disabled": true
+								},
+								{
+									"key": "password",
+									"value": "aj54@#1!",
+									"type": "default",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{localhost}}api/grade/certificate?email=catis@yondu.com&code=BIOCHEM&batch=1",
+							"host": [
+								"{{localhost}}api"
+							],
+							"path": [
+								"grade",
+								"certificate"
+							],
+							"query": [
+								{
+									"key": "email",
+									"value": "catis@yondu.com"
+								},
+								{
+									"key": "code",
+									"value": "BIOCHEM"
+								},
+								{
+									"key": "batch",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		},
 		{
-			"name": "GET Users",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "{{Bearer}}eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhai5waWVkcmFnb3phQHlhaG9vLmNvbSIsInJvbGVzIjpbIkFETUlOIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC9hcGkvbG9naW4iLCJleHAiOjE2NzAwNTI5MzR9.5PqJ98Qa1DpEkjsSYgbF2qEQtecOZi8LsHEB8e2vM7M",
-						"type": "default"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "",
-					"options": {
-						"raw": {
-							"language": "json"
+			"name": "Admin Request",
+			"item": [
+				{
+					"name": "Course Request",
+					"item": [
+						{
+							"name": "POST Add Course",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{Bearer}}eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbi5wcm9oYW5AeWFob28uY29tIiwicm9sZXMiOlsiQURNSU4iXSwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL2FwaS9sb2dpbiIsImV4cCI6MTY3MDkzNTUxNH0.Lb22ehdwnUl-121LIMIQ61ThSf9kdQlS6LVtjKJvFBI",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"code\": \"UX and UI\",\r\n    \"title\": \"UX/UI for Beginners\",\r\n    \"description\": \"Learn UX/UI design pattern\"    \r\n   \r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{localhost}}api/courses",
+									"host": [
+										"{{localhost}}api"
+									],
+									"path": [
+										"courses"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET  Courses with page",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{Bearer}}eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbi5wcm9oYW5AeWFob28uY29tIiwicm9sZXMiOlsiQURNSU4iXSwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL2FwaS9sb2dpbiIsImV4cCI6MTY3MDkzNTUxNH0.Lb22ehdwnUl-121LIMIQ61ThSf9kdQlS6LVtjKJvFBI",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": []
+								},
+								"url": {
+									"raw": "{{localhost}}api/courses?page=0&pageSize=10",
+									"host": [
+										"{{localhost}}api"
+									],
+									"path": [
+										"courses"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "0"
+										},
+										{
+											"key": "pageSize",
+											"value": "10"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET Search Course by keyword",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{Bearer}}eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbi5wcm9oYW5AeWFob28uY29tIiwicm9sZXMiOlsiQURNSU4iXSwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL2FwaS9sb2dpbiIsImV4cCI6MTY3MDkzNTUxNH0.Lb22ehdwnUl-121LIMIQ61ThSf9kdQlS6LVtjKJvFBI",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": []
+								},
+								"url": {
+									"raw": "{{localhost}}api/courses/search?keyword=ux",
+									"host": [
+										"{{localhost}}api"
+									],
+									"path": [
+										"courses",
+										"search"
+									],
+									"query": [
+										{
+											"key": "keyword",
+											"value": "ux"
+										},
+										{
+											"key": "page",
+											"value": "0",
+											"disabled": true
+										},
+										{
+											"key": "pageSize",
+											"value": "10",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET Course by Code",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{Bearer}}eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbi5wcm9oYW5AeWFob28uY29tIiwicm9sZXMiOlsiQURNSU4iXSwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL2FwaS9sb2dpbiIsImV4cCI6MTY3MDkzNTUxNH0.Lb22ehdwnUl-121LIMIQ61ThSf9kdQlS6LVtjKJvFBI",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": []
+								},
+								"url": {
+									"raw": "{{localhost}}api/courses/UXUI",
+									"host": [
+										"{{localhost}}api"
+									],
+									"path": [
+										"courses",
+										"UXUI"
+									],
+									"query": [
+										{
+											"key": "code",
+											"value": "DATASTRUCT",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET Courses with batches",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{Bearer}}eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbi5wcm9oYW5AeWFob28uY29tIiwicm9sZXMiOlsiQURNSU4iXSwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL2FwaS9sb2dpbiIsImV4cCI6MTY3MDkzNTUxNH0.Lb22ehdwnUl-121LIMIQ61ThSf9kdQlS6LVtjKJvFBI",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": []
+								},
+								"url": {
+									"raw": "{{localhost}}api/courses/UXUI/classes",
+									"host": [
+										"{{localhost}}api"
+									],
+									"path": [
+										"courses",
+										"UXUI",
+										"classes"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "PUT Deactivate Course",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{Bearer}}eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbi5wcm9oYW5AeWFob28uY29tIiwicm9sZXMiOlsiQURNSU4iXSwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL2FwaS9sb2dpbiIsImV4cCI6MTY3MDkzNTUxNH0.Lb22ehdwnUl-121LIMIQ61ThSf9kdQlS6LVtjKJvFBI",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{localhost}}api/courses/deactivate?courseCode=UX",
+									"host": [
+										"{{localhost}}api"
+									],
+									"path": [
+										"courses",
+										"deactivate"
+									],
+									"query": [
+										{
+											"key": "courseCode",
+											"value": "UX"
+										}
+									]
+								}
+							},
+							"response": []
 						}
-					}
-				},
-				"url": {
-					"raw": "{{localhost}}api/users",
-					"host": [
-						"{{localhost}}api"
-					],
-					"path": [
-						"users"
 					]
+				},
+				{
+					"name": "Accounts Request",
+					"item": [
+						{
+							"name": "POST Add SME",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{Bearer}}eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbi5wcm9oYW5AeWFob28uY29tIiwicm9sZXMiOlsiQURNSU4iXSwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL2FwaS9sb2dpbiIsImV4cCI6MTY3MTA2NTc3N30.CF_YG7f9G9rvxWSFTQsT8HXBlGTX7jeVn1JTDlZWjFs",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"sme@yondu.com\",\r\n    \"firstname\": \"Rey\",\r\n    \"lastname\": \"Asistores\",\r\n    \"role\": \"SME\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{localhost}}api/users",
+									"host": [
+										"{{localhost}}api"
+									],
+									"path": [
+										"users"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "POST Add STUDENT",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{Bearer}}eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbi5wcm9oYW5AeWFob28uY29tIiwicm9sZXMiOlsiQURNSU4iXSwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL2FwaS9sb2dpbiIsImV4cCI6MTY3MTA2NTc3N30.CF_YG7f9G9rvxWSFTQsT8HXBlGTX7jeVn1JTDlZWjFs",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"catis200@yondu.com\",\r\n    \"firstname\": \"Roberto II\",\r\n    \"lastname\": \"Asistores\",\r\n    \"role\": \"STUDENT\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{localhost}}api/users",
+									"host": [
+										"{{localhost}}api"
+									],
+									"path": [
+										"users"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET Search user by keyword",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{Bearer}}eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbi5wcm9oYW5AeWFob28uY29tIiwicm9sZXMiOlsiQURNSU4iXSwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL2FwaS9sb2dpbiIsImV4cCI6MTY3MDkzNTUxNH0.Lb22ehdwnUl-121LIMIQ61ThSf9kdQlS6LVtjKJvFBI",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": []
+								},
+								"url": {
+									"raw": "{{localhost}}api/users/search?keyword=catis",
+									"host": [
+										"{{localhost}}api"
+									],
+									"path": [
+										"users",
+										"search"
+									],
+									"query": [
+										{
+											"key": "keyword",
+											"value": "catis"
+										},
+										{
+											"key": "page",
+											"value": "0",
+											"disabled": true
+										},
+										{
+											"key": "pageSize",
+											"value": "1",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET Users default",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{Bearer}}eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbi5wcm9oYW5AeWFob28uY29tIiwicm9sZXMiOlsiQURNSU4iXSwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL2FwaS9sb2dpbiIsImV4cCI6MTY3MDk4NTAxNH0.cFobvkuLhhjMNGwcIHfjJk_91DGsj1tPF0KElZNLCYE",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": []
+								},
+								"url": {
+									"raw": "{{localhost}}api/users",
+									"host": [
+										"{{localhost}}api"
+									],
+									"path": [
+										"users"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET Users with pagination",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{Bearer}}eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbi5wcm9oYW5AeWFob28uY29tIiwicm9sZXMiOlsiQURNSU4iXSwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL2FwaS9sb2dpbiIsImV4cCI6MTY3MDkzNTUxNH0.Lb22ehdwnUl-121LIMIQ61ThSf9kdQlS6LVtjKJvFBI",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": []
+								},
+								"url": {
+									"raw": "{{localhost}}api/users?page=0&pageSize=2",
+									"host": [
+										"{{localhost}}api"
+									],
+									"path": [
+										"users"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "0"
+										},
+										{
+											"key": "pageSize",
+											"value": "2"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET Users by Email",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{Bearer}}eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbi5wcm9oYW5AeWFob28uY29tIiwicm9sZXMiOlsiQURNSU4iXSwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL2FwaS9sb2dpbiIsImV4cCI6MTY3MDkzNTUxNH0.Lb22ehdwnUl-121LIMIQ61ThSf9kdQlS6LVtjKJvFBI",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": []
+								},
+								"url": {
+									"raw": "{{localhost}}api/users/catis@yondu.com",
+									"host": [
+										"{{localhost}}api"
+									],
+									"path": [
+										"users",
+										"catis@yondu.com"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "PUT Deactivate User",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{Bearer}}eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbi5wcm9oYW5AeWFob28uY29tIiwicm9sZXMiOlsiQURNSU4iXSwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL2FwaS9sb2dpbiIsImV4cCI6MTY3MDkzNTUxNH0.Lb22ehdwnUl-121LIMIQ61ThSf9kdQlS6LVtjKJvFBI",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{localhost}}api/users/deactivate?email=catis@yondu.com",
+									"host": [
+										"{{localhost}}api"
+									],
+									"path": [
+										"users",
+										"deactivate"
+									],
+									"query": [
+										{
+											"key": "email",
+											"value": "catis@yondu.com"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "c7a38eef-81e2-4394-931c-8656612624df",
+								"type": "default",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "admin.prohan@yahoo.com",
+									"type": "default"
+								},
+								{
+									"key": "password",
+									"value": "vsx186dgkN1C",
+									"type": "default"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{localhost}}api/login",
+							"host": [
+								"{{localhost}}api"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
+		},
+		{
+			"name": "Student Request",
+			"item": [
+				{
+					"name": "Retrieve student grades",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{Bearer}}eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2JlcnRvYXNpc3RvcmVzMTFAZ21haWwuY29tIiwicm9sZXMiOlsiU1RVREVOVCJdLCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwODAvYXBpL2xvZ2luIiwiZXhwIjoxNjcwOTQyMjUwfQ.G5eiGk40velgAZsug7eTUxp5bZ7RThrf54qvrWDX0lI",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{localhost}}api/students/retrieveStudentGrades?email=catis@yondu.com&code=BIOCHEM&batch=1",
+							"host": [
+								"{{localhost}}api"
+							],
+							"path": [
+								"students",
+								"retrieveStudentGrades"
+							],
+							"query": [
+								{
+									"key": "email",
+									"value": "catis@yondu.com"
+								},
+								{
+									"key": "code",
+									"value": "BIOCHEM"
+								},
+								{
+									"key": "batch",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login Student",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "c7a38eef-81e2-4394-931c-8656612624df",
+								"type": "default",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "robertoasistores11@gmail.com",
+									"type": "default"
+								},
+								{
+									"key": "password",
+									"value": "Tey4YcJSv2qT",
+									"type": "default"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{localhost}}api/login",
+							"host": [
+								"{{localhost}}api"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Retrieve Classes",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{Bearer}}eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjYXRpczIwMEB5b25kdS5jb20iLCJyb2xlcyI6WyJTVFVERU5UIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC9hcGkvbG9naW4iLCJleHAiOjE2NzEwNjU3Nzd9.2gD4qWopdiTyC186_Rkm_Ozqass1bxFvUiUaun2g6P4",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{localhost}}api/students/classes",
+							"host": [
+								"{{localhost}}api"
+							],
+							"path": [
+								"students",
+								"classes"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		},
 		{
 			"name": "Refresh Token",
@@ -148,237 +1751,6 @@
 						"api",
 						"token",
 						"refresh"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "GET Search user by keyword",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"auth": {
-					"type": "noauth"
-				},
-				"method": "GET",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJNaXJhIiwicm9sZXMiOlsiQURNSU4iLCJTTUUiXSwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL2FwaS9sb2dpbiIsImV4cCI6MTY2OTk1NDI3NH0.kyoRtvpGbcNIsQhVn8Mg5iSylZm8wp7p_POdBmnBF0o",
-						"type": "default"
-					}
-				],
-				"body": {
-					"mode": "urlencoded",
-					"urlencoded": []
-				},
-				"url": {
-					"raw": "{{localhost}}/api/token/refresh",
-					"host": [
-						"{{localhost}}"
-					],
-					"path": [
-						"api",
-						"token",
-						"refresh"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "GET Users with pagination",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"auth": {
-					"type": "noauth"
-				},
-				"method": "GET",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "{{Bearer}}eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhai5waWVkcmFnb3phQHlhaG9vLmNvbSIsInJvbGVzIjpbIkFETUlOIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC9hcGkvbG9naW4iLCJleHAiOjE2NzAyMjAzNjF9.CnI6MCs0UF_wMS1kS93688wk2SINsGH4HM5JwgonGZw",
-						"type": "default"
-					}
-				],
-				"body": {
-					"mode": "urlencoded",
-					"urlencoded": []
-				},
-				"url": {
-					"raw": "{{localhost}}api/users/search?keyword=piedragoza",
-					"host": [
-						"{{localhost}}api"
-					],
-					"path": [
-						"users",
-						"search"
-					],
-					"query": [
-						{
-							"key": "keyword",
-							"value": "piedragoza"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "POST Add User Admin",
-			"request": {
-				"auth": {
-					"type": "noauth"
-				},
-				"method": "POST",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "{{Bearer}}eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhai5waWVkcmFnb3phQHlhaG9vLmNvbSIsInJvbGVzIjpbIkFETUlOIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC9hcGkvbG9naW4iLCJleHAiOjE2NzAzMTM3Njd9._3R8y9yiUll8_Tm7y8cSTP6IVsujwCo8rjXh5G6xLyw",
-						"type": "default"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"email\": \"email.sample22w3@yondu.com\",\r\n    \"firstname\": \"FnameSample\",\r\n    \"lastname\": \"LnameSample\",\r\n    \"password\": \"sample2\"\r\n   \r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{localhost}}api/user/add/sme",
-					"host": [
-						"{{localhost}}api"
-					],
-					"path": [
-						"user",
-						"add",
-						"sme"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "POST Add Student by SME",
-			"request": {
-				"auth": {
-					"type": "noauth"
-				},
-				"method": "POST",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "{{Bearer}}eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJybmEucmV5MEB5YWhvby5jb20iLCJyb2xlcyI6WyJTTUUiXSwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL2FwaS9sb2dpbiIsImV4cCI6MTY3MDMxNjYzOH0.yVIIhiaZOsCNRzLsjY21D9ONgtQBSiFp-cbJPAv5GtQ",
-						"type": "default"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"email\": \"email.sample22w3@yondu.com\",\r\n    \"firstname\": \"FnameSample\",\r\n    \"lastname\": \"LnameSample\",\r\n    \"password\": \"sample2\",\r\n    \r\n   \r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{localhost}}api/user/add/student",
-					"host": [
-						"{{localhost}}api"
-					],
-					"path": [
-						"user",
-						"add",
-						"student"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "GET Users by Email",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"auth": {
-					"type": "noauth"
-				},
-				"method": "GET",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "{{Bearer}}eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhai5waWVkcmFnb3phQHlhaG9vLmNvbSIsInJvbGVzIjpbIkFETUlOIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC9hcGkvbG9naW4iLCJleHAiOjE2NzAyMjAzNjF9.CnI6MCs0UF_wMS1kS93688wk2SINsGH4HM5JwgonGZw",
-						"type": "default"
-					}
-				],
-				"body": {
-					"mode": "urlencoded",
-					"urlencoded": []
-				},
-				"url": {
-					"raw": "{{localhost}}api/users/search?keyword=piedragoza",
-					"host": [
-						"{{localhost}}api"
-					],
-					"path": [
-						"users",
-						"search"
-					],
-					"query": [
-						{
-							"key": "keyword",
-							"value": "piedragoza"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "PUT Deactivate User",
-			"request": {
-				"auth": {
-					"type": "noauth"
-				},
-				"method": "PUT",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "{{Bearer}}eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhai5waWVkcmFnb3phQHlhaG9vLmNvbSIsInJvbGVzIjpbIkFETUlOIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC9hcGkvbG9naW4iLCJleHAiOjE2NzAzMTM3Njd9._3R8y9yiUll8_Tm7y8cSTP6IVsujwCo8rjXh5G6xLyw",
-						"type": "default"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{localhost}}api/user/deactivate?email=rna.rey@yahoo.com",
-					"host": [
-						"{{localhost}}api"
-					],
-					"path": [
-						"user",
-						"deactivate"
-					],
-					"query": [
-						{
-							"key": "email",
-							"value": "rna.rey@yahoo.com"
-						}
 					]
 				}
 			},
