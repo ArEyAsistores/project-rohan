@@ -1,17 +1,20 @@
 package com.yonduunversity.rohan.controllers;
-
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yonduunversity.rohan.models.*;
 import com.yonduunversity.rohan.models.dto.*;
 import com.yonduunversity.rohan.services.ExerciseService;
 import com.yonduunversity.rohan.services.GradeService;
 import com.yonduunversity.rohan.services.QuizService;
 import com.yonduunversity.rohan.services.UserService;
+import com.yonduunversity.rohan.util.UserRequestJWT;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
@@ -19,14 +22,22 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.io.IOException;
 import java.net.URI;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
+import static org.springframework.http.HttpStatus.FORBIDDEN;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 @RequestMapping("/api") // Root path
 public class UserController {
     @Autowired
@@ -67,12 +78,7 @@ public class UserController {
                         .fromCurrentContextPath()
                         .path("api/user/add").toUriString());
 
-        String authorizationHeader = request.getHeader(AUTHORIZATION);
-        String whoAddedToken = authorizationHeader.substring("Bearer ".length());
-        Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
-        JWTVerifier jwtVerifier = JWT.require(algorithm).build();
-        DecodedJWT decodedJWT = jwtVerifier.verify(whoAddedToken);
-        String whoAdded = decodedJWT.getSubject();
+        String whoAdded = UserRequestJWT.getEmailJWT(request);
 
         return ResponseEntity.created(uri).body(userService.saveUser(user, whoAdded));
     }
@@ -112,12 +118,7 @@ public class UserController {
     public ResponseEntity<?> getStudentClasses(HttpServletRequest request,
                                                @RequestParam(name = "page", defaultValue = "0") int pageNumber,
                                                @RequestParam(name = "pageSize", defaultValue = "10") int pageSize) {
-        String authorizationHeader = request.getHeader(AUTHORIZATION);
-        String whoAddedToken = authorizationHeader.substring("Bearer ".length());
-        Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
-        JWTVerifier jwtVerifier = JWT.require(algorithm).build();
-        DecodedJWT decodedJWT = jwtVerifier.verify(whoAddedToken);
-        String studentReqEmail = decodedJWT.getSubject();
+        String studentReqEmail = UserRequestJWT.getEmailJWT(request);
 
         List<ClassDTO> studentDTOS = userService.getAllStudentClasses(studentReqEmail, pageNumber, pageSize);
         Pager pager = new Pager(studentDTOS, pageNumber, pageSize);
@@ -239,5 +240,4 @@ public class UserController {
                 gradeService.retrieveClassGrades(code, batch).stream().map(GradeDTO::new).toList(),
                 HttpStatus.OK);
     }
-
 }

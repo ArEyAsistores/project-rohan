@@ -1,7 +1,9 @@
 package com.yonduunversity.rohan;
 
+import com.itextpdf.text.DocumentException;
 import com.yonduunversity.rohan.models.*;
 import com.yonduunversity.rohan.models.dto.UserAccountDTO;
+import com.yonduunversity.rohan.util.CertificateGen;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -12,6 +14,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.yonduunversity.rohan.services.UserService;
 
+import java.io.FileNotFoundException;
+
 @SpringBootApplication
 public class RohanApplication {
 
@@ -20,7 +24,7 @@ public class RohanApplication {
 		return new ModelMapper();
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws DocumentException, FileNotFoundException {
 		SpringApplication.run(RohanApplication.class, args);
 	}
 

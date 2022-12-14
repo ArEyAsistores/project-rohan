@@ -236,8 +236,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return user;
     }
 
-
-
     @Override
     public List<ClassBatch> getAllClassBatch() {
         return classBatchRepo.findAll();
